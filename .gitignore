@@ -518,11 +518,13 @@ sftp-config.json
 
 ## dotenv / environment variables file
 *.ini
-*.env.*
-secrets.json
+.env.*
+*.env
+secrets.*
+private.*
 
 ## Oh-my-zsh
-oh-my-zsh/
+.oh-my-zsh
 
 ## Custom Dotenv Folder
 .dotfiles.git

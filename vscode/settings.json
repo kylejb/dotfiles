@@ -1,0 +1,55 @@
+{
+  "telemetry.enableCrashReporter": false,
+  "telemetry.enableTelemetry": false,
+  "nxConsole.enableTelemetry": false,
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "workbench.startupEditor": "newUntitledFile",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "One Monokai",
+  "workbench.settings.editor": "json",
+  "workbench.settings.useSplitJSON": true,
+  "workbench.panel.defaultLocation": "bottom",
+  "workbench.editor.highlightModifiedTabs": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+  },
+  "explorer.sortOrder": "type",
+  "editor.cursorBlinking": "smooth",
+  "editor.formatOnSave": true,
+  "editor.tabCompletion": "on",
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.snippetSuggestions": "top",
+  "editor.fontSize": 16,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.fontFamily": "Fira Code",
+  "terminal.integrated.fontSize": 18,
+  "terminal.integrated.env.osx": {
+    "PATH": "."
+  },
+  "gitlens.defaultTimeFormat": "HH:MM",
+  "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:MM",
+  "gitlens.defaultDateShortFormat": "MMM DD, YYYY",
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  }
+}

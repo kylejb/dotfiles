@@ -1,0 +1,11 @@
+# PERSONAL
+[core]
+  excludesfile = ~/.gitignore_global
+[user]
+  name = Kyle J. Burda
+  email = 47502769+kylejb@users.noreply.github.com
+  signingkey = 5FC6A86576CD5BD0
+[gpg]
+  program = gpg
+[commit]
+  gpgsign = true

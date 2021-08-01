@@ -1,16 +1,13 @@
+# Local/private config goes in the include
+[include]
+  path = ~/.gitconfig.local
 [core]
   excludesfile = ~/.gitignore_global
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-[user] # PERSONAL
-  name = Kyle J. Burda
-  email = 47502769+kylejb@users.noreply.github.com
-  signingkey = 5FC6A86576CD5BD0
-#[github]
-  #token = <API token> # https://github.com/settings/applications
 [init]
 	defaultBranch = main
 [rebase]
-  instructionFormat = %s [%an] # add the commit author to the end of each line
+  instructionFormat = %s [%an] # adds the commit author to the end of each line
 [push]
   default = current
 [gpg]
@@ -18,29 +15,33 @@
 [commit]
   gpgsign = true
 [color]
-  ui = true
+  branch = auto
   diff = auto
   status = auto
-  branch = auto
+  ui = true
 [format]
   pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
 [alias]
-  st = status
-  ci = commit
   br = branch
+  ci = commit
   co = checkout
   df = diff
   lg = log -p
   lp = log --pretty
-  who = shortlog -s --
-  up = pull
   pr = pull --rebase
   pu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
-  switch = !legit switch \"$@\"
+  st = status
+  up = pull
+  who = shortlog -s --
   branches = !legit branches
-  sprout = !legit sprout \"$@\"
-  unpublish = !legit unpublish \"$@\"
-  harvest = !legit harvest \"$@\"
-  sync = !legit sync \"$@\"
-  publish = !legit publish \"$@\"
+  count = !git shortlog -sn
   graft = !legit graft \"$@\"
+  harvest = !legit harvest \"$@\"
+  promote = !$ZSH/bin/git-promote
+  publish = !legit publish \"$@\"
+  rank-contributors = !$ZSH/bin/git-rank-contributors
+  sprout = !legit sprout \"$@\"
+  switch = !legit switch \"$@\"
+  sync = !legit sync \"$@\"
+  wtf = !$ZSH/bin/git-wtf
+  unpublish = !legit unpublish \"$@\"

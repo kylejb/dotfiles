@@ -1,0 +1,5 @@
+# CD into the desktop from anywhere.
+
+function desktop {
+  cd /Users/$USER/Desktop/$@
+}

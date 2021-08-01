@@ -1,16 +1,12 @@
-## Globals
-export EDITOR='vim'
-export GPG_TTY=$(tty)
-export ME=$(whoami)
-export PKG_CONFIG_PATH=/usr/bin/pkg-config
-export STARSHIP_CONFIG=~/.config/starship/starship.toml
+source .zprofile
+
 ## User Paths
   # Append current location to Python Path
   export PYTHONPATH=".:$PYTHONPATH"
-  
+
   # Add pipx install location to User Path
   export HOME_PATHS="$HOME/.local/bin"
-  # Build our final PATH by combining the variables defined above 
+  # Build our final PATH by combining the variables defined above
   # with any previous values in the PATH variable.
   export PATH=$HOME_PATHS:$PATH
   ## Path to your oh-my-zsh installation.
@@ -90,3 +86,6 @@ export NVM_DIR="/home/$USER/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 eval "$(starship init zsh)"
+
+## Enables local changes – must be last line
+[ -f ".zshrc.local" ] && source ".zshrc.local"

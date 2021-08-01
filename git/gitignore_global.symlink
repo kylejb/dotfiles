@@ -461,7 +461,7 @@ jspm_packages/
 ##############
 #  MATLAB    #
 ##############
- 
+
 # Windows default autosave extension
 *.asv
 
@@ -510,6 +510,12 @@ octave-workspace
 .dropbox.attr
 .dropbox.cache
 
+## Local dotfile changes
+*.local
+
+## Private
+git/gitconfig.local.symlink
+
 ## GPG
 secring.*
 
@@ -548,7 +554,7 @@ private.*
 *.csr
 
 # Certificate
-*.der 
+*.der
 
 # Key database file
 *.kdb

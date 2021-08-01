@@ -1,25 +1,37 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+
+. "$( pwd )/utils.exclude.sh"
+
+PROMPT='[ APT Bootstrapper ]'
+
+echo_with_prompt "Script assumes it is being run as root."
 
 # Ensures latest packages and security updates are installed
-sudo apt-get update
-sudo apt-get -y upgrade
+apt update
+apt upgrade -y
+
+# Install git
+apt install git -y
 
 # Install GNUPG
-sudo apt-get -y install gnupg
+apt install gnupg -y
 
 # Using NeoVim in VSCode
-sudo apt-get -y install neovim
+apt install neovim -y
+
+# Show directory structure with excellent formatting
+apt install tree -y
 
 ###########################
 # zsh setup
 ###########################
 echo -e "⤵ Installing zsh..."
-sudo apt-get -y install zsh
+apt install zsh -y
 echo -e "✅ Successfully installed zsh version: $(zsh --version)"
 # Set up zsh tools
 echo -e "⤵ Installing zsh plugins..."
-sudo apt-get -y install zsh-syntax-highlighting
-sudo apt-get -y install zsh-autosuggestions
+apt install zsh-syntax-highlighting -y
+apt install zsh-autosuggestions -y
 echo -e "✅ Successfully installed zsh-autosuggestions, zsh-syntax-highlighting"
 # Install ohmyzsh
 PATH_TO_ZSH_DIR=$HOME/.oh-my-zsh
@@ -35,7 +47,7 @@ else
 fi
 # Set the default shell
 echo -e "⤵ Changing the default shell"
-sudo chsh -s $(which zsh) $USER
+chsh -s $(which zsh) $USER
 echo -e "✅ Successfully modified the default shell"
 ###########################
 # end zsh setup
@@ -46,10 +58,13 @@ git clone https://github.com/zsh-users/zsh-completions.git $HOME/.oh-my-zsh/cust
 echo -e "✅ Successfully installed ohmyzsh plugins: zsh-completions"
 
 # Install starship dependencies
-# sudo apt-get -y install fonts-powerline
-sudo apt-get -y install fonts-firacode
+# apt install fonts-powerline -y
+apt install fonts-firacode -y
 # Install starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
 
+# TODO: set up cron task
+# Clean cache
+apt clean
 # TODO: Determine whether to symlink dotfiles or find an alternative approach
 echo -e "🎉 Done! 🎉"

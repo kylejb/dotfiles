@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# Show the diff of everything you haven't pushed yet.
+# Source: https://github.com/holman/dotfiles/blob/master/bin/git-unpushed
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+git diff origin/$branch..HEAD

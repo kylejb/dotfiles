@@ -1,11 +1,46 @@
-# PERSONAL
 [core]
   excludesfile = ~/.gitignore_global
-[user]
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[user] # PERSONAL
   name = Kyle J. Burda
   email = 47502769+kylejb@users.noreply.github.com
   signingkey = 5FC6A86576CD5BD0
+#[github]
+  #token = <API token> # https://github.com/settings/applications
+[init]
+	defaultBranch = main
+[rebase]
+  instructionFormat = %s [%an] # add the commit author to the end of each line
+[push]
+  default = current
 [gpg]
   program = gpg
 [commit]
   gpgsign = true
+[color]
+  ui = true
+  diff = auto
+  status = auto
+  branch = auto
+[format]
+  pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  lg = log -p
+  lp = log --pretty
+  who = shortlog -s --
+  up = pull
+  pr = pull --rebase
+  pu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+  switch = !legit switch \"$@\"
+  branches = !legit branches
+  sprout = !legit sprout \"$@\"
+  unpublish = !legit unpublish \"$@\"
+  harvest = !legit harvest \"$@\"
+  sync = !legit sync \"$@\"
+  publish = !legit publish \"$@\"
+  graft = !legit graft \"$@\"

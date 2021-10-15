@@ -2,6 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export GPG_TTY=$(tty)
+export STARSHIP_CONFIG=$HOME/.config/starship.toml
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 

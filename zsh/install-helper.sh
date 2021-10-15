@@ -1,9 +1,8 @@
 if ! [ -x "$(command -v zsh)"]; then
-    echo "Installing zsh..."
-    # assumes CODESPACE=true
-    sudo apt install zsh -y
+    echo -e "Installing zsh..."
+    sudo apt-get -y install zsh
 else
-    echo "$(zsh --version) already installed"
+    echo -e "$(zsh --version) already installed"
 fi
 
 # Set zsh as default shell
@@ -21,11 +20,10 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
-# Syslink `.zshrc` on codespace's home folder
-# if `~/.zshrc`, the `-f` flag will replace existing file with new syslink
-ln -s -f zsh/.zshrc ~/.zshrc
+DOTFILES=$(cd $(dirname $0) && pwd)
 
-#? move or syslink?
-# Syslink aliases and functions
-ln -s -f zsh/aliases.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh
-ln -s -f zsh/functions.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/functions.zsh
+# Create syslinks
+# Using `-f` will override file, if file with same name exists.
+ln -s -f $DOTFILES/.zshrc ~/.zshrc
+ln -s -f $DOTFILES/aliases.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh
+ln -s -f $DOTFILES/functions.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/functions.zsh

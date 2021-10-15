@@ -7,7 +7,7 @@ Any changes to dotfiles repository will apply only to each new codespace, and do
 
 ## Installation
 
-When creating a new codespace, this repository would be cloned into your container. GitHub will syslink any files or folders in repository that start with `.` to codespace's `$HOME` directory **IF** one of the following cannot be found:
+When creating a new codespace, your `dotfiles` repository will be cloned into your container's workspaces folder. GitHub will syslink any files or folders in repository that start with `.` to codespace's `$HOME` directory **ONLY IF** one of the following **CANNOT** be found:
 
 - <span>install.sh</span>
 - <span>install</span>

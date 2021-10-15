@@ -1,0 +1,41 @@
+function gf() {
+  local branch=$1
+  git checkout -b $branch origin/$branch
+}
+
+# rebase current branch by n-commits
+function grih() {
+    git rebase -i HEAD~$1
+}
+
+function pr() {
+    # https://git-scm.com/docs/git-status#Documentation/git-status.txt---porcelainltversiongt
+    if [ -z "$(git status --porcelain)" ]; then
+        git checkout develop
+        git branch -D "pr/$1"
+        git fetch -fu origin pull/$1/head:pr/$1
+        git checkout pr/$1
+
+        # Check to see if the git checkout was successful
+        BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        if [[ "$BRANCH" == "pr/$1" ]]; then
+            git pull -f origin pull/$1/head:pr/$1
+        else
+            echo 'Was not able to change branch';
+        fi
+    else
+        echo 'Git not clean. Branch not changed'
+    fi
+}
+
+function update_rebase () {
+    cur_branch=$(git rev-parse --abbrev-ref HEAD)
+    git checkout $1
+    git pull origin $1
+    git checkout $cur_branch
+    git rebase -i $1
+}
+
+function zshrefresh (){
+    source $HOME/.zshrc
+}

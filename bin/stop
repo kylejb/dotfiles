@@ -1,0 +1,4 @@
+#!/bin/sh -e
+# Kill running process by port number.
+
+kill $(lsof -t -i:"$1")

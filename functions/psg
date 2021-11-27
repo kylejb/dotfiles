@@ -1,8 +1,0 @@
-## A function to easily grep for a matching process
-## USE: psg postgres
-
-function psg {
-  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
-  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
-  ps aux | grep "[$FIRST]$REST"
-}

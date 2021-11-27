@@ -1,0 +1,6 @@
+#!/bin/sh
+# rebase current branch by n-commits
+
+function grih() {
+    git rebase -i HEAD~$1
+}

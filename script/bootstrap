@@ -1,156 +1,413 @@
-#!/usr/bin/env bash
+#!/bin/sh -e
+# Make sure important variables exist if not already defined
 #
-# bootstrap installs all other prereqs.
+# $USER is defined by login(1) which is not always executed (e.g. containers)
+# POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
+USER=${USER:-$(id -u -n)}
+# $HOME is defined at the time of login, but it could be unset. If it is unset,
+# a tilde by itself (~) will not be expanded to the current user's home directory.
+# POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
+HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
+# macOS does not have getent, but this works even if $HOME is unset
+HOME="${HOME:-$(eval echo ~$USER)}"
 
-cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+# TODO: confirm default settings and entrypoint
+# Default settings
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+ZSH="${ZSH:-$DOTFILES/zsh}"
+REPO=${REPO:-kylejb/dotfiles}
+REMOTE=${REMOTE:-https://github.com/${REPO}.git}
+BRANCH=${BRANCH:-main}
 
-set -e
+function runSetup() {
+    # Ask for the administrator password upfront
+    sudo -v
 
-echo ''
-
-info () {
-  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+    # Keep-alive: update existing `sudo` timestamp until the script has finished
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-user () {
-  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
 }
 
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+user_can_sudo() {
+  # Check if sudo is installed
+  command_exists sudo || return 1
+  # The following command has 3 parts:
+  #
+  # 1. Run `sudo` with `-v`. Does the following:
+  #    • with privilege: asks for a password immediately.
+  #    • without privilege: exits with error code 1 and prints the message:
+  #      Sorry, user <username> may not run sudo on <hostname>
+  #
+  # 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
+  #    password is not required, the command will finish with exit code 0.
+  #    If one is required, sudo will exit with error code 1 and print the
+  #    message:
+  #    sudo: a password is required
+  #
+  # 3. Check for the words "may not run sudo" in the output to really tell
+  #    whether the user has privileges or not. For that we have to make sure
+  #    to run `sudo` in the default locale (with `LANG=`) so that the message
+  #    stays consistent regardless of the user's locale.
+  #
+  ! LANG= sudo -n -v 2>&1 | grep -q 'may not run sudo'
 }
 
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
-  exit
-}
-
-setup_gitconfig () {
-  if ! [ -f git/gitconfig.local.symlink ]
-  then
-    info 'setup gitconfig'
-
-    git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
-    then
-      git_credential='osxkeychain'
-    fi
-
-    user ' - What is your github author name?'
-    read -e git_authorname
-    user ' - What is your github author email?'
-    read -e git_authoremail
-
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
-
-    success 'gitconfig'
-  fi
-}
-
-
-link_file () {
-  local src=$1 dst=$2
-
-  local overwrite= backup= skip=
-  local action=
-
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
-  then
-
-    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-    then
-
-      local currentSrc="$(readlink $dst)"
-
-      if [ "$currentSrc" == "$src" ]
-      then
-
-        skip=true;
-
-      else
-
-        user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
-        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
-
-        case "$action" in
-          o )
-            overwrite=true;;
-          O )
-            overwrite_all=true;;
-          b )
-            backup=true;;
-          B )
-            backup_all=true;;
-          s )
-            skip=true;;
-          S )
-            skip_all=true;;
-          * )
-            ;;
-        esac
-
-      fi
-
-    fi
-
-    overwrite=${overwrite:-$overwrite_all}
-    backup=${backup:-$backup_all}
-    skip=${skip:-$skip_all}
-
-    if [ "$overwrite" == "true" ]
-    then
-      rm -rf "$dst"
-      success "removed $dst"
-    fi
-
-    if [ "$backup" == "true" ]
-    then
-      mv "$dst" "${dst}.backup"
-      success "moved $dst to ${dst}.backup"
-    fi
-
-    if [ "$skip" == "true" ]
-    then
-      success "skipped $src"
-    fi
-  fi
-
-  if [ "$skip" != "true" ]  # "false" or empty
-  then
-    ln -s "$1" "$2"
-    success "linked $1 to $2"
-  fi
-}
-
-install_dotfiles () {
-  info 'installing dotfiles'
-
-  local overwrite_all=false backup_all=false skip_all=false
-
-  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
-  do
-    dst="$HOME/.$(basename "${src%.*}")"
-    link_file "$src" "$dst"
-  done
-}
-
-setup_gitconfig
-install_dotfiles
-
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
-  info "installing dependencies"
-  if source bin/dot | while read -r data; do info "$data"; done
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
-  fi
+# The [ -t 1 ] check only works when the function is not called from
+# a subshell (like in `$(...)` or `(...)`, so this hack redefines the
+# function at the top level to always return false when stdout is not
+# a tty.
+if [ -t 1 ]; then
+  is_tty() {
+    true
+  }
+else
+  is_tty() {
+    false
+  }
 fi
 
-echo ''
-echo '  All installed!'
+fmt_underline() {
+  is_tty && printf '\033[4m%s\033[24m\n' "$*" || printf '%s\n' "$*"
+}
+
+# shellcheck disable=SC2016 # backtick in single-quote
+fmt_code() {
+  is_tty && printf '`\033[2m%s\033[22m`\n' "$*" || printf '`%s`\n' "$*"
+}
+
+fmt_error() {
+  printf '%sError: %s%s\n' "${FMT_BOLD}${FMT_RED}" "$*" "$FMT_RESET" >&2
+}
+
+setup_color() {
+  # Only use colors if connected to a terminal
+  if ! is_tty; then
+    FMT_RAINBOW=""
+    FMT_RED=""
+    FMT_GREEN=""
+    FMT_YELLOW=""
+    FMT_BLUE=""
+    FMT_BOLD=""
+    FMT_RESET=""
+    return
+  fi
+
+  if supports_truecolor; then
+    FMT_RAINBOW="
+      $(printf '\033[38;2;255;0;0m')
+      $(printf '\033[38;2;255;97;0m')
+      $(printf '\033[38;2;247;255;0m')
+      $(printf '\033[38;2;0;255;30m')
+      $(printf '\033[38;2;77;0;255m')
+      $(printf '\033[38;2;168;0;255m')
+      $(printf '\033[38;2;245;0;172m')
+    "
+  else
+    FMT_RAINBOW="
+      $(printf '\033[38;5;196m')
+      $(printf '\033[38;5;202m')
+      $(printf '\033[38;5;226m')
+      $(printf '\033[38;5;082m')
+      $(printf '\033[38;5;021m')
+      $(printf '\033[38;5;093m')
+      $(printf '\033[38;5;163m')
+    "
+  fi
+
+  FMT_RED=$(printf '\033[31m')
+  FMT_GREEN=$(printf '\033[32m')
+  FMT_YELLOW=$(printf '\033[33m')
+  FMT_BLUE=$(printf '\033[34m')
+  FMT_BOLD=$(printf '\033[1m')
+  FMT_RESET=$(printf '\033[0m')
+}
+
+title() {
+    echo -e "\n${FMT_BLUE}$1${FMT_RESET}"
+    echo -e "${FMT_BOLD}==============================${FMT_RESET}\n"
+}
+
+error() {
+    echo -e "${FMT_RED}Error: ${FMT_RESET}$1"
+    exit 1
+}
+
+warning() {
+    echo -e "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
+}
+
+info() {
+    echo -e "${FMT_BLUE}Info: ${FMT_RESET}$1"
+}
+
+success() {
+    echo -e "${FMT_GREEN}$1${FMT_RESET}"
+}
+
+# backup() {
+#     BACKUP_DIR=$HOME/dotfiles-backup
+
+#     echo "Creating backup directory at $BACKUP_DIR"
+#     mkdir -p "$BACKUP_DIR"
+
+#     for file in $(get_linkables); do
+#         filename=".$(basename "$file" '.symlink')"
+#         target="$HOME/$filename"
+#         if [ -f "$target" ]; then
+#             echo "backing up $filename"
+#             cp "$target" "$BACKUP_DIR"
+#         else
+#             warning "$filename does not exist at this location or is a symlink"
+#         fi
+#     done
+
+#     for filename in "$HOME/.config/nvim" "$HOME/.vim" "$HOME/.vimrc"; do
+#         if [ ! -L "$filename" ]; then
+#             echo "backing up $filename"
+#             cp -rf "$filename" "$BACKUP_DIR"
+#         else
+#             warning "$filename does not exist at this location or is a symlink"
+#         fi
+#     done
+# }
+
+# setup_dotfiles() {
+#     git clone
+#     # curl --output-dir "${DOTFILES}" -L "https://github.com/${REPO}/tarball/${BRANCH}" | tar -xzv --strip-components 1 \
+#     #     --exclude={.github,LICENSE}
+# }
+
+init () {
+    echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
+	mkdir -p "$PATH_TO_CODE"
+	echo "Making a Playground folder in $PATH_TO_JOURNAL if it doesn't already exist"
+	mkdir -p "$PATH_TO_JOURNAL"
+	echo "Making a Playground folder in $PATH_TO_PLAYGROUND if it doesn't already exist"
+	mkdir -p "$PATH_TO_PLAYGROUND"
+}
+
+get_linkables() {
+    find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'
+}
+
+get_os() {
+  local os=''
+	if [ $( echo "$OSTYPE" | grep 'darwin' ) ] ; then
+    os='darwin'
+  elif [ $( echo "$OSTYPE" | grep 'linux-gnu' ) ] ; then
+    source /etc/os-release
+    # Set os to ID_LIKE if this field exists
+    # Else default to ID
+    # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
+    os="${ID_LIKE:-$ID}"
+  else
+    os='unknown'
+  fi
+
+  # set os to env variable
+  export DETECTED_OS="$os"
+
+  # value to return
+  echo "$DETECTED_OS"
+}
+
+setup_symlinks() {
+    title 'Creating symlinks'
+
+    for file in $(get_linkables) ; do
+        target="$HOME/.$(basename "$file" '.symlink')"
+        if [ -e "$target" ]; then
+            info "~${target#$HOME} already exists... Skipping."
+        else
+            info "Creating symlink for $file"
+            ln -s "$file" "$target"
+        fi
+    done
+
+    echo -e
+    info 'installing to ~/.config'
+    if [ ! -d "$HOME/.config" ]; then
+        info 'Creating ~/.config'
+        mkdir -p "$HOME/.config"
+    fi
+
+    config_files=$(find "$DOTFILES/config" -maxdepth 1 2>/dev/null)
+    for config in $config_files; do
+        target="$HOME/.config/$(basename "$config")"
+        if [ -e "$target" ]; then
+            info "~${target#$HOME} already exists... Skipping."
+        else
+            info "Creating symlink for $config"
+            ln -s "$config" "$target"
+        fi
+    done
+}
+
+run_installers() {
+    # find the installers and run them iteratively
+    find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+}
+
+setup_git() {
+    title 'Setting up Git'
+
+    defaultName='Kyle J. Burda'
+    defaultEmail='47502769+kylejb@users.noreply.github.com'
+    defaultGithub='kylejb'
+    defaultSigningkey='0x0'
+
+    read -rp "Name [$defaultName] " name
+    read -rp "Email [$defaultEmail] " email
+    read -rp "Github username [$defaultGithub] " github
+    read -rp "Signing key [$defaultSigningkey] " signingkey
+
+    git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
+    git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
+    git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
+    git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
+
+    if [[ "$(get_os)" == 'darwin' ]]; then
+        git config --global credential.helper 'osxkeychain'
+    else
+        warn 'Did not set credential.helper'
+    fi
+}
+
+setup_homebrew() {
+    title "Setting up Homebrew"
+
+    if [ "$(get_os)" == 'darwin' ]; then
+        if test ! "$(command -v brew)"; then
+            info 'Homebrew not installed. Installing.'
+            # Run as a login shell (non-interactive) so that the script doesn't pause for user input
+            curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash --login
+        fi
+    fi
+
+    # install brew dependencies from Brewfile
+    brew bundle
+}
+
+setup_shell() {
+    title 'Configuring shell'
+
+    [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
+    if ! grep "$zsh_path" /etc/shells; then
+        info "adding $zsh_path to /etc/shells"
+        echo "$zsh_path" | sudo tee -a /etc/shells
+    fi
+
+    if [[ "$SHELL" != "$zsh_path" ]]; then
+        chsh -s "$zsh_path"
+        info "default shell changed to $zsh_path"
+    fi
+}
+
+install_tools () {
+  local os=$(get_os)
+	if [ "$os" = 'darwin' ] ; then
+    	echo 'Detected macOS'
+		echo 'Installing useful stuff using brew. This may take a while...'
+		sh macos/setup.sh
+	else
+		echo 'Skipping installations using Homebrew because MacOS was not detected...'
+	fi
+
+	if [ "$os" = 'debian' || "$os" = 'ubuntu'] ; then
+    	echo "Detected $os"
+
+		echo 'Installing useful stuff using apt. This may take a while...'
+		sh linux/setup.sh
+	else
+		echo 'Skipping installations using apt because Debian/Linux was not detected...'
+	fi
+}
+
+# TODO: add config options for terminal
+setup_terminfo() {
+    title 'Configuring terminfo'
+
+    info 'adding xterm-256color-italic.terminfo'
+    tic -x "$DOTFILES/resources/xterm-256color-italic.terminfo"
+}
+
+config_macos() {
+    title 'Configuring macOS'
+    local os=$(get_os)
+    if [[ "$os" == 'darwin' ]]; then
+        info 'Add macOS config preferences here.'
+    else
+        warning 'macOS not detected. Skipping.'
+    fi
+}
+
+setup_all() {
+    setup_symlinks
+    setup_pkg_manager
+    setup_shell
+    setup_git
+}
+
+setup_macos() {
+    config_macos
+}
+
+# TODO: Incorporate installations for various OS contexts (e.g., codespaces, macOS, Linux, Windows)
+
+set +u
+if [ $CODESPACES ]; then
+  echo -e 'Updating container dependencies...'
+  /bin/sh $DOTFILES/codespaces/setup.sh
+  exit 0
+fi
+set -u
+
+# TODO: invoke functions to support first run
+
+# case "$1" in
+#     backup)
+#         backup
+#         ;;
+#     link)
+#         setup_symlinks
+#         ;;
+#     git)
+#         setup_git
+#         ;;
+#     homebrew)
+#         setup_pkg_manager
+#         ;;
+#     shell)
+#         setup_shell
+#         ;;
+#     macos)
+#         setup_symlinks
+#         setup_pkg_manager
+#         setup_shell
+#         setup_git
+#         setup_macos
+#         ;;
+#     linux)
+#         setup_symlinks
+#         setup_pkg_manager
+#         setup_shell
+#         setup_git
+#         setup_linux
+#         ;;
+#     all)
+#         setup_symlinks
+#         setup_pkg_manager
+#         setup_shell
+#         setup_git
+#         setup_macos
+#         ;;
+#     *)
+#         echo -e $"\nUsage: $(basename "$0") {link|git|homebrew|shell|macos|all}\n"
+#         exit 1
+#         ;;
+# esac
+
+success 'Done.'

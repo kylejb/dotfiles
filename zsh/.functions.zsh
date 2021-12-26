@@ -41,3 +41,10 @@ function psg {
   REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
   ps aux | grep "[$FIRST]$REST"
 }
+
+function gpg_restart {
+  pkill gpg
+  pkill pinentry
+  pkill ssh-agent
+  eval $(gpg-agent --daemon --enable-ssh-support)
+}

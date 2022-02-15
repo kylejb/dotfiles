@@ -4,8 +4,6 @@ add_newline = false
 format = """\
     $username\
     $memory_usage\
-    $hostname\
-    $kubernetes\
     $directory\
     $git_branch\
     $git_commit\
@@ -15,34 +13,12 @@ format = """\
     $package\
     $nodejs\
     $python\
-    $rust\
-    $conda\
-    $aws\
     $env_var\
-    $crystal\
     $line_break\
     $cmd_duration\
-    $jobs\
     $time\
     $character\
     """
-
-[battery]
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
-full_symbol = "🔋"
-
-[[battery.display]]
-style = "bold red"
-threshold = 10
-
-[[battery.display]]
-style = "bold yellow"
-threshold = 60
-
-[[battery.display]]
-style = "bold green"
-threshold = 100
 
 [character]
 # symbol = "➜"
@@ -105,10 +81,6 @@ ssh_only = true
 # format = "⟫ "
 disabled = false
 trim_at = "."
-
-# [jobs]
-# symbol = "+ "
-# threshold = 1
 
 [line_break]
 disabled = true

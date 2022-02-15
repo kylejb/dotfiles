@@ -3,9 +3,9 @@
 	ignorecase = false
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [user]
-	name = <name>
-	email = <email>
-	signingkey = <key>
+	name = Kyle J. Burda
+	email = kyle.burda@ayasdi.com
+	signingkey = FAE7464507534DE7
 [init]
 	defaultBranch = main
 [color]

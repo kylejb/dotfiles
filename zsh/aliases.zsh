@@ -28,7 +28,7 @@ alias zr="zshrefresh" # invokes function
 #    Misc     #
 ###############
 
-alias rw="npm run start web"
-alias rcb="npm run start cb"
-alias ree="npm run start events-engine"
-alias rre="npm run start rules-engine"
+alias st-a="npm start api"
+alias st-w="npm start web"
+alias st-e="npm start events-engine"
+alias st-r="npm start rules-engine"

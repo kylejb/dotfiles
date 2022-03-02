@@ -19,3 +19,5 @@
 	adog = log --all --decorate --oneline --graph
 [rebase]
 	instructionFormat = %s [%an] # add commit author to the end of each line
+[commit]
+	gpgsign = true

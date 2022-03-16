@@ -1,4 +1,4 @@
-if ! [ -x "$(command -v zsh)"]; then
+if ! [ -x "$(command -v zsh)" ]; then
     echo -e "Installing zsh..."
     sudo apt-get -y install zsh
 else

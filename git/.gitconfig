@@ -6,8 +6,6 @@
 	name = Kyle J. Burda
 	email = kyle.burda@ayasdi.com
 	signingkey = FAE7464507534DE7
-[init]
-	defaultBranch = main
 [color]
 	ui = true
 	diff = auto
@@ -17,7 +15,11 @@
 	pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
 [alias]
 	adog = log --all --decorate --oneline --graph
+[init]
+	defaultBranch = main
 [rebase]
 	instructionFormat = %s [%an] # add commit author to the end of each line
 [commit]
 	gpgsign = true
+[push]
+	default = current

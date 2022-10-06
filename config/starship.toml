@@ -1,0 +1,83 @@
+# Inserts a blank line between shell prompts
+add_newline = false
+
+format = """\
+    $username\
+    $memory_usage\
+    $hostname\
+    $kubernetes\
+    $directory\
+    $git_branch\
+    $git_commit\
+    $git_state\
+    $git_status\
+    $hg_branch\
+    $package\
+    $nodejs\
+    $python\
+    $rust\
+    $line_break\
+    $cmd_duration\
+    $jobs\
+    $character\
+    """
+right_format = """\
+    $time
+    """
+
+[battery]
+charging_symbol = "⚡"
+discharging_symbol = "🔋"
+full_symbol = "🔌"
+
+[[battery.display]]
+style = "bold red"
+threshold = 10
+
+[[battery.display]]
+style = "bold yellow"
+threshold = 30
+
+[character]
+error_symbol = "[✗](bold red) "
+
+[cmd_duration]
+format = "took [$duration]($style) "
+min_time = 500
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold cyan"
+truncate_to_repo = true
+truncation_length = 2
+
+[git_state]
+cherry_pick = "🍒 PICKING"
+
+[hostname]
+ssh_only = true
+trim_at = "."
+
+[line_break]
+disabled = true
+
+[nodejs]
+style = "bold green"
+symbol = "⬢ "
+
+[python]
+pyenv_prefix = "pyenv"
+pyenv_version_name = false
+style = "bold yellow"
+symbol = "🐍 "
+
+[time]
+disabled = false
+format="[$time]($style)"
+style = "bold yellow"
+time_format = "%T"
+
+[username]
+show_always = true
+style_root = "bold red"
+style_user = "bold yellow"

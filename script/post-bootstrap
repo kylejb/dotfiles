@@ -2,7 +2,7 @@
 ### ----------------- Bootstrap post-installation scripts ----------------- ###
 # Run by run_dotfile_scripts in bootstrap.sh
 # Scripts must be executable (chmod +x)
-echo "-> Running strap-after-setup. Some steps may require password entry."
+echo "-> Running post-bootstrap. Some steps may require password entry."
 
 ### Configure macOS
 if [ "${MACOS:-0}" -gt 0 ] || [ "$(uname)" = "Darwin" ]; then

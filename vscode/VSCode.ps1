@@ -14,6 +14,7 @@ choco install -y "vscode" --params "/NoDesktopIcon /NoQuicklaunchIcon /NoContext
 Set-VSCode-Configuration;
 refreshenv;
 code --install-extension "aaron-bond.better-comments";
+code --install-extension "christian-kohler.path-intellisense";
 code --install-extension "dbaeumer.vscode-eslint";
 code --install-extension "eamodio.gitlens";
 code --install-extension "esbenp.prettier-vscode";

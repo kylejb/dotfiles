@@ -5,7 +5,6 @@ source $ZSH/init.sh
   ### From Fedora's dotfiles
   ## export PATH=/usr/bin:$PATH
   ## export DOCKER_HOST=unix:///run/user/1000/docker.sock
-  prepend_path $TOOLBOX_PATH
 
   prepend_path $CARGO_BIN
   prepend_path $GOBIN

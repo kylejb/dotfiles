@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Usage: git-up
 #        git-reup
@@ -8,8 +8,6 @@
 #
 # Sourced
 # https://github.com/holman/dotfiles/blob/master/bin/git-up
-
-set -e
 
 PULL_ARGS="$@"
 

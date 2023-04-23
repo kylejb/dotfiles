@@ -53,23 +53,23 @@ main() {
 #####################
 
 heading() {
-	printf '\n%s\n' "${BOLD}${UNDERLINE}${BLUE}$*${NO_COLOUR}"
+	printf '\n%s\n' "${BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
 }
 
 info() {
-	printf '%s\n' "${BOLD}${MAGENTA}==> $*${NO_COLOUR}"
+	printf '%s\n' "${BOLD}${MAGENTA}==> $*${NO_COLOR}"
 }
 
 warn() {
-	printf '%s\n' "${YELLOW}! $*${NO_COLOUR}"
+	printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
 }
 
 error() {
-	printf '%s\n' "${RED}x $*${NO_COLOUR}" >&2
+	printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
 }
 
 completed() {
-	printf '\n%s\n' "${GREEN}$*${NO_COLOUR}"
+	printf '\n%s\n' "${GREEN}$*${NO_COLOR}"
 }
 
 has() {
@@ -106,9 +106,9 @@ write_line_to_file_if_not_exists() {
 	grep -qxF "$LINE" "$FILE" || echo "$LINE" | sudo tee -a "$FILE"
 }
 
-# usage: get_latest_release "nushell/nushell"
+# usage: get_latest_release "kylejb/dotfiles"
 github_repo_latest_release() {
-	curl -fsSL "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+	curl -fsSL "https://api.github.com/repos/$1/releases/latest" |    # Get latest release from GitHub API
 		grep '"tag_name":' |                                          # Get tag line
 		sed -E 's/.*"([^"]+)".*/\1/'                                  # get JSON value for release tag
 }

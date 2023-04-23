@@ -7,5 +7,3 @@ elif [[ -f /usr/local/bin/brew ]]; then
 fi
 
 . $HOME/.asdf/asdf.sh
-
-. $HOME/.asdf/plugins/java/set-java-home.zsh

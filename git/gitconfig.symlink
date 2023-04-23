@@ -36,9 +36,9 @@
   count = !git shortlog -sn
   graft = !legit graft \"$@\"
   harvest = !legit harvest \"$@\"
-  promote = !$ZSH/bin/git-promote
+  promote = !$DOTFILES/bin/git-promote
   publish = !legit publish \"$@\"
-  rank-contributors = !$ZSH/bin/git-rank-contributors
+  rank-contributors = !$DOTFILES/bin/git-rank-contributors
   sprout = !legit sprout \"$@\"
   switch = !legit switch \"$@\"
   sync = !legit sync \"$@\"

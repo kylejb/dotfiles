@@ -72,10 +72,19 @@ fi
 # asdf-plugins if config provided
 initial_asdf_plugin_list="${DOTFILES}/asdf/initial-asdf-plugins.txt"
 if [ -f "$initial_asdf_plugin_list" ]; then
+	installed_nodejs=''
 	while read -r p || [ -n "$p" ]; do
 		plugin_name="$(cut -d ' ' -f1 <<<"$p")"
 		plugin_url="$(cut -d ' ' -f2 <<<"$p")"
 		plugin_version="$(cut -d ' ' -f3 <<<"$p")"
 		asdf_plugin_setup "$plugin_name" "$plugin_url" "$plugin_version"
+		if [ "$plugin_name" = 'nodejs' ]; then
+			installed_nodejs='true'
+		fi
 	done <"$initial_asdf_plugin_list"
+
+	if [ $installed_nodejs = 'true' ]; then
+		corepack enable
+		asdf reshim
+	fi
 fi

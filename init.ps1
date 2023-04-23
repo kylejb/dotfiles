@@ -1,5 +1,3 @@
-# TODO: add support for updating
-
 $GitHubRepositoryUri = "https://github.com/${GitHubRepositoryAuthor}/${GitHubRepositoryName}/archive/refs/heads/main.zip";
 
 $DotfilesFolder = Join-Path -Path $HOME -ChildPath ".dotfiles";
@@ -10,9 +8,7 @@ $DownloadResult = $FALSE;
 
 # Request custom values
 $ComputerName = Read-Host -Prompt "Input the new computer name here";
-
 $GitUserName = Read-Host -Prompt "Input your Git user name here";
-
 $GitUserEmail = Read-Host -Prompt "Input your Git user email here";
 
 $ValidDisks = Get-PSDrive -PSProvider "FileSystem" | Select-Object -ExpandProperty "Root";
@@ -43,3 +39,35 @@ if ($DownloadResult) {
   [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipRepositoryFile, $DotfilesFolder);
   Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "Setup.ps1");
 }
+
+####
+
+# Add needed modules
+Import-Module "~\.dotfiles\pwsh\Modules\Core-Functions\Core-Functions.psm1"
+Import-Module "~\.dotfiles\pwsh\Modules\Install-Fonts\Install-Fonts.psm1"
+
+# Install Oh My Posh
+winget install JanDeDobbeleer.OhMyPosh
+
+# Install fonts
+$dir = "~\Downloads\Fonts"
+If(!(test-path $dir)) {New-Item -ItemType Directory -Force -Path $dir}
+Start-BitsTransfer "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip" $dir\FiraCode.zip
+Expand-Archive -Path $dir\FiraCode.zip -DestinationPath $dir
+Get-ChildItem -Path $dir  *.ttf | ForEach-Object { Remove-Item -Path $_.FullName }
+Get-ChildItem -Path $dir  Fura* | ForEach-Object { Remove-Item -Path $_.FullName }
+Get-ChildItem -Path $dir  *Mono* | ForEach-Object { Remove-Item -Path $_.FullName }
+Get-ChildItem -Path $dir  -Exclude "*Windows Compatible.otf" | ForEach-Object { Remove-Item -Path $_.FullName }
+Install-FontsFromDir $dir
+Remove-ItemSafely $dir
+
+# Delete exising profiles
+Remove-ItemSafely ~\Documents\WindowsPowerShell
+Remove-ItemSafely ~\Documents\PowerShell
+
+# Get My Documents location
+$docs = [Environment]::GetFolderPath('MyDocuments')
+
+# Symlink profile to locations
+New-Item -ItemType Junction -Path "$docs\WindowsPowerShell\" -Target (Get-Item '~\.dotfiles\pwsh').FullName
+New-Item -ItemType Junction -Path "$docs\PowerShell\" -Target (Get-Item '~\.dotfiles\pwsh').FullName

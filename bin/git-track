@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Sets up your branch to track a remote branch. Assumes you mean
 # `origin/$branch-name`.

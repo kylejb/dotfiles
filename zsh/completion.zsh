@@ -1,10 +1,10 @@
 # Completions
-unsetopt menu_complete          # do not autoselect the first completion entry
 unsetopt flowcontrol
-setopt auto_menu                # show completion menu on successive tab press
-setopt complete_in_word
+unsetopt menu_complete          # do not autoselect the first completion entry
 setopt always_to_end
+setopt auto_menu                # show completion menu on successive tab press
 setopt complete_aliases         # do not expand aliases before completion
+setopt complete_in_word
 
 # pasting with tabs doesn't perform completion
 zstyle ':completion:*' insert-tab pending

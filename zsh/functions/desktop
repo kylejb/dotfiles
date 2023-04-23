@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 function desktop {
   cd $HOME/Desktop/$@

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 # rebase current branch by n-commits
 
 function grih {

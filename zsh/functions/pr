@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 function pr {
     # https://git-scm.com/docs/git-status#Documentation/git-status.txt---porcelainltversiongt

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 # Function to easily grep for a matching process
 # EXAMPLE: psg postgres

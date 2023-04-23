@@ -36,6 +36,6 @@ function update_rebase {
     git rebase -i $1
 }
 
-function zshrefresh {
+function zsource {
     source $HOME/.zshrc
 }

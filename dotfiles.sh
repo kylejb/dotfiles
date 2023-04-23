@@ -10,7 +10,7 @@ main() {
 		;;
 	msys*)
 		PLATFORM="windows"
-		warn "Run Windows.ps1 instead"
+		warn "Run init.ps1 instead"
 		exit 1
 		;;
 	*)

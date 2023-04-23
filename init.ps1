@@ -47,7 +47,8 @@ Import-Module "~\.dotfiles\pwsh\Modules\Core-Functions\Core-Functions.psm1"
 Import-Module "~\.dotfiles\pwsh\Modules\Install-Fonts\Install-Fonts.psm1"
 
 # Install Oh My Posh
-winget install JanDeDobbeleer.OhMyPosh
+# https://ohmyposh.dev/docs/installation/windows
+winget install JanDeDobbeleer.OhMyPosh -s winget
 
 # Install fonts
 $dir = "~\Downloads\Fonts"

@@ -361,7 +361,7 @@ set +u
 if [ $CODESPACES ]; then
   CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
   echo -e 'Updating container dependencies...'
-  /bin/sh $CODESPACE_DOTFILES/codespaces/setup.sh
+  /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
   exit 0
 fi
 set -u

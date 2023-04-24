@@ -31,10 +31,11 @@ Set-PSReadLineOption -Colors @{
 ################################################################################
 
 # Chocolatey profile
-$ChocolateyProfile = Join-Path -Path $env:ChocolateyInstall -ChildPath "helpers" | Join-Path -ChildPath "chocolateyProfile.psm1";
-if (Test-Path($ChocolateyProfile)) {
-  Import-Module $ChocolateyProfile;
-};
+# TODO: replace with winget
+# $ChocolateyProfile = Join-Path -Path $env:ChocolateyInstall -ChildPath "helpers" | Join-Path -ChildPath "chocolateyProfile.psm1";
+# if (Test-Path($ChocolateyProfile)) {
+#   Import-Module $ChocolateyProfile;
+# };
 
 ################################################################################
 #                        WindowsTerminal Profile Aliases                       #
@@ -83,8 +84,10 @@ Set-Alias -Name "trash" -Value "Open-Recycle-Bin";
 function Update-System {
   Update-Module;
   Update-Help -Force;
+  # TODO: replace with Winget
   choco upgrade -y "chocolatey";
   choco upgrade -y all --execution-timeout 7200;
+  # END
   wsl sudo apt --yes update;
   wsl sudo apt --yes upgrade;
 };
@@ -163,15 +166,6 @@ function Invoke-Git-Hard-Reset-Last-Commit {
   git reset --hard HEAD~1;
 };
 Set-Alias -Name "ghrlc" -Value "Invoke-Git-Hard-Reset-Last-Commit";
-
-################################################################################
-#                                  Vim Aliases                                 #
-################################################################################
-
-function Invoke-Edit-Vimrc {
-  vim ~/.vimrc;
-};
-Set-Alias -Name "editvim" -Value "Invoke-Edit-Vimrc";
 
 ################################################################################
 #                                Docker Aliases                                #

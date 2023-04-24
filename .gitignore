@@ -1,3 +1,6 @@
+# git
+# TODO: consider mirroring approach taken for gnupg to handle OS contexts
+
 # gnupg
 gpg-agent.conf
 

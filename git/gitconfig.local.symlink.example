@@ -1,3 +1,4 @@
+# TODO: remove this file and document as example (exclude when pulling, if possible)
 [user]
   name = NAME
   email = EMAIL

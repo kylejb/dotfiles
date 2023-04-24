@@ -12,5 +12,3 @@ function Set-Workspace-Folder-Ubuntu {
   wsl mkdir -p -v ~/Workspace;
 }
 
-Set-Workspace-Folder-Windows;
-Set-Workspace-Folder-Ubuntu;

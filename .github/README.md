@@ -1,18 +1,28 @@
 # kylejb's dotfiles
 
-These files target macOS and Debian/Ubuntu environments.
+Supports macOS, Debian/Ubuntu, and Windows 11+ with WSL2.
+
+> **Warning**
+> Use at your own risk.
 
 ## Installation
 
-Run this:
+* Windows:
 
-```zsh
-git clone https://github.com/kylejb/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-script/bootstrap
-```
+    ```ps1
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
+    Invoke-Expression (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.ps1")
 
-This will symlink the appropriate files in .dotfiles to your home directory. Everything is configured and tweaked within ~/.dotfiles.
+    ```
+
+* MacOS / Linux:
+
+    ```sh
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.sh)"
+
+    ```
+
+This will symlink the appropriate files to your home directory. Everything is configured and tweaked within this folder.
 
 The main file you'll want to change right off the bat is zsh/zshrc.symlink, which sets up a few paths that'll be different on your particular machine.
 

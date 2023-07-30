@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Nukes a branch locally and on the origin remote.
 #

@@ -1,7 +1,7 @@
 [include]
+  # TODO: update path after redesigning approach
   path = ~/.gitconfig.local
 [core]
-  excludesfile = ~/.gitignore_global
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [init]
 	defaultBranch = main
@@ -9,10 +9,6 @@
   instructionFormat = %s [%an] # adds the commit author to the end of each line
 [push]
   default = current
-[gpg]
-  program = gpg
-[commit]
-  gpgsign = true
 [color]
   branch = auto
   diff = auto
@@ -36,9 +32,9 @@
   count = !git shortlog -sn
   graft = !legit graft \"$@\"
   harvest = !legit harvest \"$@\"
-  promote = !$ZSH/bin/git-promote
+  promote = !$DOTFILES/bin/git-promote
   publish = !legit publish \"$@\"
-  rank-contributors = !$ZSH/bin/git-rank-contributors
+  rank-contributors = !$DOTFILES/bin/git-rank-contributors
   sprout = !legit sprout \"$@\"
   switch = !legit switch \"$@\"
   sync = !legit sync \"$@\"

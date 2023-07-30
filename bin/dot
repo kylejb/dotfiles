@@ -5,7 +5,7 @@
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 
 displayUsageAndExit() {

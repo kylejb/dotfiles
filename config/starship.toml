@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = false
 
@@ -73,7 +75,7 @@ symbol = "🐍 "
 
 [time]
 disabled = false
-format="[$time]($style)"
+format = "[$time]($style)"
 style = "bold yellow"
 time_format = "%T"
 

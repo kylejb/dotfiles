@@ -1,0 +1,96 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "segments": [
+                {
+                    "type": "os",
+                    "style": "powerline",
+                    "background": "white",
+                    "foreground": "blue"
+                },
+                {
+                    "type": "root",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "background": "yellow",
+                    "foreground": "black",
+                    "properties": {
+                        "root_icon": ""
+                    }
+                },
+                {
+                    "type": "path",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "background": "blue",
+                    "foreground": "black",
+                    "properties": {
+                        "enable_hyperlink": true,
+                        "home_icon": "",
+                        "folder_icon": "",
+                        "folder_separator_icon": "  ",
+                        "style": "full"
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "background": "green",
+                    "foreground": "black",
+                    "properties": {
+                        "display_status": true,
+                        "display_stash_count": true,
+                        "display_upstream_icon": true,
+                        "status_colors_enabled": true,
+                        "local_changes_color": "yellow"
+                    }
+                },
+                {
+                    "type": "executiontime",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "background": "white",
+                    "foreground": "black",
+                    "properties": {
+                        "threshold": 100,
+                        "style": "roundrock",
+                        "prefix": "  [ ",
+                        "postfix": " ] "
+                    }
+                },
+                {
+                    "type": "exit",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "background": "red",
+                    "foreground": "black",
+                    "properties": {
+                        "prefix": "  "
+                    }
+                }
+            ]
+        },
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "newline": true,
+            "segments": [
+                {
+                    "type": "text",
+                    "style": "plain",
+                    "background": "transparent",
+                    "foreground": "blue",
+                    "properties": {
+                        "prefix": "",
+                        "text": "❯"
+                    }
+                }
+            ]
+        }
+    ],
+    "final_space": false
+}

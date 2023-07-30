@@ -97,6 +97,7 @@ setup_git() {
     git config -f ~/.gitconfig.local user.email "${email:-$defaultEmail}"
     git config -f ~/.gitconfig.local user.signingkey "${signingkey:-$defaultSigningkey}"
     git config -f ~/.gitconfig.local github.user "${github:-$defaultGithub}"
+    git config -f ~/.gitconfig.local commit.gpgsign true
 
     if [[ "$(get_os)" == 'darwin' ]]; then
         git config -f ~/.gitconfig.local credential.helper "osxkeychain"

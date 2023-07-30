@@ -1,0 +1,3 @@
+Host github.com
+    IdentitiesOnly yes
+    IdentityAgent ~/.1password/agent.sock

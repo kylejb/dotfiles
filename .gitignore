@@ -2,7 +2,10 @@
 # TODO: consider mirroring approach taken for gnupg to handle OS contexts
 
 # gnupg
-gpg-agent.conf
+gnupg/gpg-agent.conf
 
-# PowerShell
-profile.ps1
+# ssh
+ssh/config
+
+# zsh
+zsh/plugins/**

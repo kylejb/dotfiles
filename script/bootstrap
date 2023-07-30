@@ -24,7 +24,11 @@ runSetup() {
   sudo -v
 
   # Keep-alive: update existing `sudo` timestamp until the script has finished
-  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+  while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" || exit
+  done 2>/dev/null &
 }
 
 command_exists() {
@@ -126,25 +130,25 @@ setup_color() {
 }
 
 title() {
-    echo -e "\n${FMT_BLUE}$1${FMT_RESET}"
-    echo -e "${FMT_BOLD}==============================${FMT_RESET}\n"
+  echo -e "\n${FMT_BLUE}$1${FMT_RESET}"
+  echo -e "${FMT_BOLD}==============================${FMT_RESET}\n"
 }
 
 error() {
-    echo -e "${FMT_RED}Error: ${FMT_RESET}$1"
-    exit 1
+  echo -e "${FMT_RED}Error: ${FMT_RESET}$1"
+  exit 1
 }
 
 warning() {
-    echo -e "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
+  echo -e "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
 }
 
 info() {
-    echo -e "${FMT_BLUE}Info: ${FMT_RESET}$1"
+  echo -e "${FMT_BLUE}Info: ${FMT_RESET}$1"
 }
 
 success() {
-    echo -e "${FMT_GREEN}$1${FMT_RESET}"
+  echo -e "${FMT_GREEN}$1${FMT_RESET}"
 }
 
 # backup() {
@@ -182,11 +186,11 @@ success() {
 
 init() {
   echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
-	mkdir -p "$PATH_TO_CODE"
-	echo "Making a Playground folder in $PATH_TO_JOURNAL if it doesn't already exist"
-	mkdir -p "$PATH_TO_JOURNAL"
-	echo "Making a Playground folder in $PATH_TO_PLAYGROUND if it doesn't already exist"
-	mkdir -p "$PATH_TO_PLAYGROUND"
+  mkdir -p "$PATH_TO_CODE"
+  echo "Making a Playground folder in $PATH_TO_JOURNAL if it doesn't already exist"
+  mkdir -p "$PATH_TO_JOURNAL"
+  echo "Making a Playground folder in $PATH_TO_PLAYGROUND if it doesn't already exist"
+  mkdir -p "$PATH_TO_PLAYGROUND"
 }
 
 get_linkables() {
@@ -195,9 +199,9 @@ get_linkables() {
 
 get_os() {
   local os=''
-	if [ $( echo "$OSTYPE" | grep 'darwin' ) ] ; then
+  if [ $(echo "$OSTYPE" | grep 'darwin') ]; then
     os='darwin'
-  elif [ $( echo "$OSTYPE" | grep 'linux-gnu' ) ] ; then
+  elif [ $(echo "$OSTYPE" | grep 'linux-gnu') ]; then
     source /etc/os-release
     # Set os to ID_LIKE if this field exists
     # Else default to ID
@@ -217,7 +221,7 @@ get_os() {
 setup_symlinks() {
   title 'Creating symlinks'
 
-  for file in $(get_linkables) ; do
+  for file in $(get_linkables); do
     target="$HOME/.$(basename "$file" '.symlink')"
     if [ -e "$target" ]; then
       info "~${target#$HOME} already exists... Skipping."
@@ -247,118 +251,118 @@ setup_symlinks() {
 }
 
 run_installers() {
-    # find the installers and run them iteratively
-    find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+  # find the installers and run them iteratively
+  find . -name install.sh | while read -r installer; do sh -c "${installer}"; done
 }
 
 setup_git() {
-    title 'Setting up Git'
+  title 'Setting up Git'
 
-    defaultName='Kyle J. Burda'
-    defaultEmail='47502769+kylejb@users.noreply.github.com'
-    defaultGithub='kylejb'
-    defaultSigningkey='0x0'
+  defaultName='Kyle J. Burda'
+  defaultEmail='47502769+kylejb@users.noreply.github.com'
+  defaultGithub='kylejb'
+  defaultSigningkey='0x0'
 
-    read -rp "Name [$defaultName] " name
-    read -rp "Email [$defaultEmail] " email
-    read -rp "Github username [$defaultGithub] " github
-    read -rp "Signing key [$defaultSigningkey] " signingkey
+  read -rp "Name [$defaultName] " name
+  read -rp "Email [$defaultEmail] " email
+  read -rp "Github username [$defaultGithub] " github
+  read -rp "Signing key [$defaultSigningkey] " signingkey
 
-    git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
-    git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
-    git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
-    git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
+  git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
+  git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
+  git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
+  git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
 
-    if [[ "$(get_os)" == 'darwin' ]]; then
-        git config --global credential.helper 'osxkeychain'
-    else
-        warn 'Did not set credential.helper'
-    fi
+  if [[ "$(get_os)" == 'darwin' ]]; then
+    git config --global credential.helper 'osxkeychain'
+  else
+    warn 'Did not set credential.helper'
+  fi
 }
 
 setup_homebrew() {
-    title "Setting up Homebrew"
+  title "Setting up Homebrew"
 
-    if [ "$(get_os)" == 'darwin' ]; then
-        if test ! "$(command -v brew)"; then
-            info 'Homebrew not installed. Installing.'
-            # Run as a login shell (non-interactive) so that the script doesn't pause for user input
-            curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash --login
-        fi
+  if [ "$(get_os)" == 'darwin' ]; then
+    if test ! "$(command -v brew)"; then
+      info 'Homebrew not installed. Installing.'
+      # Run as a login shell (non-interactive) so that the script doesn't pause for user input
+      curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash --login
     fi
+  fi
 
-    # install brew dependencies from Brewfile
-    brew bundle
+  # install brew dependencies from Brewfile
+  brew bundle
 }
 
 setup_shell() {
-    title 'Configuring shell'
+  title 'Configuring shell'
 
-    [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
-    if ! grep "$zsh_path" /etc/shells; then
-        info "adding $zsh_path to /etc/shells"
-        echo "$zsh_path" | sudo tee -a /etc/shells
-    fi
+  [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
+  if ! grep "$zsh_path" /etc/shells; then
+    info "adding $zsh_path to /etc/shells"
+    echo "$zsh_path" | sudo tee -a /etc/shells
+  fi
 
-    if [[ "$SHELL" != "$zsh_path" ]]; then
-        chsh -s "$zsh_path"
-        info "default shell changed to $zsh_path"
-    fi
+  if [[ "$SHELL" != "$zsh_path" ]]; then
+    chsh -s "$zsh_path"
+    info "default shell changed to $zsh_path"
+  fi
 }
 
 install_tools() {
-  local os=$(get_os)
-	if [ "$os" = 'darwin' ] ; then
+  local os="$(get_os)"
+  if [ "$os" = 'darwin' ]; then
     echo 'Detected macOS'
-		echo 'Installing useful stuff using brew. This may take a while...'
-		sh macos/setup.sh
-	else
-		echo 'Skipping installations using Homebrew because MacOS was not detected...'
-	fi
+    echo 'Installing useful stuff using brew. This may take a while...'
+    sh macos/setup.sh
+  else
+    echo 'Skipping installations using Homebrew because MacOS was not detected...'
+  fi
 
-	if [ "$os" = 'debian' || "$os" = 'ubuntu' ] ; then
+  if [ "$os" = 'debian' ] || [ "$os" = 'ubuntu' ]; then
     echo "Detected $os"
 
-		echo 'Installing useful stuff using apt. This may take a while...'
-		sh linux/debian.sh
-	else
-		echo 'Skipping installations using apt because Debian/Linux was not detected...'
-	fi
+    echo 'Installing useful stuff using apt. This may take a while...'
+    sh linux/debian.sh
+  else
+    echo 'Skipping installations using apt because Debian/Linux was not detected...'
+  fi
 }
 
 # TODO: add config options for terminal
 setup_terminfo() {
-    title 'Configuring terminfo'
+  title 'Configuring terminfo'
 
-    info 'adding xterm-256color-italic.terminfo'
-    tic -x "$DOTFILES/resources/xterm-256color-italic.terminfo"
+  info 'adding xterm-256color-italic.terminfo'
+  tic -x "$DOTFILES/macos/xterm-256color-italic.terminfo"
 }
 
 config_macos() {
-    title 'Configuring macOS'
-    local os=$(get_os)
-    if [[ "$os" == 'darwin' ]]; then
-        info 'Add macOS config preferences here.'
-    else
-        warning 'macOS not detected. Skipping.'
-    fi
+  title 'Configuring macOS'
+  local os="$(get_os)"
+  if [[ "$os" == 'darwin' ]]; then
+    info 'Add macOS config preferences here.'
+  else
+    warning 'macOS not detected. Skipping.'
+  fi
 }
 
 setup_all() {
-    setup_symlinks
-    setup_pkg_manager
-    setup_shell
-    setup_git
+  setup_symlinks
+  setup_pkg_manager
+  setup_shell
+  setup_git
 }
 
 setup_macos() {
-    config_macos
+  config_macos
 }
 
 # TODO: Incorporate installations for various OS contexts (e.g., codespaces, macOS, Linux, Windows)
 
 set +u
-if [ $CODESPACES ]; then
+if [ "$CODESPACES" ]; then
   CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
   echo -e 'Updating container dependencies...'
   /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh

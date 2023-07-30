@@ -47,7 +47,10 @@
   "git.autoStash": true,
   "git.branchSortOrder": "alphabetically",
   "git.enableCommitSigning": true,
-  "git.repositoryScanIgnoredFolders": ["node_modules", ".venv"],
+  "git.repositoryScanIgnoredFolders": [
+    "node_modules",
+    ".venv"
+  ],
   "git-graph.dialog.general.referenceInputSpaceSubstitution": "Hyphen",
   "git-graph.repository.commits.showSignatureStatus": true,
   "git-graph.repository.fetchAndPrune": true,
@@ -78,7 +81,9 @@
   "python.testing.pytestEnabled": true,
   "python.testing.pytestPath": "~/.local/bin/pytest",
   "python.testing.unittestEnabled": false,
-  "python.venvFolders": [".venv"],
+  "python.venvFolders": [
+    ".venv"
+  ],
   "redhat.telemetry.enabled": false,
   "search.exclude": {
     "**/.venv": true
@@ -129,6 +134,9 @@
       "comments": true,
       "strings": true
     }
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

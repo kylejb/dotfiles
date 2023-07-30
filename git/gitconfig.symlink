@@ -9,8 +9,6 @@
   instructionFormat = %s [%an] # adds the commit author to the end of each line
 [push]
   default = current
-[gpg]
-  program = gpg
 [commit]
   gpgsign = true
 [color]

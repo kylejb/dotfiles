@@ -18,13 +18,22 @@
 ###############
 
 if [[ "$OSTYPE" == (darwin|freebsd)* ]]; then
-    # this is a good alias, it works by default just using $LSCOLORS
-    ls -G . &>/dev/null && alias ls='ls -G'
-
-    # only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
-    # otherwise, gls will use the default color scheme which is ugly af
-    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+  # this is a good alias, it works by default just using $LSCOLORS
+  ls -l . &>/dev/null && alias ll='ls -l'
+  ls -G . &>/dev/null && alias ls='ls -G'
+  ls -A . &>/dev/null && alias la='ls -A'
+  ls -lAh . &>/dev/null && alias l='ls -lAh'
+    
+  # only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
+  # otherwise, gls will use the default color scheme which is ugly af
+  if $(gls &>/dev/null); then
+    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls -F --color=tty'
+    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias l='gls -lAh --color=tty'
+    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ll='gls -l --color=tty'
+    [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias la='gls -A --color=tty'
+  fi
 fi
+
 # enable diff color if possible.
 if command diff --color . . &>/dev/null; then
   alias diff='diff --color'
@@ -51,6 +60,10 @@ for completion_file in ${(M)config_files:#*/completion.zsh}
 do
   source $completion_file
 done
+
+autoload -Uz compinit
+compinit
+# autoload -U compaudit compinit zrecompile
 
 # load plugins
 export ZPLUGDIR="$XDG_CACHE_HOME/zsh/plugins"

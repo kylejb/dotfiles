@@ -1,4 +1,9 @@
-#!/bin/sh -eo pipefail
+#!/bin/sh -e
+
+# shellcheck disable=SC1091,SC3046
+. utils.sh
+
+set -o pipefail
 
 asdf_plugin_setup() {
 	local plugin_name="${1}"
@@ -30,7 +35,8 @@ asdf_plugin_setup() {
 		# elif [ -n "fedora" ]; then
 		# 	dnf install make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
 		elif [[ "$DETECTED_OS" == 'darwin' ]]; then
-			brew install openssl readline sqlite3 xz zlib tcl-tk
+			echo "brew install deps"
+			# brew install openssl readline sqlite3 xz zlib tcl-tk
 		else
 			echo 'Script only supports macOS and Ubuntu'
 		fi
@@ -45,7 +51,7 @@ asdf_plugin_setup() {
 	#     log_failure_and_exit "asdf plugin add ${plugin_name} encountered an error during operation. Run this command manually to debug the issue."
 	# fi
 
-	asdf install "${plugin_name}" "${plugin_version}"
+	asdf install "${plugin_name}" "${plugin_version}" || true
 	asdf global "${plugin_name}" "$(asdf list "${plugin_name}" | tail -n 1 | xargs echo)"
 	echo "Successfully installed ${plugin_name} via asdf"
 }

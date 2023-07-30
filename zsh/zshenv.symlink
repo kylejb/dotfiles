@@ -25,15 +25,15 @@ export VISUAL="code"
 
 # git
 export GH_CONFIG=$XDG_CONFIG_HOME/gh
-export GIT_MERGE_AUTOEDIT='no'              # require message when merging
-export GIT_REVIEW_BASE=main                 # see gitconfig
+export GIT_MERGE_AUTOEDIT='no' # require message when merging
+export GIT_REVIEW_BASE=main    # see gitconfig
 
 # golang
 export GOBIN="$HOME/workspace/go/bin"
 export GOCACHE="$XDG_CACHE_HOME/go-build"
 export GOPATH="$HOME/workspace/go"
 # TODO: set go version dynamically
-export GOROOT="$HOME/.asdf/installs/golang/1.20.3/go"
+export GOROOT="$HOME/.asdf/installs/golang/1.20.6/go"
 
 # npm
 export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
@@ -46,20 +46,20 @@ export PYTHONPATH=".:$PYTHONPATH"
 
 # rust
 # TODO: set go version dynamically
-export CARGO_BIN="$HOME/.asdf/installs/rust/1.67.3/bin"
+export CARGO_BIN="$HOME/.asdf/installs/rust/1.71.0/bin"
 
 # starship
 export STARSHIP_CONFIG=~"$XDG_CONFIG_HOME/starship.toml"
 
 # yubikey (https://github.com/drduh/YubiKey-Guide#replace-agents)
 export GPG_TTY=$(tty)
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+# export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket) # TODO: handle env without it
 
 # zsh
 export ZDOTDIR="$HOME"
-export HISTFILE="$ZDOTDIR/.zhistory"        # History filepath
-export HISTSIZE=10000                       # Maximum events for internal history
-export SAVEHIST=10000                       # Maximum events in history file
+export HISTFILE="$ZDOTDIR/.zhistory" # History filepath
+export HISTSIZE=10000                # Maximum events for internal history
+export SAVEHIST=10000                # Maximum events in history file
 
 # TODO: incorporate as part of macos specific install
 # /opt/homebrew/share/zsh/site-functions

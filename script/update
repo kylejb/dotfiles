@@ -8,7 +8,9 @@ run_updates() {
 # TODO: Script to dynamically update all packages/dependencies based on OS with one command
 
 # Update App Store apps
-sudo softwareupdate -i -a
+softwareupdate -i -a
 
 # Update Homebrew (Cask) & packages
-brew update && brew upgrade && brew cleanup
+su admin -c 'brew update && brew upgrade && brew cleanup'
+
+run_updates

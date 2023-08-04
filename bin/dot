@@ -25,8 +25,11 @@ while test $# -gt 0; do
 			displayUsageAndExit
 			;;
 		"-e"|"--edit")
-			exec "$EDITOR" "$dotfilesDirectory"
+			exec "${EDITOR:-"code"}" "$dotfilesDirectory"
 			exit
+			;;
+		"update")
+			exec "$dotfilesDirectory/script/update"
 			;;
 		*)
 			echo "Invalid option: $1"
@@ -38,20 +41,20 @@ done
 
 # TODO: finish CLI process; consider incorporating cases
 
-export DOTFILES=$HOME/.dotfiles
+# export DOTFILES=$HOME/.dotfiles
 
-# TODO: Dynamically install/update based on OS.
-# Set macOS defaults
-$DOTFILES/macos/set-defaults.sh
+# # TODO: Dynamically install/update based on OS.
+# # Set macOS defaults
+# # $DOTFILES/macos/set-defaults.sh
 
-# TODO: install homebrew, if not installed
-# Install homebrew
-# $DOTFILES/macos/setup.sh 2>&1
+# # TODO: install homebrew, if not installed
+# # Install homebrew
+# # $DOTFILES/macos/setup.sh 2>&1
 
-# Upgrade homebrew
-echo "› brew update"
-brew update
+# # Upgrade homebrew
+# echo "› brew update"
+# brew update
 
-# Install software
-echo "› $DOTFILES/script/bootstrap"
-$DOTFILES/script/bootstrap
+# # Install software
+# echo "› $DOTFILES/script/bootstrap"
+# $DOTFILES/script/bootstrap

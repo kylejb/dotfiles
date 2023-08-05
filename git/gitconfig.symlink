@@ -1,0 +1,47 @@
+# Local/private config goes in the include
+[include]
+  path = ~/.gitconfig.local
+[core]
+  excludesfile = ~/.gitignore_global
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[init]
+	defaultBranch = main
+[rebase]
+  instructionFormat = %s [%an] # adds the commit author to the end of each line
+[push]
+  default = current
+[gpg]
+  program = gpg
+[commit]
+  gpgsign = true
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+  ui = true
+[format]
+  pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
+[alias]
+  br = branch
+  ci = commit
+  co = checkout
+  df = diff
+  lg = log -p
+  lp = log --pretty
+  pr = pull --rebase
+  pu = !"git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+  st = status
+  up = pull
+  who = shortlog -s --
+  branches = !legit branches
+  count = !git shortlog -sn
+  graft = !legit graft \"$@\"
+  harvest = !legit harvest \"$@\"
+  promote = !$ZSH/bin/git-promote
+  publish = !legit publish \"$@\"
+  rank-contributors = !$ZSH/bin/git-rank-contributors
+  sprout = !legit sprout \"$@\"
+  switch = !legit switch \"$@\"
+  sync = !legit sync \"$@\"
+  wtf = !$ZSH/bin/git-wtf
+  unpublish = !legit unpublish \"$@\"

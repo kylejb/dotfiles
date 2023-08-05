@@ -1,0 +1,3 @@
+function zp {
+  $EDITOR ~/.dotfiles/.zprofile
+}

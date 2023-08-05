@@ -1,0 +1,11 @@
+#!/bin/sh
+# Alternative: https://github.com/zpm-zsh/title
+#
+#
+# Source: https://github.com/holman/dotfiles/blob/master/bin/headers
+
+
+curl -sv "$@" 2>&1 >/dev/null |
+  grep -v "^\*" |
+  grep -v "^}" |
+  cut -c3-

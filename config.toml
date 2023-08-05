@@ -1,0 +1,4 @@
+virtualenvs.in-project = true
+
+[browser]
+gatherUsageStats = false

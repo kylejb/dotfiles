@@ -32,7 +32,8 @@ export GIT_REVIEW_BASE=main                 # see gitconfig
 export GOBIN="$HOME/workspace/go/bin"
 export GOCACHE="$XDG_CACHE_HOME/go-build"
 export GOPATH="$HOME/workspace/go"
-export GOROOT="$HOME/.asdf/installs/golang/1.19.2/go"
+# TODO: set go version dynamically
+export GOROOT="$HOME/.asdf/installs/golang/1.20.1/go"
 
 # npm
 export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
@@ -42,6 +43,10 @@ export NPM_CONFIG_PREFIX="$NPM_PATH"
 # python
 export PIPX_BIN_PATH="$HOME/.local/bin"
 export PYTHONPATH=".:$PYTHONPATH"
+
+# rust
+# TODO: set go version dynamically
+export CARGO_BIN="$HOME/.asdf/installs/rust/1.67.1/bin"
 
 # starship
 export STARSHIP_CONFIG=~"$XDG_CONFIG_HOME/starship.toml"

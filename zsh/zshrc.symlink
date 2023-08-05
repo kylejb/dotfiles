@@ -1,11 +1,19 @@
 source .zprofile
 
+# https://github.com/drduh/YubiKey-Guide#replace-agents
+export GPG_TTY=$(tty)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+
 ## User Paths
   # Append current location to Python Path
   export PYTHONPATH=".:$PYTHONPATH"
 
   # Add pipx install location to User Path
   export HOME_PATHS="$HOME/.local/bin"
+  ### From Fedora's dotfiles
+  ## export PATH=/usr/bin:$PATH
+  ## export DOCKER_HOST=unix:///run/user/1000/docker.sock
   # Build our final PATH by combining the variables defined above
   # with any previous values in the PATH variable.
   export PATH=$HOME_PATHS:$PATH
@@ -61,7 +69,7 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-plugins=(git npm postgres zsh-completions)
+plugins=(asdf git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 

@@ -34,6 +34,7 @@ function Install-VSCode-Extensions-In-WSL {
   Write-Host "Installing Visual Studio Code extensions in WSL:" -ForegroundColor "Green";
 
   wsl code --install-extension aaron-bond.better-comments;
+  wsl code --install-extension christian-kohler.path-intellisense;
   wsl code --install-extension dbaeumer.vscode-eslint;
   wsl code --install-extension eamodio.gitlens;
   wsl code --install-extension esbenp.prettier-vscode;

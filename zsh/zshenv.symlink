@@ -32,7 +32,7 @@ export GIT_REVIEW_BASE=main                 # see gitconfig
 export GOBIN="$HOME/workspace/go/bin"
 export GOCACHE="$XDG_CACHE_HOME/go-build"
 export GOPATH="$HOME/workspace/go"
-export GOROOT="$HOME/.asdf/installs/golang/1.19.1/go"
+export GOROOT="$HOME/.asdf/installs/golang/1.19.2/go"
 
 # npm
 export NPM_PATH="$XDG_CONFIG_HOME/node_modules"

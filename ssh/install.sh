@@ -14,9 +14,9 @@ case $(hostname) in
 W-*)
     info "Work environment detected. Applying ssh configurations for ${DETECTED_OS}..."
     if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
-        echo 'Include linux.base-config\n' | cat - "${src_dir}/config" >tmp_config && mv tmp_config "${src_dir}/config"
+        echo 'Include $DOTFILES/ssh/linux.base-config\n' | cat - "${src_dir}/config" >tmp_config && mv tmp_config "${src_dir}/config"
     elif [[ "$DETECTED_OS" == 'darwin' ]]; then
-        echo 'Include macos.base-config\n' | cat - "${src_dir}/config" >tmp_config && mv tmp_config "${src_dir}/config"
+        echo 'Include $DOTFILES/ssh/macos.base-config\n' | cat - "${src_dir}/config" >tmp_config && mv tmp_config "${src_dir}/config"
     fi
     ;;
 *)

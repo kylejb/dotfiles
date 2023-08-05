@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = false
 
@@ -35,11 +37,6 @@ style = "bold cyan"
 truncate_to_repo = true
 truncation_length = 2
 
-# [env_var]
-# variable = "SHELL"
-# default = "Zsh"
-# format = ">"
-
 [git_branch]
 # symbol = "🌱 "
 disabled = false
@@ -58,24 +55,6 @@ rebase = "REBASING"
 revert = "REVERTING"
 style = "bold yellow"
 
-# [git_status]
-# conflicted = "🏳"
-# ahead = "🏎💨"
-# behind = "😰"
-# diverged = "😵"
-# untracked = "🤷‍"
-# stashed = "📦"
-# modified = "📝"
-# staged.value = "++"
-# staged.style = "green"
-# staged_count.enabled = true
-# staged_count.style = "green"
-# renamed = "👅"
-# deleted = "🗑"
-
-# [[git_status.count]]
-# enabled = true
-
 [hostname]
 ssh_only = true
 # format = "⟫ "
@@ -85,24 +64,10 @@ trim_at = "."
 [line_break]
 disabled = true
 
-# [memory_usage]
-# disabled = false
-# show_percentage = true
-# show_swap = false
-# threshold = -1
-# symbol = " "
-# separator = "/"
-# style = "bold dimmed white"
-
 [nodejs]
 disabled = false
 style = "bold green"
 symbol = "⬢ "
-
-# [package]
-# symbol = "📦 "
-# style = "bold red"
-# disabled = false
 
 [python]
 disabled = false
@@ -111,19 +76,8 @@ pyenv_version_name = false
 style = "bold yellow"
 symbol = "🐍 "
 
-# [time]
-# format = "🕙%T"
-# style_root = "bold red"
-# style_user = "bold yellow"
-# show_always = true
-# disabled = false
-
 [username]
 disabled = false
 show_always = true
 style_root = "bold red"
 style_user = "bold yellow"
-
-# Disable the package module, hiding it from the prompt completely
-# [package]
-# disabled = true

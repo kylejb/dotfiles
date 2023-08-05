@@ -1,7 +1,20 @@
 # First time installation for new Windows system.
-
 # TODO: review paths and refactor
 # TODO: review Setup.ps1 and merge
+
+# function mklink {
+#   cmd /c mklink $args
+# # cmd /c mklink c:\path\to\symlink c:\target\file
+
+# # must pass /d if path to is a directory
+# # cmd /c mklink /d c:\path\to\symlink c:\target\directory
+# }
+
+# # powershell version
+# function make-link ($target, $link) {
+#   # Junction (for directory)
+#   New-Item -Path $link -ItemType SymbolicLink -Value $target
+# }
 
 $DownloadResult = $FALSE;
 

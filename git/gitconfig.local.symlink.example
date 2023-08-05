@@ -1,9 +1,0 @@
-# TODO: remove this file and document as example (exclude when pulling, if possible)
-[user]
-  name = NAME
-  email = EMAIL
-  signingkey = KEY
-[github]
-  token = API_Token # https://github.com/settings/applications
-[credential]
-  helper = GIT_CREDENTIAL_HELPER

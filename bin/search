@@ -2,7 +2,6 @@
 #
 # Quick search in a directory for a string ($@).
 #
-
 # use -iru to search directories ack usually ignores (like .git)
 if [ -x /usr/bin/ack-grep ]; then
     ack-grep -i "$@"

@@ -187,10 +187,10 @@ success() {
 init() {
   echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
   mkdir -p "$PATH_TO_CODE"
-  echo "Making a Playground folder in $PATH_TO_JOURNAL if it doesn't already exist"
+  echo "Making a Journal folder in $PATH_TO_JOURNAL if it doesn't already exist"
   mkdir -p "$PATH_TO_JOURNAL"
-  echo "Making a Playground folder in $PATH_TO_PLAYGROUND if it doesn't already exist"
-  mkdir -p "$PATH_TO_PLAYGROUND"
+  echo "Making a Sandbox folder in $PATH_TO_SANDBOX if it doesn't already exist"
+  mkdir -p "$PATH_TO_SANDBOX"
 }
 
 get_linkables() {

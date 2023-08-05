@@ -22,7 +22,7 @@ Script will download this repository to `~/.dotfiles` and will symlink the appro
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.sh)"
     ```
 
-Everything is configurable from this folder. The main file you'll want to change right off the bat is zsh/zshrc.symlink, which sets up a few paths that may differ on your particular machine.
+Everything is configurable from this folder. The main file you'll want to change right off the bat is `zsh/zshrc.symlink`, which sets up a few paths that may differ on your particular machine.
 
 ## Update
 
@@ -31,7 +31,7 @@ Everything is configurable from this folder. The main file you'll want to change
 ## Structure
 
 Everything is built around "topic" areas. If you're adding a new area to your
-forked dotfiles — say, "Java" — you can simply add a `java` directory and put
+forked dotfiles — "Java", for instance — you can add a `java` directory and put
 files in there. Anything with an extension of `.zsh` will get automatically
 included into your shell. Anything with an extension of `.symlink` will get
 symlinked without extension into `$HOME` when you run `script/bootstrap`.

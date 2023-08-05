@@ -1,11 +1,9 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # dot
 #
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
-
-set -e
 
 parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
@@ -38,19 +36,22 @@ while test $# -gt 0; do
 	shift
 done
 
-export ZSH=$HOME/.dotfiles
+# TODO: finish CLI process; consider incorporating cases
+
+export DOTFILES=$HOME/.dotfiles
 
 # TODO: Dynamically install/update based on OS.
 # Set macOS defaults
-$ZSH/macos/set-defaults.sh
+$DOTFILES/macos/set-defaults.sh
 
+# TODO: install homebrew, if not installed
 # Install homebrew
-$ZSH/homebrew/install.sh 2>&1
+# $DOTFILES/macos/setup.sh 2>&1
 
 # Upgrade homebrew
 echo "› brew update"
 brew update
 
 # Install software
-echo "› $ZSH/script/install"
-$ZSH/script/install
+echo "› $DOTFILES/script/bootstrap"
+$DOTFILES/script/bootstrap

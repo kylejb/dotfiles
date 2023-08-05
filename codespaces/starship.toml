@@ -1,0 +1,129 @@
+# Inserts a blank line between shell prompts
+add_newline = false
+
+format = """\
+    $username\
+    $memory_usage\
+    $directory\
+    $git_branch\
+    $git_commit\
+    $git_state\
+    $git_status\
+    $hg_branch\
+    $package\
+    $nodejs\
+    $python\
+    $env_var\
+    $line_break\
+    $cmd_duration\
+    $time\
+    $character\
+    """
+
+[character]
+# symbol = "➜"
+error_symbol = "✗"
+
+[cmd_duration]
+format = "took [$duration]($style) "
+min_time = 500
+
+[directory]
+disabled = false
+format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold cyan"
+truncate_to_repo = true
+truncation_length = 2
+
+# [env_var]
+# variable = "SHELL"
+# default = "Zsh"
+# format = ">"
+
+[git_branch]
+# symbol = "🌱 "
+disabled = false
+style = "bold purple"
+truncation_length = 8
+truncation_symbol = "..."
+
+[git_state]
+am = "AM"
+am_or_rebase = "AM/REBASE"
+bisect = "BISECTING"
+cherry_pick = "CHERRY PICKING"
+disabled = false
+merge = "MERGING"
+rebase = "REBASING"
+revert = "REVERTING"
+style = "bold yellow"
+
+# [git_status]
+# conflicted = "🏳"
+# ahead = "🏎💨"
+# behind = "😰"
+# diverged = "😵"
+# untracked = "🤷‍"
+# stashed = "📦"
+# modified = "📝"
+# staged.value = "++"
+# staged.style = "green"
+# staged_count.enabled = true
+# staged_count.style = "green"
+# renamed = "👅"
+# deleted = "🗑"
+
+# [[git_status.count]]
+# enabled = true
+
+[hostname]
+ssh_only = true
+# format = "⟫ "
+disabled = false
+trim_at = "."
+
+[line_break]
+disabled = true
+
+# [memory_usage]
+# disabled = false
+# show_percentage = true
+# show_swap = false
+# threshold = -1
+# symbol = " "
+# separator = "/"
+# style = "bold dimmed white"
+
+[nodejs]
+disabled = false
+style = "bold green"
+symbol = "⬢ "
+
+# [package]
+# symbol = "📦 "
+# style = "bold red"
+# disabled = false
+
+[python]
+disabled = false
+pyenv_prefix = "pyenv"
+pyenv_version_name = false
+style = "bold yellow"
+symbol = "🐍 "
+
+# [time]
+# format = "🕙%T"
+# style_root = "bold red"
+# style_user = "bold yellow"
+# show_always = true
+# disabled = false
+
+[username]
+disabled = false
+show_always = true
+style_root = "bold red"
+style_user = "bold yellow"
+
+# Disable the package module, hiding it from the prompt completely
+# [package]
+# disabled = true

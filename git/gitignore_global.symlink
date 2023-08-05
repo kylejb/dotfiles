@@ -458,42 +458,6 @@ jspm_packages/
 # Used by previous versions of JEnv
 .jenv-version
 
-##############
-#  MATLAB    #
-##############
-
-# Windows default autosave extension
-*.asv
-
-# OSX / *nix default autosave extension
-*.m~
-
-# Compiled MEX binaries (all platforms)
-*.mex*
-
-# Packaged app and toolbox files
-*.mlappinstall
-*.mltbx
-
-# Generated helpsearch folders
-helpsearch*/
-
-# Simulink code generation folders
-slprj/
-sccprj/
-
-# Matlab code generation folders
-codegen/
-
-# Simulink autosave extension
-*.autosave
-
-# Simulink cache files
-*.slxc
-
-# Octave session info
-octave-workspace
-
 # ----------------------------------------------------------------------
 # | Miscellaneous                                                      |
 # ----------------------------------------------------------------------
@@ -510,11 +474,8 @@ octave-workspace
 .dropbox.attr
 .dropbox.cache
 
-## Local dotfile changes
-*.local
-
-## Private
-git/gitconfig.local.symlink
+## Private dotfile config
+*.local.*
 
 ## GPG
 secring.*
@@ -533,11 +494,7 @@ private.*
 .oh-my-zsh
 
 ## Custom Dotenv Folder
-.dotfiles.git
 .dotfiles
-.cfg.git
-.cfg
-
 
 ###############
 #  OpenSSL    #

@@ -10,8 +10,8 @@ export ZSH="${ZSH:-$DOTFILES/zsh}"
 # Directories
 export PATH_TO_CODE="$HOME/Dev"
 export PATH_TO_JOURNAL="$HOME/Journal"
-export PATH_TO_PLAYGROUND="$HOME/Playground"
-export SCREENSHOT="$HOME/Documents/screenshots"
+export PATH_TO_SANDBOX="$HOME/Sandbox"
+export SCREENSHOT="$HOME/Documents/Screenshots"
 
 # XDG
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -25,15 +25,14 @@ export VISUAL="code"
 
 # git
 export GH_CONFIG=$XDG_CONFIG_HOME/gh
-export GIT_MERGE_AUTOEDIT='no' # require message when merging
-export GIT_REVIEW_BASE=main    # see gitconfig
+export GIT_MERGE_AUTOEDIT='no'        # require message when merging
+export GIT_REVIEW_BASE=main           # see gitconfig
 
 # golang
-export GOBIN="$HOME/workspace/go/bin"
-export GOCACHE="$XDG_CACHE_HOME/go-build"
-export GOPATH="$HOME/workspace/go"
-# TODO: set go version dynamically
-export GOROOT="$HOME/.asdf/installs/golang/1.20.6/go"
+# export GOBIN="$HOME/workspace/go/bin"
+# export GOCACHE="$XDG_CACHE_HOME/go-build"
+# export GOPATH="$HOME/workspace/go"
+# export GOROOT="$HOME/.asdf/installs/golang/1.20.7/go"
 
 # npm
 export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
@@ -44,12 +43,8 @@ export NPM_CONFIG_PREFIX="$NPM_PATH"
 export PIPX_BIN_PATH="$HOME/.local/bin"
 export PYTHONPATH=".:$PYTHONPATH"
 
-# rust
-# TODO: set go version dynamically
-export CARGO_BIN="$HOME/.asdf/installs/rust/1.71.0/bin"
-
 # starship
-export STARSHIP_CONFIG=~"$XDG_CONFIG_HOME/starship.toml"
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 
 # yubikey (https://github.com/drduh/YubiKey-Guide#replace-agents)
 export GPG_TTY=$(tty)

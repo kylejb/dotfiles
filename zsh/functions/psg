@@ -1,7 +1,10 @@
 #!/usr/bin/env zsh
-
+#
 # Function to easily grep for a matching process
-# EXAMPLE: psg postgres
+# Example:
+#
+#   psg postgres
+
 function psg {
   FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
   REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`

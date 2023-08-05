@@ -16,8 +16,8 @@ displayUsageAndExit() {
 	echo 'Options:'
 	echo '  -i, --install   Install dotfiles'
 	echo '  -u, --update    Update dotfiles'
-	echo '  -e, --edit    	Open dotfiles directory for editing'
-	echo '  -h, --help    	Show this help message and exit'
+	echo '  -e, --edit      Open dotfiles directory for editing'
+	echo '  -h, --help      Show this help message and exit'
 	exit
 }
 

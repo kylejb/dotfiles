@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh -e
+
 [[ ! -d "$1" ]] && return
 
 path=(

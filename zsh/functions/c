@@ -1,1 +1,3 @@
+#!/usr/bin/env zsh -e
+
 cd $PATH_TO_CODE/$1

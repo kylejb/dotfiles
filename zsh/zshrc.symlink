@@ -6,9 +6,6 @@ source $ZSH/init.sh
 ## export PATH=/usr/bin:$PATH
 ## export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
-prepend_path $CARGO_BIN
-prepend_path $GOBIN
-prepend_path $GOROOT
 prepend_path $NPM_BIN
 prepend_path $PIPX_BIN_PATH
 prepend_path $DOTFILES/bin

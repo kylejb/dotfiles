@@ -1,21 +1,21 @@
 source $ZSH/init.sh
 
 ## User Paths
-  # TODO: set these based on os env
-  ### From Fedora's dotfiles
-  ## export PATH=/usr/bin:$PATH
-  ## export DOCKER_HOST=unix:///run/user/1000/docker.sock
-  prepend_path $TOOLBOX_PATH
+# TODO: set these based on os env
+### From Fedora's dotfiles
+## export PATH=/usr/bin:$PATH
+## export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
-  prepend_path $CARGO_BIN
-  prepend_path $GOBIN
-  prepend_path $GOROOT
-  prepend_path $NPM_BIN
-  prepend_path $PIPX_BIN_PATH
-  prepend_path $DOTFILES/bin
+prepend_path $CARGO_BIN
+prepend_path $GOBIN
+prepend_path $GOROOT
+prepend_path $NPM_BIN
+prepend_path $PIPX_BIN_PATH
+prepend_path $DOTFILES/bin
 
 # Supports GPG signing with Yubikey
-gpgconf --launch gpg-agent
+# TODO: handle env without it
+# gpgconf --launch gpg-agent
 
 # private environment variables
 [[ -f $HOME/.localrc ]] && source $HOME/.localrc

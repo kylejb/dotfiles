@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env zsh -e
 # This code was originally from
 # https://github.com/jason0x43/dotfiles/blob/eff04270c4d8074db36d3e3bf85f64d3ccbeafe9/zsh/functions/zfetch
 

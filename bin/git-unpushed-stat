@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Show the diffstat of everything you haven't pushed yet.
 #

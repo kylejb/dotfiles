@@ -1,1 +1,11 @@
-gpg-agent.conf
+# git
+# TODO: consider mirroring approach taken for gnupg to handle OS contexts
+
+# gnupg
+gnupg/gpg-agent.conf
+
+# ssh
+ssh/config
+
+# zsh
+zsh/plugins/**

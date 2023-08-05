@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 # Alternative: https://github.com/zpm-zsh/title
 #
 #

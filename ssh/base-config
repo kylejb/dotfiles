@@ -1,0 +1,28 @@
+# Host github.com
+#   User git
+#   ControlMaster no
+#   IdentitiesOnly yes
+#   IdentityFile ~/.ssh/id_rsa_yubikey.pub
+
+Host *
+  ## https://docs.rc.fas.harvard.edu/kb/using-ssh-controlmaster-for-single-sign-on/
+  AddKeysToAgent yes
+  AddressFamily inet
+  ChallengeResponseAuthentication no
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+  ControlMaster auto
+  ControlPath ~/.ssh/master-%r@%h:%p
+  ControlPersist 300
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Trusted no
+  HashKnownHosts yes
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
+  KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+  PasswordAuthentication no
+  ServerAliveCountMax 2
+  ServerAliveInterval 300
+  StrictHostKeyChecking ask
+  VerifyHostKeyDNS yes
+  VisualHostKey yes

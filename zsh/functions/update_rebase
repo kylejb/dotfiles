@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh -e
 
 function update_rebase {
     cur_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -6,12 +6,4 @@ function update_rebase {
     git pull origin $1
     git checkout $cur_branch
     git rebase -i $1
-}
-
-function zp {
-  $EDITOR $ZSH/zprofile
-}
-
-function zshrefresh {
-    source $HOME/.zshrc
 }

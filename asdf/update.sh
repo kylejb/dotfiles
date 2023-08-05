@@ -3,13 +3,18 @@
 # shellcheck disable=SC1091,SC3046
 . utils.sh
 
-update_asdf () {
+grab_latest_installed() {
+    local plugin_name="${1}"
+    asdf list "${plugin_name}" | tail -n 1 | sed 's/*//g' | xargs | tr -d '[:space:]'
+}
+
+update_asdf() {
     echo "Updating asdf..."
     asdf update
     asdf plugin update --all
 }
 
-update_plugin_dependency_manager() {
+update_plugin_package_manager() {
     local plugin_name="${1}"
 
     case "${plugin_name}" in
@@ -34,12 +39,7 @@ update_plugin_dependency_manager() {
     esac
 }
 
-grab_latest_installed() {
-    local plugin_name="${1}"
-    asdf list "${plugin_name}" | tail -n 1 | sed 's/*//g' | xargs | tr -d '[:space:]'
-}
-
-replace_current_latest() {
+upsert_latest_plugin() {
     local plugin_name="${1}"
 
     local latest_version="$(asdf latest $plugin_name)"
@@ -58,14 +58,14 @@ replace_current_latest() {
     asdf global "${plugin_name}" "${latest_version}"
 }
 
-update_latest() {
+upsert_latest_plugins() {
     for plugin in $(asdf plugin list); do
-        replace_current_latest $plugin
-        update_plugin_dependency_manager $plugin
+        upsert_latest_plugin $plugin
+        update_plugin_package_manager $plugin
     done
 
     asdf reshim
 }
 
 update_asdf
-update_latest
+upsert_latest_plugins

@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 # shellcheck disable=SC1091,SC3046
 . utils.sh
@@ -15,7 +15,7 @@ asdf_plugin_setup() {
 	# if nodejs
 	# install nodejs deps
 	if [[ "${plugin_name}" == 'nodejs' && ! -x "$(command -v gpg)" ]]; then
-	    if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+		if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
 			sudo apt-get install gpg -y
 		elif [[ "$DETECTED_OS" == 'darwin' ]]; then
 			brew install gpg
@@ -27,10 +27,11 @@ asdf_plugin_setup() {
 	# if python
 	# install python deps
 	if [[ "${plugin_name}" == 'python' ]]; then
-	    if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
-			sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
-			libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-			libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+		if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+			sudo apt-get update
+			sudo apt-get install make build-essential libssl-dev zlib1g-dev \
+				libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+				libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 		# TODO: add support for Fedora
 		# elif [ -n "fedora" ]; then
 		# 	dnf install make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
@@ -58,19 +59,19 @@ asdf_plugin_setup() {
 
 # asdf
 if [ -d "${HOME}/.asdf" ]; then
-    # success
+	# success
 	echo 'asdf already exists'
 else
-    # info
+	# info
 	echo 'Installing asdf'
 	git clone https://github.com/asdf-vm/asdf.git "${HOME}/.asdf"
 
 	[ -d "${HOME}/.asdf" ] || {
-        # failure and exit
+		# failure and exit
 		echo 'Could not find .asdf' 1>&2
-        exit 1
+		exit 1
 	}
-    # success
+	# success
 	echo 'Successfully installed asdf'
 	exit 0
 fi

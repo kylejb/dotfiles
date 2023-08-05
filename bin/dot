@@ -9,52 +9,37 @@ parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 
 displayUsageAndExit() {
-	echo "dot -- dotfiles management"
-	echo ""
-	echo "Usage: dot [options]"
-	echo ""
-	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
+	echo 'dot -- dotfiles management'
+	echo ''
+	echo 'Usage: dot [options]'
+	echo ''
+	echo 'Options:'
+	echo '  -i, --install   Install dotfiles'
+	echo '  -u, --update    Update dotfiles'
+	echo '  -e, --edit    	Open dotfiles directory for editing'
+	echo '  -h, --help    	Show this help message and exit'
 	exit
 }
 
 while test $# -gt 0; do
 	case "$1" in
-		"-h"|"--help")
-			displayUsageAndExit
-			;;
-		"-e"|"--edit")
-			exec "${EDITOR:-"code"}" "$dotfilesDirectory"
-			exit
-			;;
-		"update")
-			exec "$dotfilesDirectory/script/update"
-			;;
-		*)
-			echo "Invalid option: $1"
-			displayUsageAndExit
-			;;
+	'-h' | '--help')
+		displayUsageAndExit
+		;;
+	'-e' | '--edit')
+		exec "${EDITOR:-"code"}" "$dotfilesDirectory"
+		exit
+		;;
+	'-i' | '--install')
+		exec "$dotfilesDirectory/script/bootstrap"
+		;;
+	'-u' | 'update')
+		exec "$dotfilesDirectory/script/update"
+		;;
+	*)
+		echo "Invalid option: $1"
+		displayUsageAndExit
+		;;
 	esac
 	shift
 done
-
-# TODO: finish CLI process; consider incorporating cases
-
-# export DOTFILES=$HOME/.dotfiles
-
-# # TODO: Dynamically install/update based on OS.
-# # Set macOS defaults
-# # $DOTFILES/macos/set-defaults.sh
-
-# # TODO: install homebrew, if not installed
-# # Install homebrew
-# # $DOTFILES/macos/setup.sh 2>&1
-
-# # Upgrade homebrew
-# echo "› brew update"
-# brew update
-
-# # Install software
-# echo "› $DOTFILES/script/bootstrap"
-# $DOTFILES/script/bootstrap

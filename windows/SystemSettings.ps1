@@ -145,6 +145,13 @@ function Rename-PC {
   }
 }
 
+function Update-SystemUserPath {
+  $userProfilePath = [Environment]::GetEnvironmentVariable("USERPROFILE", [EnvironmentVariableTarget]::User);
+  $newPath = $userProfilePath + "\AppData\Local\1Password\app\8";
+  [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User) + ";" + $newPath, [EnvironmentVariableTarget]::User);
+}
+
+
 Disable-WindowsFeature "WindowsMediaPlayer" "Windows Media Player";
 Disable-WindowsFeature "Internet-Explorer-Optional-amd64" "Internet Explorer";
 Disable-WindowsFeature "Printing-XPSServices-Features" "Microsoft XPS Document Writer";
@@ -165,3 +172,4 @@ Disable-RecentlyOpenedItems-From-JumpList;
 Set-Power-Configuration;
 Set-Custom-Regional-Format;
 Rename-PC;
+Update-SystemUserPath;

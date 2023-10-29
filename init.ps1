@@ -6,6 +6,10 @@ Import-Module "~\.dotfiles\pwsh\Modules\Install-Fonts\Install-Fonts.psm1"
 # https://ohmyposh.dev/docs/installation/windows
 winget install JanDeDobbeleer.OhMyPosh -s winget
 
+# Install 1Password
+winget install AgileBits.1Password -s winget
+winget install AgileBits.1Password.CLI -s winget
+
 # Install fonts
 $dir = "~\Downloads\Fonts"
 If(!(test-path $dir)) {New-Item -ItemType Directory -Force -Path $dir}

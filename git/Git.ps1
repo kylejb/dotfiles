@@ -3,8 +3,9 @@ function Set-Git-Configuration {
 
   # git config --global user.name $Config.GitUserName;
   # git config --global user.email $Config.GitUserEmail;
-  git config --global gpg.program C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe;
-  git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe;
+  git config --global core.sshCommand "ssh.exe";
+  git config --global core.sshProgram "ssh.exe";
+  git config --global gpg.ssh.program "op-ssh-sign.exe";
 
   Write-Host "Git was successfully configured." -ForegroundColor "Green";
 }

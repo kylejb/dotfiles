@@ -3,7 +3,7 @@
 # shellcheck disable=SC1091,SC3046
 . utils.sh
 
-src_dir="${DOTFILES}/ssh"
+src_dir="${DOTFILES:-$HOME/.dotfiles}/ssh"
 target_dir="${HOME}/.ssh"
 
 cp "${src_dir}/base-config" "${src_dir}/config"

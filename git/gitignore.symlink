@@ -86,10 +86,12 @@ pip-delete-this-directory.txt
 
 ._*
 .AppleDouble
+.CFUserTextEncoding
 .DS_Store
 .DS_Store?
 .LSOverride
 .Spotlight-V100
+.Trash
 .Trashes
 
 #########

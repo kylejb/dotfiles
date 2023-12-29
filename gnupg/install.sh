@@ -7,7 +7,7 @@ cp "${DOTFILES}/gnupg/base.gpg-agent.conf" "${DOTFILES}/gnupg/gpg-agent.conf"
 
 case "$DETECTED_OS" in
 darwin)
-  echo "pinentry-program /opt/homebrew/bin/pinentry-mac" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
+  echo "pinentry-program /opt/homebrew/bin/pinentry" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
   ;;
 linux-gnu)
   echo "pinentry-program /usr/local/bin/pinentry-curse" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
@@ -33,6 +33,11 @@ if [ -e "$gpg_agent_target" ]; then
 else
   info "Creating symlink for $gpg_agent_source"
   ln -s "$gpg_agent_source" "$gpg_agent_target"
+fi
+
+info 'Setting up ~/.gnupg'
+if [ ! -d ~/.gnupg ]; then
+  mkdir "$HOME/.gnupg"
 fi
 
 gpg_conf_source="$DOTFILES/gnupg/gpg.conf"

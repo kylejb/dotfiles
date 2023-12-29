@@ -10,10 +10,6 @@ prepend_path $NPM_BIN
 prepend_path $PIPX_BIN_PATH
 prepend_path $DOTFILES/bin
 
-# Supports GPG signing with Yubikey
-# TODO: handle env without it
-# gpgconf --launch gpg-agent
-
 # private environment variables
 [[ -f $HOME/.localrc ]] && source $HOME/.localrc
 

@@ -84,18 +84,6 @@ setup_git() {
   git config -f ~/.gitconfig.local commit.gpgsign true
 }
 
-setup_homebrew() {
-  title "Setting up Homebrew"
-
-  if [ "$(get_os)" == 'darwin' ]; then
-    if test ! "$(command -v brew)"; then
-      info 'Homebrew not installed. Installing.'
-      # Run as a login shell (non-interactive) so that the script doesn't pause for user input
-      curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh | bash --login
-    fi
-  fi
-}
-
 setup_shell() {
   title 'Configuring shell'
 
@@ -112,22 +100,22 @@ setup_shell() {
 }
 
 install_tools() {
+  title 'Install dev tools'
   local os="$(get_os)"
   if [ "$os" = 'darwin' ]; then
-    echo 'Detected macOS'
-    echo 'Installing useful stuff using brew. This may take a while...'
+    info 'Detected macOS'
+    info 'Setting up Homebrew and installing common dependencies for development. This may take a while...'
     sh macos/setup.sh
   else
-    echo 'Skipping installations using Homebrew because MacOS was not detected...'
+    warning 'Skipping installation using Homebrew because macOS was not detected...'
   fi
 
   if [ "$os" = 'debian' ] || [ "$os" = 'ubuntu' ]; then
-    echo "Detected $os"
-
-    echo 'Installing useful stuff using apt. This may take a while...'
+    info "Detected $os"
+    info 'Installing common dependencies for development using apt. This may take a while...'
     sh linux/debian.sh
   else
-    echo 'Skipping installations using apt because Debian/Linux was not detected...'
+    warning 'Skipping installation using apt because Debian/Ubuntu was not detected...'
   fi
 }
 
@@ -139,31 +127,18 @@ setup_terminfo() {
   tic -x "$DOTFILES/macos/xterm-256color-italic.terminfo"
 }
 
-config_macos() {
-  title 'Configuring macOS'
-  local os="$(get_os)"
-  if [[ "$os" == 'darwin' ]]; then
-    info 'Add macOS config preferences here.'
-    setup_terminfo
-  else
-    warning 'macOS not detected. Skipping.'
-  fi
-}
+main() {
+  title 'Installing dotfiles...'
 
-setup_all() {
-  setup_symlinks
-  setup_pkg_manager
+  init
+  install_tools
+  run_installers
   setup_shell
-  setup_git
-}
-
-setup_macos() {
-  config_macos
-  setup_homebrew
   setup_symlinks
+
+  success 'Done.'
 }
 
-# TODO: refactor to single entrypoint
 set +u
 if [ "$CODESPACES" ]; then
   CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
@@ -175,47 +150,4 @@ else
 fi
 set -u
 
-# case "$1" in
-#     backup)
-#         backup
-#         ;;
-#     link)
-#         setup_symlinks
-#         ;;
-#     git)
-#         setup_git
-#         ;;
-#     homebrew)
-#         setup_homebrew
-#         ;;
-#     shell)
-#         setup_shell
-#         ;;
-#     macos)
-#         setup_symlinks
-#         setup_pkg_manager
-#         setup_shell
-#         setup_git
-#         setup_macos
-#         ;;
-#     linux)
-#         setup_symlinks
-#         setup_pkg_manager
-#         setup_shell
-#         setup_git
-#         setup_linux
-#         ;;
-#     all)
-#         setup_symlinks
-#         setup_pkg_manager
-#         setup_shell
-#         setup_git
-#         setup_macos
-#         ;;
-#     *)
-#         echo -e $"\nUsage: $(basename "$0") {link|git|homebrew|shell|macos|all}\n"
-#         exit 1
-#         ;;
-# esac
-
-success 'Done.'
+main

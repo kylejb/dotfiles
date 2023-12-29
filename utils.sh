@@ -1,13 +1,5 @@
 #!/bin/sh -e
 
-# TODO: confirm default settings and entrypoint
-# Default settings
-DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
-ZSH="${ZSH:-$DOTFILES/zsh}"
-REPO=${REPO:-kylejb/dotfiles}
-REMOTE=${REMOTE:-https://github.com/${REPO}.git}
-BRANCH=${BRANCH:-main}
-
 runSetup() {
     # Ask for the administrator password upfront
     sudo -v
@@ -75,7 +67,7 @@ setup_color() {
         return
     fi
 
-    if supports_truecolor; then
+    if command_exists supports_truecolor && supports_truecolor; then
         FMT_RAINBOW="
       $(printf '\033[38;2;255;0;0m')
       $(printf '\033[38;2;255;97;0m')
@@ -103,6 +95,7 @@ setup_color() {
     FMT_BLUE=$(printf '\033[34m')
     FMT_BOLD=$(printf '\033[1m')
     FMT_RESET=$(printf '\033[0m')
+    NO_COLOR=$(printf '\033[0m')
 }
 
 title() {
@@ -133,11 +126,11 @@ success() {
 #####################
 
 heading() {
-    printf '\n%s\n' "${BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
+    printf '\n%s\n' "${FMT_BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
 }
 
 info() {
-    printf '%s\n' "${BOLD}${MAGENTA}==> $*${NO_COLOR}"
+    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${NO_COLOR}"
 }
 
 warn() {
@@ -178,19 +171,5 @@ get_os() {
     echo "$DETECTED_OS"
 }
 
-# shellcheck disable=SC3043
-# usage: write_line_to_file_if_not_exists "some_line" "/some/file"
-write_line_to_file_if_not_exists() {
-    local LINE="$1"
-    local FILE="$2"
-
-    info "Appending ${LINE} to ${FILE} if not exists"
-    grep -qxF "$LINE" "$FILE" || echo "$LINE" | sudo tee -a "$FILE"
-}
-
-# usage: get_latest_release "kylejb/dotfiles"
-github_repo_latest_release() {
-    curl -fsSL "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub API
-        grep '"tag_name":' |                                       # Get tag line
-        sed -E 's/.*"([^"]+)".*/\1/'                               # get JSON value for release tag
-}
+get_os
+setup_color

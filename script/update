@@ -11,6 +11,6 @@ run_updates() {
 softwareupdate -i -a
 
 # Update Homebrew (Cask) & packages
-su admin -c 'brew update && brew upgrade && brew cleanup'
+brew update && brew upgrade && brew cleanup
 
 run_updates

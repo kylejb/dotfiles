@@ -5,18 +5,14 @@
   "editor.acceptSuggestionOnEnter": "off",
   "editor.bracketPairColorization.enabled": true,
   "editor.detectIndentation": false,
-  "editor.fontFamily": "Meslo LG S for Powerline",
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
   "editor.fontSize": 16,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   "editor.snippetSuggestions": "top",
   "editor.tabCompletion": "on",
-  "emmet.includeLanguages": {
-    "*.erb": "html",
-    "*.hbs": "html",
-    "django-html": "html"
-  },
   "emmet.triggerExpansionOnTab": true,
   "explorer.compactFolders": false,
   "explorer.confirmDelete": false,
@@ -47,10 +43,7 @@
   "git.autoStash": true,
   "git.branchSortOrder": "alphabetically",
   "git.enableCommitSigning": true,
-  "git.repositoryScanIgnoredFolders": [
-    "node_modules",
-    ".venv"
-  ],
+  "git.repositoryScanIgnoredFolders": ["node_modules", ".venv"],
   "git-graph.dialog.general.referenceInputSpaceSubstitution": "Hyphen",
   "git-graph.repository.commits.showSignatureStatus": true,
   "git-graph.repository.fetchAndPrune": true,
@@ -81,9 +74,7 @@
   "python.testing.pytestEnabled": true,
   "python.testing.pytestPath": "~/.local/bin/pytest",
   "python.testing.unittestEnabled": false,
-  "python.venvFolders": [
-    ".venv"
-  ],
+  "python.venvFolders": [".venv"],
   "redhat.telemetry.enabled": false,
   "search.exclude": {
     "**/.venv": true
@@ -99,7 +90,7 @@
     "PATH": ".",
     "PYTHONPATH": "."
   },
-  "terminal.integrated.fontFamily": "Meslo LG S for Powerline",
+  "terminal.integrated.fontFamily": "Fira Code",
   "typescript.suggest.paths": true,
   "update.mode": "start",
   "window.restoreWindows": "none",
@@ -113,7 +104,6 @@
   "zenMode.centerLayout": false,
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
-  "zenMode.hideTabs": false,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

@@ -14,36 +14,24 @@ if test ! "$(command -v brew)"; then
   fi
 fi
 
-# TODO: add Brewfile
-# if [ -f "${HOME}/.Brewfile" ]; then
-# 		log_info "Installing Homebrew packages/casks and apps from the Mac App Store"
-# 		brew bundle install --global
-# fi
-
 # TODO: consider adding https://github.com/ogham/exa
 
 # Make sure we’re using the latest Homebrew
-brew update
-
-# Upgrade any already-installed formulae
-brew upgrade
-
-# ---------------------------------------------
-# Basic Utilities
-# ---------------------------------------------
-
-# Core Utils
-# brew install coreutils
+brew update && brew upgrade
 
 # ---------------------------------------------
 # Tools I use often
 # ---------------------------------------------
 
-# Pipx to manage global Python packages through venv
-brew install pipx
+# Open source replacement for Apple's Terminal
+brew install --cask iterm2
 
 # Docker for containerization
 brew install docker
+
+# Pipx to manage global Python packages through venv
+brew install pipx
+
 
 # Show directory structure with excellent formatting
 brew install tree
@@ -68,9 +56,8 @@ brew install starship
 # Remove outdated versions from the cellar
 brew cleanup
 
-# The Brewfile handles Homebrew-based app and library installs, but there may
-# still be updates and installables in the Mac App Store.
-echo "› sudo softwareupdate -i -a"
-sudo softwareupdate -i -a
+# Update macOS Apps
+echo "› softwareupdate -i -a"
+softwareupdate -i -a
 
 exit 0

@@ -4,8 +4,8 @@
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [user]
   name = Kyle J. Burda
-  email = kburda@symphonysensa.com
-  signingkey = FAE7464507534DE7
+  email = 47502769+kylejb@users.noreply.github.com
+  signingkey = 1AA6EA9CEF529F55
 [alias]
   adog = log --all --decorate --oneline --graph
 [color]

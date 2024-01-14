@@ -15,14 +15,15 @@ install_extensions() {
 
 # Set up symlinks for settings, snippets, and keybindings
 echo "Setting up VSCode. This may take a minute..."
-for file in $(ls -A "$PWD/vscode" | grep --include -r -E '\.json|snippets'); do
+# shellcheck disable=SC2010
+for file in $(ls -A "${DOTFILES}/vscode" | grep --include -r -E '\.json|snippets'); do
     # shellcheck disable=3028
     if echo "$OSTYPE" | grep -iq 'darwin'; then
-        ln -svf "$PWD/vscode/$file" "$HOME/Library/Application Support/Code/User/settings.json"
+        ln -svf "${DOTFILES}/vscode/$file" "$HOME/Library/Application Support/Code/User/settings.json"
     elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
-        ln -svf "$PWD/vscode/$file" "$HOME/.config/Code/User/$file"
+        ln -svf "${DOTFILES}/vscode/$file" "$HOME/.config/Code/User/$file"
     else
-        echo "Unsupported OS detected. Skipping VSCode setup..."
+        echo 'Unsupported OS detected. Skipping VSCode setup...'
     fi
 done
 

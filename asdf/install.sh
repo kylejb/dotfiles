@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # shellcheck disable=SC1091,SC3046
-. utils.sh
+. "${DOTFILES}/utils.sh"
 
 set -o pipefail
 

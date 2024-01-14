@@ -3,11 +3,8 @@
 # First time installation for new systems
 
 # Default settings
-DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
-ZSH="${ZSH:-$DOTFILES/zsh}"
-REPO=${REPO:-kylejb/dotfiles}
-REMOTE=${REMOTE:-https://github.com/${REPO}.git}
-BRANCH=${BRANCH:-main}
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+export ZSH="${ZSH:-$DOTFILES/zsh}"
 
 # $USER is defined by login(1) which is not always executed (e.g. containers)
 # POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
@@ -23,5 +20,6 @@ if [ ! -d "$DOTFILES" ]; then
     echo "Installing kylejb/dotfiles"
     git clone "${REMOTE}" "${DOTFILES}" || true
 
+    # shellcheck source=/dev/null
     . "${DOTFILES}/script/bootstrap"
 fi

@@ -1,152 +1,152 @@
-#!/bin/sh -e
+#!/usr/bin/env bash
+set -e
 
 # Default settings
-DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
-ZSH="${ZSH:-$DOTFILES/zsh}"
-REPO=${REPO:-kylejb/dotfiles}
-REMOTE=${REMOTE:-https://github.com/${REPO}.git}
-BRANCH=${BRANCH:-main}
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+export ZSH="${ZSH:-$DOTFILES/zsh}"
 
-. utils.sh
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
 
 init() {
-  echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
-  mkdir -p "$PATH_TO_CODE"
-  echo "Making a Journal folder in $PATH_TO_JOURNAL if it doesn't already exist"
-  mkdir -p "$PATH_TO_JOURNAL"
-  echo "Making a Sandbox folder in $PATH_TO_SANDBOX if it doesn't already exist"
-  mkdir -p "$PATH_TO_SANDBOX"
+    echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
+    mkdir -p "$PATH_TO_CODE"
+    echo "Making a Journal folder in $PATH_TO_JOURNAL if it doesn't already exist"
+    mkdir -p "$PATH_TO_JOURNAL"
+    echo "Making a Sandbox folder in $PATH_TO_SANDBOX if it doesn't already exist"
+    mkdir -p "$PATH_TO_SANDBOX"
 }
 
 get_linkables() {
-  find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'
+    find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'
 }
 
 setup_symlinks() {
-  title 'Creating symlinks'
+    title 'Creating symlinks'
 
-  for file in $(get_linkables); do
-    target="$HOME/.$(basename "$file" '.symlink')"
-    if [ -e "$target" ]; then
-      info "~${target#$HOME} already exists... Skipping."
-    else
-      info "Creating symlink for $file"
-      ln -sf "$file" "$target"
+    for file in $(get_linkables); do
+        target="$HOME/.$(basename "$file" '.symlink')"
+        if [ -e "$target" ]; then
+            info "~${target#$HOME} already exists... Skipping."
+        else
+            info "Creating symlink for $file"
+            ln -sf "$file" "$target"
+        fi
+    done
+
+    info 'Setting up ~/.config'
+
+    if [ ! -d "$HOME/.config" ]; then
+        info 'Creating ~/.config'
+        mkdir -p "$HOME/.config"
     fi
-  done
 
-  info 'Setting up ~/.config'
-
-  if [ ! -d "$HOME/.config" ]; then
-    info 'Creating ~/.config'
-    mkdir -p "$HOME/.config"
-  fi
-
-  config_files=$(find "$DOTFILES/config" -maxdepth 1 2>/dev/null)
-  for config in $config_files; do
-    target="$HOME/.config/$(basename "$config")"
-    if [ -e "$target" ]; then
-      info "~${target#$HOME} already exists... Skipping."
-    else
-      info "Creating symlink for $config"
-      ln -s "$config" "$target"
-    fi
-  done
+    config_files=$(find "$DOTFILES/config" -maxdepth 1 2>/dev/null)
+    for config in $config_files; do
+        target="$HOME/.config/$(basename "$config")"
+        if [ -e "$target" ]; then
+            info "~${target#$HOME} already exists... Skipping."
+        else
+            info "Creating symlink for $config"
+            ln -s "$config" "$target"
+        fi
+    done
 }
 
 run_installers() {
-  # find the installers and run them iteratively
-  find . -name install.sh | while read -r installer; do sh -c "${installer}"; done
+    # find the installers and run them iteratively
+    find "${DOTFILES}" -name install.sh | while read -r installer; do sh -c "${installer}"; done
 }
 
 # TODO: update to work with XDG_CONFIG_HOME
 setup_git() {
-  if [ -f "$HOME/.gitconfig.local" ]; then
-    info "Detected local git configuration. Skipping Git setup..."
-    return 0
-  fi
-  title 'Setting up Git'
+    if [ -f "$HOME/.gitconfig.local" ]; then
+        info "Detected local git configuration. Skipping Git setup..."
+        return 0
+    fi
+    title 'Setting up Git'
 
-  defaultName='Kyle J. Burda'
-  defaultEmail='47502769+kylejb@users.noreply.github.com'
-  defaultGithub='kylejb'
-  defaultSigningkey='0x0'
+    defaultName='Kyle J. Burda'
+    defaultEmail='47502769+kylejb@users.noreply.github.com'
+    defaultGithub='kylejb'
+    defaultSigningkey='0x0'
 
-  read -rp "Name [$defaultName] " name
-  read -rp "Email [$defaultEmail] " email
-  read -rp "Github username [$defaultGithub] " github
-  read -rp "Signing key [$defaultSigningkey] " signingkey
+    read -rp "Name [$defaultName] " name
+    read -rp "Email [$defaultEmail] " email
+    read -rp "Github username [$defaultGithub] " github
+    read -rp "Signing key [$defaultSigningkey] " signingkey
 
-  git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
-  git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
-  git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
-  git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
-  git config -f ~/.gitconfig.local commit.gpgsign true
+    git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
+    git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
+    git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
+    git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
+    git config -f ~/.gitconfig.local commit.gpgsign true
 }
 
 setup_shell() {
-  title 'Configuring shell'
+    title 'Configuring shell'
 
-  [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
-  if ! grep "$zsh_path" /etc/shells; then
-    info "adding $zsh_path to /etc/shells"
-    echo "$zsh_path" | sudo tee -a /etc/shells
-  fi
+    [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
+    if ! grep "$zsh_path" /etc/shells; then
+        info "adding $zsh_path to /etc/shells"
+        echo "$zsh_path" | sudo tee -a /etc/shells
+    fi
 
-  if [[ "$SHELL" != "$zsh_path" ]]; then
-    chsh -s "$zsh_path"
-    info "default shell changed to $zsh_path"
-  fi
+    if [[ "$SHELL" != "$zsh_path" ]]; then
+        chsh -s "$zsh_path"
+        info "default shell changed to $zsh_path"
+    fi
 }
 
 install_tools() {
-  title 'Install dev tools'
-  local os="$(get_os)"
-  if [ "$os" = 'darwin' ]; then
-    info 'Detected macOS'
-    info 'Setting up Homebrew and installing common dependencies for development. This may take a while...'
-    sh macos/setup.sh
-  else
-    warning 'Skipping installation using Homebrew because macOS was not detected...'
-  fi
+    title 'Install dev tools'
+    local os
+    os="$(get_os)"
+    if [ "$os" = 'darwin' ]; then
+        info 'Detected macOS'
+        info 'Setting up Homebrew and installing common dependencies for development. This may take a while...'
+        sh "${DOTFILES}/macos/setup.sh"
+    else
+        warning 'Skipping installation using Homebrew because macOS was not detected...'
+    fi
 
-  if [ "$os" = 'debian' ] || [ "$os" = 'ubuntu' ]; then
-    info "Detected $os"
-    info 'Installing common dependencies for development using apt. This may take a while...'
-    sh linux/debian.sh
-  else
-    warning 'Skipping installation using apt because Debian/Ubuntu was not detected...'
-  fi
+    if [ "$os" = 'debian' ] || [ "$os" = 'ubuntu' ]; then
+        info "Detected $os"
+        info 'Installing common dependencies for development using apt. This may take a while...'
+        sh "${DOTFILES}/linux/debian.sh"
+    else
+        warning 'Skipping installation using apt because Debian/Ubuntu was not detected...'
+    fi
 }
 
 # TODO: add config options for terminal
 setup_terminfo() {
-  title 'Configuring terminfo'
+    title 'Configuring terminfo'
 
-  info 'adding xterm-256color-italic.terminfo'
-  tic -x "$DOTFILES/macos/xterm-256color-italic.terminfo"
+    info 'adding xterm-256color-italic.terminfo'
+    tic -x "$DOTFILES/macos/xterm-256color-italic.terminfo"
 }
 
 main() {
-  title 'Installing dotfiles...'
+    title 'Installing dotfiles...'
 
-  init
-  install_tools
-  run_installers
-  setup_shell
-  setup_symlinks
+    # init
+    install_tools
+    run_installers
+    setup_shell
+    setup_symlinks
 
-  success 'Done.'
+    success 'Done.'
 }
 
 set +u
 if [ "$CODESPACES" ]; then
-  CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
-  echo -e 'Updating container dependencies...'
-  /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
-  exit 0
+    CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
+    echo -e 'Updating container dependencies...'
+    /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
+    exit 0
 else
-  info "Incorporate installation for various OS contexts (e.g., macOS, Linux, Windows)"
+    info "Incorporate installation for various OS contexts (e.g., macOS, Linux, Windows)"
 fi
 set -u
 

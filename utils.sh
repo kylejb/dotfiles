@@ -99,22 +99,12 @@ setup_color() {
 }
 
 title() {
-    echo "\n${FMT_BLUE}$1${FMT_RESET}"
-    echo "${FMT_BOLD}==============================${FMT_RESET}\n"
-}
-
-error() {
-    echo "${FMT_RED}Error: ${FMT_RESET}$1"
-    # shellcheck disable=SC2317
-    exit 1
+    printf "\n%s%s%s\n" "${FMT_BLUE}" "$1" "${FMT_RESET}"
+    printf "%s%s%s\n\n" "${FMT_BOLD}" "==============================" "${FMT_RESET}"
 }
 
 warning() {
     echo "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
-}
-
-info() {
-    echo "${FMT_BLUE}Info: ${FMT_RESET}$1"
 }
 
 success() {
@@ -138,7 +128,9 @@ warn() {
 }
 
 error() {
+    # printf "%sError: %s%s\n" "${FMT_RED}" "${FMT_RESET}" "$1"
     printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
+    exit 1
 }
 
 completed() {
@@ -151,7 +143,8 @@ has() {
 
 # shellcheck disable=SC1091,SC3028,SC3043,SC3046
 get_os() {
-    local os=''
+    local os
+    os='unknown'
     if echo "$OSTYPE" | grep -iq 'darwin'; then
         os='darwin'
     elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
@@ -160,8 +153,6 @@ get_os() {
         # Else default to ID
         # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
         os="${ID_LIKE:-$ID}"
-    else
-        os='unknown'
     fi
 
     # set os to env variable

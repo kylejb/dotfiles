@@ -1,38 +1,38 @@
-#!/bin/sh -e
-### ----------------- Bootstrap post-installation scripts ----------------- ###
+#!/usr/bin/env zsh
+## ----------------- Bootstrap post-installation scripts ----------------- ##
 # Run by run_dotfile_scripts in bootstrap.sh
 # Scripts must be executable (chmod +x)
 echo "-> Running post-bootstrap. Some steps may require password entry."
 
-### Configure macOS
+### set macOS configurations
 if [ "${MACOS:-0}" -gt 0 ] || [ "$(uname)" = "Darwin" ]; then
-  "$HOME"/.dotfiles/macos/set-defaults.sh
+    "./${DOTFILES}/macos/set-defaults.sh"
 else
-  echo "Not macOS. Skipping set-defaults.sh."
+    echo 'Not macOS. Skipping set-defaults.sh.'
 fi
 
 ### Install Poetry
 if command -v pipx &>/dev/null && ! command -v poetry &>/dev/null; then
-  pipx install poetry
+    pipx install poetry
 else
-  echo "Skipping Poetry install."
+    echo 'Skipping Poetry install.'
 fi
 
-### Install VSCode extensions
+### install VSCode extensions
 for i in {code,code-exploration,code-insiders,code-server,codium}; do
-  if [ "${CODESPACE:-0}" -gt 0 ] || [ "$(whoami)" = "codespace" ]; then
-    echo "Error: Codespaces VSCode CLI can't install extensions."
-  else
-    "$HOME"/.dotfiles/script/vscode-extensions.sh "$i"
-  fi
+    if [ "${CODESPACE:-0}" -gt 0 ] || [ "$(whoami)" = "codespace" ]; then
+        echo 'Error: Codespaces VSCode CLI cannot install extensions.'
+    else
+        "./${DOTFILES}/script/vscode-extensions.sh" "$i"
+    fi
 done
 
-### Set shell
+### set shell
 if ! [[ $SHELL =~ "zsh" ]] && command -v zsh &>/dev/null; then
-  echo '--> Changing shell to Zsh. Password entry required.'
-  [ "${LINUX:-0}" -gt 0 ] || [ "$(uname)" = 'Linux' ] &&
-  command -v zsh | sudo tee -a /etc/shells
-  sudo chsh -s "$(command -v zsh)" "$USER"
+    echo '--> Changing shell to Zsh. Password entry required.'
+    [ "${LINUX:-0}" -gt 0 ] || [ "$(uname)" = 'Linux' ] &&
+        command -v zsh | sudo tee -a /etc/shells
+    sudo chsh -s "$(command -v zsh)" "$USER"
 else
-  echo "Shell is already set to Zsh."
+    echo 'Shell is already set to Zsh.'
 fi

@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # shellcheck disable=SC1091,SC3046
-. utils.sh
+. ${DOTFILES}/utils.sh
 
 cp "${DOTFILES}/gnupg/base.gpg-agent.conf" "${DOTFILES}/gnupg/gpg-agent.conf"
 

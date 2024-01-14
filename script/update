@@ -1,8 +1,7 @@
 #!/bin/sh -e
 
 run_updates() {
-    # find all update files and run them iteratively
-    find . -name update.sh | while read -r updater; do sh -c "${updater}"; done
+    find "${DOTFILES}" -name update.sh | while read -r updater; do sh -c "${updater}"; done
 }
 
 # TODO: Script to dynamically update all packages/dependencies based on OS with one command

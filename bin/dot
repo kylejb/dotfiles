@@ -5,41 +5,39 @@
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]:-${(%):-%x}}" )" && pwd -P)"
-dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
-
 displayUsageAndExit() {
-	echo 'dot -- dotfiles management'
-	echo ''
-	echo 'Usage: dot [options]'
-	echo ''
-	echo 'Options:'
-	echo '  -i, --install   Install dotfiles'
-	echo '  -u, --update    Update dotfiles'
-	echo '  -e, --edit      Open dotfiles directory for editing'
-	echo '  -h, --help      Show this help message and exit'
-	exit
+    echo 'dot -- dotfiles management'
+    echo ''
+    echo 'Usage: dot [options]'
+    echo ''
+    echo 'Options:'
+    echo '  -i, --install   Install dotfiles'
+    echo '  -u, --update    Update dotfiles'
+    echo '  -e, --edit      Open dotfiles directory for editing'
+    echo '  -h, --help      Show this help message and exit'
+    exit
 }
 
 while test $# -gt 0; do
-	case "$1" in
-	'-h' | '--help')
-		displayUsageAndExit
-		;;
-	'-e' | '--edit')
-		exec "${EDITOR:-"code"}" "$dotfilesDirectory"
-		exit
-		;;
-	'-i' | '--install')
-		exec "$dotfilesDirectory/script/bootstrap"
-		;;
-	'-u' | 'update')
-		exec "$dotfilesDirectory/script/update"
-		;;
-	*)
-		echo "Invalid option: $1"
-		displayUsageAndExit
-		;;
-	esac
-	shift
+    case "$1" in
+    '-h' | '--help')
+        displayUsageAndExit
+        ;;
+    '-e' | '--edit')
+        exec "${EDITOR:-"code"}" "${DOTFILES}"
+        exit
+        ;;
+    '-i' | '--install')
+        exec "${DOTFILES}/script/bootstrap"
+        ;;
+    '-u' | 'update')
+        git -C "${DOTFILES}" pull
+        exec "${DOTFILES}/script/update"
+        ;;
+    *)
+        echo "Invalid option: $1"
+        displayUsageAndExit
+        ;;
+    esac
+    shift
 done

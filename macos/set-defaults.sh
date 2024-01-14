@@ -2,7 +2,7 @@
 # source: https://mths.be/macos
 
 # shellcheck disable=SC1091,SC3046
-. utils.sh
+. "${DOTFILES}}/utils.sh"
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change

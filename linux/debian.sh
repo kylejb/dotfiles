@@ -52,7 +52,12 @@ echo '⤵ Installing fonts to support starship.rs...'
 sudo apt-get install fonts-firacode -y
 # Install starship
 echo '⤵ Installing starship.rs...'
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
+if ! [ -x "$(command -v starship)" ]; then
+  echo '⤵ Installing starship.rs...'
+  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
+else
+  echo "$(starship --version) already installed"
+fi
 
 # Clean cache
 sudo apt clean

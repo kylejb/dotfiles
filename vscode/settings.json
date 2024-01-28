@@ -50,7 +50,7 @@
   "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:MM",
   "gitlens.defaultDateShortFormat": "MM-DD-YYYY",
   "gitlens.defaultTimeFormat": "HH:MM",
-  "go.gopath": "~/go",
+  "go.inferGopath": true,
   "html.format.endWithNewline": true,
   "html.format.indentInnerHtml": true,
   "html.format.templating": true,
@@ -109,6 +109,9 @@
   },
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -29,7 +29,7 @@ update_plugin_package_manager() {
         pipx reinstall-all
         ;;
     ruby)
-        gem update —-system
+        gem update --system
         gem update
         gem cleanup
         ;;

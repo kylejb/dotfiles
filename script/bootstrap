@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
+# TODO: rework entrypoints; this is a hack to avoid error when importing utils.sh
+set +u
+if [ "$CODESPACES" ]; then
+    CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
+    echo -e 'Updating container dependencies...'
+    /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
+    exit 0
+else
+    info "Incorporate installation for various OS contexts (e.g., macOS, Linux, Windows)"
+fi
+set -u
+
 # Default settings
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 export ZSH="${ZSH:-$DOTFILES/zsh}"
@@ -27,6 +39,7 @@ setup_symlinks() {
     for file in $(get_linkables); do
         target="$HOME/.$(basename "$file" '.symlink')"
         if [ -e "$target" ]; then
+            # shellcheck disable=SC2295
             info "~${target#$HOME} already exists... Skipping."
         else
             info "Creating symlink for $file"
@@ -45,6 +58,7 @@ setup_symlinks() {
     for config in $config_files; do
         target="$HOME/.config/$(basename "$config")"
         if [ -e "$target" ]; then
+            # shellcheck disable=SC2295
             info "~${target#$HOME} already exists... Skipping."
         else
             info "Creating symlink for $config"
@@ -138,16 +152,5 @@ main() {
 
     success 'Done.'
 }
-
-set +u
-if [ "$CODESPACES" ]; then
-    CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
-    echo -e 'Updating container dependencies...'
-    /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
-    exit 0
-else
-    info "Incorporate installation for various OS contexts (e.g., macOS, Linux, Windows)"
-fi
-set -u
 
 main

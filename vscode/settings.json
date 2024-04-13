@@ -51,6 +51,7 @@
   "gitlens.defaultDateShortFormat": "MM-DD-YYYY",
   "gitlens.defaultTimeFormat": "HH:MM",
   "go.inferGopath": true,
+  "go.toolsManagement.autoUpdate": true,
   "html.format.endWithNewline": true,
   "html.format.indentInnerHtml": true,
   "html.format.templating": true,
@@ -59,6 +60,10 @@
   "js/ts.implicitProjectConfig.experimentalDecorators": true,
   "js/ts.implicitProjectConfig.target": "ESNext",
   "markdown.preview.scrollEditorWithPreview": false,
+  "material-icon-theme.folders.associations": {
+    "internal": "Lib",
+    "Web": "React-components"
+  },
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "npm.enableRunFromFolder": true,
   "python.defaultInterpreterPath": "~/.asdf/shims/python",

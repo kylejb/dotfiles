@@ -4,3 +4,4 @@ git_protocol: ssh
 editor: code
 # When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
 prompt: enabled
+version: "1"

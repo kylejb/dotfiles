@@ -2,25 +2,25 @@
 
 Supports macOS, Debian/Ubuntu, and Windows 11.
 
-> **Warning**
+> [!Warning]
 > Use at your own risk.
 
 ## Install
 
 Script will download this repository to `~/.dotfiles` and will symlink the appropriate files to your home directory.
 
-* Windows:
+- Windows:
 
-    ```ps1
-    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
-    Invoke-Expression (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.ps1")
-    ```
+  ```ps1
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
+  Invoke-Expression (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.ps1")
+  ```
 
-* MacOS / Linux:
+- MacOS / Linux:
 
-    ```bash
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.sh)"
-    ```
+  ```bash
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/kylejb/dotfiles/HEAD/installer.sh)"
+  ```
 
 Everything is configurable from this folder. The main file you'll want to change right off the bat is `zsh/zshrc.symlink`, which sets up a few paths that may differ on your particular machine.
 

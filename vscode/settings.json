@@ -1,148 +1,148 @@
 {
-  "css.format.spaceAroundSelectorSeparator": true,
-  "debug.console.fontSize": 16,
-  "diffEditor.ignoreTrimWhitespace": true,
-  "editor.acceptSuggestionOnEnter": "off",
-  "editor.bracketPairColorization.enabled": true,
-  "editor.detectIndentation": false,
-  "editor.fontFamily": "Fira Code",
-  "editor.fontLigatures": true,
-  "editor.fontSize": 16,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.insertSpaces": true,
-  "editor.snippetSuggestions": "top",
-  "editor.tabCompletion": "on",
-  "emmet.triggerExpansionOnTab": true,
-  "explorer.compactFolders": false,
-  "explorer.confirmDelete": false,
-  "explorer.sortOrder": "foldersNestsFiles",
-  "extensions.autoUpdate": false,
-  "extensions.autoCheckUpdates": false,
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 4000,
-  "files.enableTrash": false,
-  "files.exclude": {
-    "**/__pycache__": true,
-    "**/.git": true,
-    "**/.hg": true,
-    "**/.idea": true,
-    "**/.mypy_cache": true,
-    "**/.pytest_cache": true,
-    "**/.svn": true,
-    "**/.venv": true,
-    "**/.DS_Store": true,
-    "**/CVS": true,
-    "**/Thumbs.db": true,
-    "**/.coverage": true,
-    "**/node_modules": true
-  },
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true,
-  "git.autoStash": true,
-  "git.branchSortOrder": "alphabetically",
-  "git.enableCommitSigning": true,
-  "git.repositoryScanIgnoredFolders": ["node_modules", ".venv"],
-  "git-graph.dialog.general.referenceInputSpaceSubstitution": "Hyphen",
-  "git-graph.repository.commits.showSignatureStatus": true,
-  "git-graph.repository.fetchAndPrune": true,
-  "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:MM",
-  "gitlens.defaultDateShortFormat": "MM-DD-YYYY",
-  "gitlens.defaultTimeFormat": "HH:MM",
-  "go.inferGopath": true,
-  "go.toolsManagement.autoUpdate": true,
-  "html.format.endWithNewline": true,
-  "html.format.indentInnerHtml": true,
-  "html.format.templating": true,
-  "html.format.wrapLineLength": 100,
-  "javascript.suggest.paths": true,
-  "js/ts.implicitProjectConfig.experimentalDecorators": true,
-  "js/ts.implicitProjectConfig.target": "ESNext",
-  "markdown.preview.scrollEditorWithPreview": false,
-  "material-icon-theme.folders.associations": {
-    "internal": "Lib",
-    "Web": "React-components"
-  },
-  "merge-conflict.autoNavigateNextConflict.enabled": true,
-  "npm.enableRunFromFolder": true,
-  "python.defaultInterpreterPath": "~/.asdf/shims/python",
-  "python.formatting.blackPath": "~/.local/bin/black",
-  "python.formatting.provider": "black",
-  "python.linting.enabled": true,
-  "python.linting.flake8Enabled": true,
-  "python.linting.flake8Path": "~/.local/bin/flake8",
-  "python.linting.mypyEnabled": true,
-  "python.linting.mypyPath": "~/.local/bin/mypy",
-  "python.linting.pylintEnabled": false,
-  "python.poetryPath": "~/.local/bin/poetry",
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestPath": "~/.local/bin/pytest",
-  "python.testing.unittestEnabled": false,
-  "python.venvFolders": [".venv"],
-  "redhat.telemetry.enabled": false,
-  "search.exclude": {
-    "**/.venv": true
-  },
-  "search.showLineNumbers": true,
-  "svelte.enable-ts-plugin": true,
-  "svelte.plugin.svelte.note-new-transformation": false,
-  "telemetry.telemetryLevel": "off",
-  "terminal.external.osxExec": "iTerm.app",
-  "terminal.external.windowsExec": "wt.exe",
-  "terminal.integrated.cursorStyle": "line",
-  "terminal.integrated.env.osx": {
-    "PATH": ".",
-    "PYTHONPATH": "."
-  },
-  "terminal.integrated.fontFamily": "Fira Code",
-  "typescript.suggest.paths": true,
-  "update.mode": "start",
-  "window.restoreWindows": "none",
-  "window.zoomLevel": 1,
-  "workbench.colorTheme": "One Dark Pro Darker",
-  "workbench.enableExperiments": false,
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.settings.editor": "json",
-  "workbench.settings.useSplitJSON": true,
-  "workbench.startupEditor": "none",
-  "zenMode.centerLayout": false,
-  "zenMode.fullScreen": false,
-  "zenMode.hideLineNumbers": false,
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[go]": {
-    "editor.defaultFormatter": "golang.go"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.renderWhitespace": "all",
-    "editor.quickSuggestions": {
-      "other": true,
-      "comments": true,
-      "strings": true
+    "css.format.spaceAroundSelectorSeparator": true,
+    "debug.console.fontSize": 16,
+    "diffEditor.ignoreTrimWhitespace": true,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.detectIndentation": false,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 16,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.snippetSuggestions": "top",
+    "editor.tabCompletion": "on",
+    "emmet.triggerExpansionOnTab": true,
+    "explorer.compactFolders": false,
+    "explorer.confirmDelete": false,
+    "explorer.sortOrder": "foldersNestsFiles",
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 4000,
+    "files.enableTrash": false,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.git": true,
+        "**/.hg": true,
+        "**/.idea": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/.svn": true,
+        "**/.venv": true,
+        "**/.DS_Store": true,
+        "**/CVS": true,
+        "**/Thumbs.db": true,
+        "**/.coverage": true,
+        "**/node_modules": true
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "git.autoStash": true,
+    "git.branchSortOrder": "alphabetically",
+    "git.enableCommitSigning": true,
+    "git.repositoryScanIgnoredFolders": [
+        "node_modules",
+        ".venv"
+    ],
+    "git-graph.dialog.general.referenceInputSpaceSubstitution": "Hyphen",
+    "git-graph.repository.commits.showSignatureStatus": true,
+    "git-graph.repository.fetchAndPrune": true,
+    "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:MM",
+    "gitlens.defaultDateShortFormat": "MM-DD-YYYY",
+    "gitlens.defaultTimeFormat": "HH:MM",
+    "go.inferGopath": true,
+    "go.toolsManagement.autoUpdate": true,
+    "html.format.endWithNewline": true,
+    "html.format.indentInnerHtml": true,
+    "html.format.templating": true,
+    "html.format.wrapLineLength": 100,
+    "javascript.suggest.paths": true,
+    "js/ts.implicitProjectConfig.experimentalDecorators": true,
+    "js/ts.implicitProjectConfig.target": "ESNext",
+    "markdown.preview.scrollEditorWithPreview": false,
+    "material-icon-theme.folders.associations": {
+        "internal": "Lib",
+        "Web": "React-components"
+    },
+    "merge-conflict.autoNavigateNextConflict.enabled": true,
+    "npm.enableRunFromFolder": true,
+    "python.defaultInterpreterPath": "~/.asdf/shims/python",
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "~/.local/bin/mypy",
+    "python.poetryPath": "~/.local/bin/poetry",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": "~/.local/bin/pytest",
+    "python.testing.unittestEnabled": false,
+    "python.venvFolders": [
+        ".venv"
+    ],
+    "redhat.telemetry.enabled": false,
+    "search.exclude": {
+        "**/.venv": true
+    },
+    "search.showLineNumbers": true,
+    "svelte.enable-ts-plugin": true,
+    "svelte.plugin.svelte.note-new-transformation": false,
+    "telemetry.telemetryLevel": "off",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.external.windowsExec": "wt.exe",
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.env.osx": {
+        "PATH": ".",
+        "PYTHONPATH": "."
+    },
+    "terminal.integrated.fontFamily": "Fira Code",
+    "typescript.suggest.paths": true,
+    "update.mode": "start",
+    "window.restoreWindows": "none",
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "workbench.enableExperiments": false,
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.settings.editor": "json",
+    "workbench.settings.useSplitJSON": true,
+    "workbench.startupEditor": "none",
+    "yaml.format.singleQuote": true,
+    "zenMode.centerLayout": false,
+    "zenMode.fullScreen": false,
+    "zenMode.hideLineNumbers": false,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.renderWhitespace": "all",
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": true,
+            "strings": true
+        }
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
-  },
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
 }

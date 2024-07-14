@@ -6,4 +6,4 @@ elif [[ -f /usr/local/bin/brew ]]; then
     eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-. $HOME/.asdf/asdf.sh
+eval "$($HOME/.local/bin/mise activate zsh --shims)"

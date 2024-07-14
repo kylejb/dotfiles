@@ -69,7 +69,7 @@
     },
     "merge-conflict.autoNavigateNextConflict.enabled": true,
     "npm.enableRunFromFolder": true,
-    "python.defaultInterpreterPath": "~/.asdf/shims/python",
+    "python.defaultInterpreterPath": "~/.local/share/mise/shims/python",
     "python.linting.mypyEnabled": true,
     "python.linting.mypyPath": "~/.local/bin/mypy",
     "python.poetryPath": "~/.local/bin/poetry",

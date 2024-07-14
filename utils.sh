@@ -145,7 +145,9 @@ has() {
 get_os() {
     local os
     os='unknown'
-    if echo "$OSTYPE" | grep -iq 'darwin'; then
+    if echo "$OSTYPE" | grep -iq 'alpine'; then
+        os='alpine'
+    elif echo "$OSTYPE" | grep -iq 'darwin'; then
         os='darwin'
     elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
         source /etc/os-release
@@ -154,8 +156,6 @@ get_os() {
         # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
         os="${ID_LIKE:-$ID}"
     fi
-
-    # set os to env variable
     export DETECTED_OS="$os"
 
     # value to return

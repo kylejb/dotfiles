@@ -119,7 +119,7 @@
         "editor.defaultFormatter": "golang.go"
     },
     "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[jsonc]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"

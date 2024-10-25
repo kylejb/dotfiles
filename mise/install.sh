@@ -41,6 +41,12 @@ mise use -g node@latest
 echo 'Installing latest version of Python'
 mise use -g python@latest
 
+echo 'Installing system dependencies to build Ruby'
+if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+  sudo apt-get install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+elif [[ "$DETECTED_OS" == 'darwin' ]]; then
+  brew install openssl@3 readline libyaml gmp autoconf
+fi
 echo 'Installing latest version of Ruby'
 mise use -g ruby@latest
 

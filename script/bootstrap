@@ -8,9 +8,8 @@ if [ "$CODESPACES" ]; then
     echo -e 'Updating container dependencies...'
     /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
     exit 0
-else
-    info "Incorporate installation for various OS contexts (e.g., macOS, Linux, Windows)"
 fi
+
 set -u
 
 # Default settings

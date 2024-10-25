@@ -26,6 +26,11 @@ esac
 #pinentry-program /usr/bin/pinentry-gtk-2
 #pinentry-program /usr/bin/pinentry-x11
 
+info 'Setting up ~/.gnupg'
+if [ ! -d ~/.gnupg ]; then
+  mkdir "$HOME/.gnupg"
+fi
+
 gpg_agent_source="$DOTFILES/gnupg/gpg-agent.conf"
 gpg_agent_target="$HOME/.gnupg/gpg-agent.conf"
 if [ -e "$gpg_agent_target" ]; then
@@ -33,11 +38,6 @@ if [ -e "$gpg_agent_target" ]; then
 else
   info "Creating symlink for $gpg_agent_source"
   ln -s "$gpg_agent_source" "$gpg_agent_target"
-fi
-
-info 'Setting up ~/.gnupg'
-if [ ! -d ~/.gnupg ]; then
-  mkdir "$HOME/.gnupg"
 fi
 
 gpg_conf_source="$DOTFILES/gnupg/gpg.conf"

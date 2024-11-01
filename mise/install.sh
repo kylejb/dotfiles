@@ -35,8 +35,8 @@ if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
 elif [[ "$DETECTED_OS" == 'darwin' ]]; then
   brew install gpg
 fi
-echo 'Installing latest version of Node.js'
-mise use -g node@latest
+echo 'Installing lts version of Node.js'
+mise use -g node@lts
 
 echo 'Installing latest version of Python'
 mise use -g python@latest

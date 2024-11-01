@@ -477,7 +477,7 @@ jspm_packages/
 .dropbox.cache
 
 ## Private dotfile config
-*.local.*
+*.local
 
 ## GPG
 secring.*

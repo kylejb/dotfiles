@@ -1,10 +1,10 @@
 [include]
   # TODO: update path after redesigning approach
-  path = ~/.gitconfig.local
+  path = ~/.config/git/config.local
 [core]
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [rebase]
   instructionFormat = %s [%an] # adds the commit author to the end of each line
 [push]

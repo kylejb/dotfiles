@@ -1,8 +1,11 @@
-#!/usr/bin/env zsh -e
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
+
+set -e
 
 [[ ! -d "$1" ]] && return
 
 path=(
-    $1
-    $path
+    "$1"
+    "$path"
 )

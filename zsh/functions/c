@@ -1,3 +1,6 @@
-#!/usr/bin/env zsh -e
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
 
-cd $PATH_TO_CODE/$1
+set -e
+
+cd "$PATH_TO_CODE/$1"

@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
-# rebase current branch by n-commits
+# shellcheck disable=SC1071
+#
+# Rebase current branch by n-commits.
 
 function grih {
-    git rebase -i HEAD~$1
+    git rebase -i HEAD~"$1"
 }

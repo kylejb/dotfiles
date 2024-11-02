@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+# shellcheck disable=SC1071
+#
 # Usage: extract <file>
 # Description: extracts archived files / mounts disk images
 # Note: .dmg/hdiutil is macOS-specific.

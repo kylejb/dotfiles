@@ -1,4 +1,5 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
+# shellcheck disable=SC1071
 #
 # Function to easily grep for a matching process
 # Example:
@@ -6,7 +7,7 @@
 #   psg postgres
 
 function psg {
-  FIRST=`echo $1 | sed -e 's/^\(.\).*/\1/'`
-  REST=`echo $1 | sed -e 's/^.\(.*\)/\1/'`
+  FIRST=$(echo $1 | sed -e 's/^\(.\).*/\1/')
+  REST=$(echo $1 | sed -e 's/^.\(.*\)/\1/')
   ps aux | grep "[$FIRST]$REST"
 }

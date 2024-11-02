@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
+# shellcheck disable=SC1071
 
 function zsource {
-    source $HOME/.zshrc
+    # shellcheck source=/dev/null
+    source "$HOME"/.zshrc
 }

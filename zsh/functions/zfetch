@@ -1,4 +1,6 @@
-#!/usr/bin/env zsh -e
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071
+#
 # This code was originally from
 # https://github.com/jason0x43/dotfiles/blob/eff04270c4d8074db36d3e3bf85f64d3ccbeafe9/zsh/functions/zfetch
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# shellcheck disable=SC1071
 
 function pr {
     # https://git-scm.com/docs/git-status#Documentation/git-status.txt---porcelainltversiongt

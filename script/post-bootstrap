@@ -2,6 +2,8 @@
 ## ----------------- Bootstrap post-installation scripts ----------------- ##
 # Run by run_dotfile_scripts in bootstrap.sh
 # Scripts must be executable (chmod +x)
+#
+# shellcheck disable=SC1071
 echo "-> Running post-bootstrap. Some steps may require password entry."
 
 ### set macOS configurations

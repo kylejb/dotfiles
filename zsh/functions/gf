@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
+# shellcheck disable=SC1071
 
 function gf {
   local branch=$1
-  git checkout -b $branch origin/$branch
+  git checkout -b "$branch" origin/"$branch"
 }

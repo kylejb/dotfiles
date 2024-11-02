@@ -47,8 +47,8 @@ brew install tree
 brew install zsh
 
 # Install Nerd Fonts for IDE
-brew install font-fira-code-nerd-font
-brew install font-meslo-lg-nerd-font
+brew install --cask font-fira-code-nerd-font
+brew install --cask font-meslo-lg-nerd-font
 
 brew install starship
 

@@ -6,6 +6,6 @@ set -e
 [[ ! -d "$1" ]] && return
 
 path=(
-    "$1"
-    "$path"
+    $1
+    $path
 )

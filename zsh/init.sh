@@ -23,7 +23,7 @@ if [[ "$OSTYPE" == (darwin|freebsd)* ]]; then
   ls -G . &>/dev/null && alias ls='ls -G'
   ls -A . &>/dev/null && alias la='ls -A'
   ls -lAh . &>/dev/null && alias l='ls -lAh'
-    
+
   # only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
   # otherwise, gls will use the default color scheme which is ugly af
   if $(gls &>/dev/null); then

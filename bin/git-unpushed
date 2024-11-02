@@ -4,4 +4,4 @@
 # Source: https://github.com/holman/dotfiles/blob/master/bin/git-unpushed
 
 branch=$(git rev-parse --abbrev-ref HEAD)
-git diff origin/$branch..HEAD
+git diff origin/"$branch"..HEAD

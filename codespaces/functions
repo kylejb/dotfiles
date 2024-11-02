@@ -1,7 +1,8 @@
 function grih {
-    git rebase -i HEAD~$1
+    git rebase -i HEAD~"$1"
 }
 
 function zsource {
-    source $HOME/.zshrc
+    # shellcheck source=/dev/null
+    source "$HOME"/.zshrc
 }

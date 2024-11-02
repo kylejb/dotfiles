@@ -36,7 +36,8 @@ user_can_sudo() {
     #    whether the user has privileges or not. For that we have to make sure
     #    to run `sudo` in the default locale (with `LANG=`) so that the message
     #    stays consistent regardless of the user's locale.
-    #
+
+    # shellcheck disable=SC1007
     ! LANG= sudo -n -v 2>&1 | grep -q 'may not run sudo'
 }
 

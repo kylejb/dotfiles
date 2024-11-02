@@ -27,5 +27,5 @@ alias l='ls -lah'
 #    Misc     #
 ###############
 
-alias api="npm start api"
-alias web="npm start web"
+alias api="task api:serve"
+alias web="task serve"

@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 # shellcheck disable=SC1071
 
-set -e
-
 function update_rebase {
     cur_branch=$(git rev-parse --abbrev-ref HEAD)
     git checkout "$1"

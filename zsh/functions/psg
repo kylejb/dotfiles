@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # shellcheck disable=SC1071
 #
 # Function to easily grep for a matching process

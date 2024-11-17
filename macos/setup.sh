@@ -4,6 +4,12 @@
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
+# Check for XCode Command Line Tools
+if test ! "$(xcode-select -p)"; then
+  echo "  Installing XCode Command Line Tools for you."
+  xcode-select --install
+fi
+
 # Check for Homebrew
 if test ! "$(command -v brew)"; then
   echo "  Installing Homebrew for you."

@@ -16,6 +16,8 @@ HOME="${HOME:-$(getent passwd "$USER" 2>/dev/null | cut -d: -f6)}"
 # macOS does not have getent, but this works even if $HOME is unset
 HOME="${HOME:-$(eval echo ~"$USER")}"
 
+REMOTE=${REMOTE:-"git@github.com:kylejb/dotfiles.git"}
+
 if [ ! -d "$DOTFILES" ]; then
     echo "Installing kylejb/dotfiles"
     git clone "${REMOTE}" "${DOTFILES}" || true

@@ -1,12 +1,12 @@
 #!/bin/sh -e
 
 # Ensure latest packages and security updates are installed
-sudo apt-get update && sudo apt-get upgrade -y
+sudo apt update && sudo apt upgrade -y
 
 # Install git
 if ! [ -x "$(command -v git)" ]; then
   echo '⤵ Installing git...'
-  sudo apt-get install git -y
+  sudo apt install git -y
 else
   echo "$(git --version) already installed"
 fi
@@ -14,42 +14,42 @@ fi
 # Install GNUPG
 if ! [ -x "$(command -v gpg)" ]; then
   echo '⤵ Installing gpg...'
-  sudo apt-get install gpg -y
+  sudo apt install gpg -y
 else
   echo "$(gpg --version) already installed"
 fi
 
-# Show directory structure with excellent formatting
-sudo apt-get install tree -y
+# Shows directory structure with excellent formatting
+sudo apt install tree -y
 
-###########################
-# zsh setup
-###########################
+
 # Install zsh
 if ! [ -x "$(command -v zsh)" ]; then
   echo '⤵ Installing zsh...'
-  sudo apt-get install zsh -y
+  sudo apt install zsh -y
+  echo "✅ Successfully installed zsh version: $(zsh --version)"
 else
   echo "$(zsh --version) already installed"
 fi
-echo '✅ Successfully installed zsh version: $(zsh --version)'
+
 # Set up zsh tools
 echo '⤵ Installing zsh plugins...'
-sudo apt-get install zsh-syntax-highlighting -y
-sudo apt-get install zsh-autosuggestions -y
+sudo apt install zsh-syntax-highlighting -y
+sudo apt install zsh-autosuggestions -y
 echo '✅ Successfully installed zsh-autosuggestions, zsh-syntax-highlighting'
+
 # Set the default shell
 echo '⤵ Changing the default shell'
 chsh -s "$(which zsh)" "${USER}"
 echo '✅ Successfully modified the default shell'
-###########################
-# end zsh setup
-###########################
+
 
 # Install starship dependencies
 echo '⤵ Installing fonts to support starship.rs...'
 # apt install fonts-powerline -y
-sudo apt-get install fonts-firacode -y
+sudo apt install fonts-firacode -y
+echo '✅ Successfully installed fonts'
+
 # Install starship
 echo '⤵ Installing starship.rs...'
 if ! [ -x "$(command -v starship)" ]; then
@@ -58,6 +58,7 @@ if ! [ -x "$(command -v starship)" ]; then
 else
   echo "$(starship --version) already installed"
 fi
+echo "✅ Successfully installed starship version: $(starship --version)"
 
 # Clean cache
 sudo apt clean

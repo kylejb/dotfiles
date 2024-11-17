@@ -29,34 +29,23 @@ brew update && brew upgrade
 # Tools I use often
 # ---------------------------------------------
 
-# Open source replacement for Apple's Terminal
 brew install --cask iterm2
+brew install --cask visual-studio-code
 
-# Docker for containerization
 brew install docker
-
-# Pipx to manage global Python packages through venv
 brew install pipx
-
-
-# Show directory structure with excellent formatting
-brew install tree
-
-# tmux
+brew install starship
 # brew install tmux
+brew install tree
+brew install zsh
 
 # ---------------------------------------------
 # Misc
 # ---------------------------------------------
 
-# Zsh
-brew install zsh
-
-# Install Nerd Fonts for IDE
+# Nerd Fonts for IDEs
 brew install --cask font-fira-code-nerd-font
 brew install --cask font-meslo-lg-nerd-font
-
-brew install starship
 
 # Remove outdated versions from the cellar
 brew cleanup

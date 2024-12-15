@@ -51,20 +51,20 @@ do
 done
 
 # load everything but path and completion files
-for file in ${${config_files:#*/completion.zsh:#*/path.zsh}}
+for file in ${${config_files:#*/completion.zsh}:#*/path.zsh}
 do
   source $file
 done
+
+autoload -Uz compinit
+compinit
+# autoload -U compaudit compinit zrecompile
 
 # load every completion after autocomplete loads
 for completion_file in ${(M)config_files:#*/completion.zsh}
 do
   source $completion_file
 done
-
-autoload -Uz compinit
-compinit
-# autoload -U compaudit compinit zrecompile
 
 # load plugins
 export ZPLUGDIR="$XDG_CACHE_HOME/zsh/plugins"

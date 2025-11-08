@@ -30,6 +30,7 @@ brew update && brew upgrade
 # ---------------------------------------------
 
 brew install --cask iterm2
+brew install --cask tailscale-app
 brew install --cask visual-studio-code
 
 brew install docker

@@ -9,6 +9,7 @@ source $ZSH/init.sh
 prepend_path $NPM_BIN
 prepend_path $PIPX_BIN_PATH
 prepend_path $DOTFILES/bin
+prepend_path /opt/homebrew/Cellar
 
 # private environment variables
 [[ -f $HOME/.localrc ]] && source $HOME/.localrc

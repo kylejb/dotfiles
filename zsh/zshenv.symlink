@@ -30,12 +30,11 @@ export GIT_MERGE_AUTOEDIT='no'        # require message when merging
 export GIT_REVIEW_BASE=main           # see gitconfig
 
 # npm
-export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
+export NPM_PATH="$HOME/.local"
 export NPM_BIN="$NPM_PATH/bin"
 export NPM_CONFIG_PREFIX="$NPM_PATH"
 
 # python
-export PIPX_BIN_PATH="$HOME/.local/bin"
 export PYTHONPATH=".:$PYTHONPATH"
 
 # starship

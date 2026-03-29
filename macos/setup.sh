@@ -34,7 +34,6 @@ brew install --cask tailscale-app
 brew install --cask visual-studio-code
 
 brew install docker
-brew install pipx
 brew install starship
 # brew install tmux
 brew install tree

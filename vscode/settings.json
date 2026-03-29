@@ -48,6 +48,7 @@
   "git-graph.dialog.general.referenceInputSpaceSubstitution": "Hyphen",
   "git-graph.repository.commits.showSignatureStatus": true,
   "git-graph.repository.fetchAndPrune": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
   "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:MM",
   "gitlens.defaultDateShortFormat": "MM-DD-YYYY",
   "gitlens.defaultTimeFormat": "HH:MM",
@@ -67,9 +68,9 @@
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "npm.enableRunFromFolder": true,
   "python.analysis.typeCheckingMode": "standard",
-  "python.defaultInterpreterPath": "~/.local/share/mise/shims/python",
+  "python.defaultInterpreterPath": "$HOME/.local/share/mise/shims/python",
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestPath": "~/.local/bin/pytest",
+  "python.testing.pytestPath": "$HOME/.local/bin/pytest",
   "python.venvFolders": [".venv"],
   "redhat.telemetry.enabled": false,
   "remote.defaultExtensionsIfInstalledLocally": [
@@ -159,5 +160,8 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
   }
 }

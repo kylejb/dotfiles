@@ -13,11 +13,15 @@ else
     echo 'Not macOS. Skipping set-defaults.sh.'
 fi
 
-### Install Poetry
-if command -v pipx &>/dev/null && ! command -v poetry &>/dev/null; then
-    pipx install poetry
+### Install UV
+if command -v pipx &>/dev/null && ! command -v uv &>/dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    if command -v "${HOME}/.local/bin/uv"; then
+        echo 'Successfully installed uv'
+    fi
+    echo 'Unable to locate uv after installation'
 else
-    echo 'Skipping Poetry install.'
+    echo 'Skipping uv install.'
 fi
 
 ### install VSCode extensions

@@ -68,9 +68,9 @@
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "npm.enableRunFromFolder": true,
   "python.analysis.typeCheckingMode": "standard",
-  "python.defaultInterpreterPath": "$HOME/.local/share/mise/shims/python",
+  "python.defaultInterpreterPath": "~/.local/share/mise/shims/python",
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestPath": "$HOME/.local/bin/pytest",
+  "python.testing.pytestPath": "~/.local/bin/pytest",
   "python.venvFolders": [".venv"],
   "redhat.telemetry.enabled": false,
   "remote.defaultExtensionsIfInstalledLocally": [

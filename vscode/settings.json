@@ -82,6 +82,7 @@
     "**/.venv": true
   },
   "search.showLineNumbers": true,
+  "security.workspace.trust.untrustedFiles": "newWindow",
   "telemetry.telemetryLevel": "off",
   "terminal.external.osxExec": "iTerm.app",
   "terminal.external.windowsExec": "wt.exe",

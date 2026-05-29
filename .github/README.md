@@ -24,9 +24,22 @@ Script will download this repository to `~/.dotfiles` and will symlink the appro
 
 Everything is configurable from this folder. The main file you'll want to change right off the bat is `zsh/zshrc.symlink`, which sets up a few paths that may differ on your particular machine.
 
-## Update
+## Managing your environment with `dot`
 
-`dot` is a simple script that installs some dependencies, sets sane macOS defaults, and so on. Tweak this script, and occasionally run dot from time to time to keep your environment fresh and up-to-date. You can find this script in `bin/`.
+`dot` (in `bin/`, on your `$PATH` after install) is the single front door for
+managing these dotfiles:
+
+```
+dot -i, --install     Install dotfiles (runs script/bootstrap)
+dot -u, --update      git pull + run all topic update.sh scripts
+dot -d, --defaults    Re-apply macOS defaults (macOS only)
+dot -e, --edit        Open the dotfiles directory in $EDITOR
+dot     --uninstall   Remove symlinks (does NOT remove installed packages)
+dot -h, --help        Show usage
+```
+
+Run `dot -u` from time to time to keep your environment fresh. On Windows, use
+`init.ps1` instead — `dot` will refuse to run there.
 
 ## Structure
 

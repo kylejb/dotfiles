@@ -2,8 +2,19 @@
 #
 # dot
 #
-# `dot` handles installation, updates, things like that. Run it periodically
-# to make sure you're on the latest and greatest.
+# `dot` is the single front door for managing these dotfiles: installation,
+# updates, applying macOS defaults, and uninstall. Run it periodically to make
+# sure you're on the latest and greatest.
+
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# Windows is managed via PowerShell, not this script.
+case "$(uname | tr '[:upper:]' '[:lower:]')" in
+*mingw* | *msys* | *cygwin*)
+    echo 'Windows detected. Run init.ps1 instead of dot.' >&2
+    exit 1
+    ;;
+esac
 
 displayUsageAndExit() {
     echo 'dot -- dotfiles management'
@@ -11,12 +22,18 @@ displayUsageAndExit() {
     echo 'Usage: dot [options]'
     echo ''
     echo 'Options:'
-    echo '  -i, --install   Install dotfiles'
-    echo '  -u, --update    Update dotfiles'
-    echo '  -e, --edit      Open dotfiles directory for editing'
-    echo '  -h, --help      Show this help message and exit'
+    echo '  -i, --install     Install dotfiles'
+    echo '  -u, --update      Update dotfiles (git pull + run updaters)'
+    echo '  -d, --defaults    Re-apply macOS defaults (macOS only)'
+    echo '  -e, --edit        Open dotfiles directory for editing'
+    echo '      --uninstall   Remove symlinks (does NOT remove installed packages)'
+    echo '  -h, --help        Show this help message and exit'
     exit
 }
+
+if [ $# -eq 0 ]; then
+    displayUsageAndExit
+fi
 
 while test $# -gt 0; do
     case "$1" in
@@ -24,15 +41,25 @@ while test $# -gt 0; do
         displayUsageAndExit
         ;;
     '-e' | '--edit')
-        exec "${EDITOR:-"code"}" "${DOTFILES}"
-        exit
+        exec "${EDITOR:-code}" "${DOTFILES}"
         ;;
     '-i' | '--install')
         exec "${DOTFILES}/script/bootstrap"
         ;;
-    '-u' | 'update')
+    '-u' | '--update')
         git -C "${DOTFILES}" pull
         exec "${DOTFILES}/script/update"
+        ;;
+    '-d' | '--defaults')
+        if [ "$(uname)" = 'Darwin' ]; then
+            exec "${DOTFILES}/macos/set-defaults.sh"
+        else
+            echo 'Not macOS. Nothing to do.' >&2
+            exit 1
+        fi
+        ;;
+    '--uninstall')
+        exec "${DOTFILES}/script/uninstall"
         ;;
     *)
         echo "Invalid option: $1"

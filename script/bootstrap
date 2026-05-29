@@ -67,17 +67,22 @@ setup_symlinks() {
 }
 
 run_installers() {
-    # find the installers and run them iteratively
-    find "${DOTFILES}" -name install.sh | while read -r installer; do sh -c "${installer}"; done
+    # delegate to the shared installer runner (script/install)
+    # shellcheck source=/dev/null
+    . "${DOTFILES}/script/install"
 }
 
-# TODO: update to work with XDG_CONFIG_HOME
 setup_git() {
-    if [ -f "$HOME/.gitconfig.local" ]; then
+    # The include in config/git/config points at this path (XDG).
+    git_local="$HOME/.config/git/config.local"
+
+    if [ -f "$git_local" ]; then
         info "Detected local git configuration. Skipping Git setup..."
         return 0
     fi
     title 'Setting up Git'
+
+    mkdir -p "$(dirname "$git_local")"
 
     defaultName='Kyle J. Burda'
     defaultEmail='47502769+kylejb@users.noreply.github.com'
@@ -89,11 +94,11 @@ setup_git() {
     read -rp "Github username [$defaultGithub] " github
     read -rp "Signing key [$defaultSigningkey] " signingkey
 
-    git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
-    git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
-    git config -f ~/.gitconfig-local user.signingkey "${signingkey:-$defaultSigningkey}"
-    git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
-    git config -f ~/.gitconfig.local commit.gpgsign true
+    git config -f "$git_local" user.name "${name:-$defaultName}"
+    git config -f "$git_local" user.email "${email:-$defaultEmail}"
+    git config -f "$git_local" user.signingkey "${signingkey:-$defaultSigningkey}"
+    git config -f "$git_local" github.user "${github:-$defaultGithub}"
+    git config -f "$git_local" commit.gpgsign true
 }
 
 setup_shell() {
@@ -132,6 +137,15 @@ install_tools() {
     fi
 }
 
+set_macos_defaults() {
+    local os
+    os="$(get_os)"
+    if [ "$os" = 'darwin' ]; then
+        title 'Applying macOS defaults'
+        sh "${DOTFILES}/macos/set-defaults.sh"
+    fi
+}
+
 # TODO: add config options for terminal
 setup_terminfo() {
     title 'Configuring terminfo'
@@ -148,6 +162,7 @@ main() {
     run_installers
     setup_shell
     setup_symlinks
+    set_macos_defaults
 
     success 'Done.'
 }

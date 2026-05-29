@@ -1,0 +1,18 @@
+# Example MCP server fragment — copy to `mcp.toml` (committed, non-secret) or
+# `mcp.local.toml` (gitignored, for secret-bearing servers) and run `dot --apply`.
+#
+# These tables are merged into ~/.codex/config.toml inside the managed block.
+# Only additive sections belong here. Confirm this is how your Codex reads MCP.
+
+# Non-secret server: safe to commit (no credentials).
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/Users/kylejb/Developer"]
+
+# Secret-bearing server: keep the token OUT of git. Put this table in
+# `mcp.local.toml` (gitignored) with the real value, or have the server read an
+# env var exported from your machine-local shell config (~/.localrc).
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+# env.GITHUB_TOKEN is read from the environment at runtime — do not inline it.

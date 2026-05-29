@@ -158,6 +158,7 @@ main() {
     title 'Installing dotfiles...'
 
     # init
+    setup_profile
     install_tools
     run_installers
     setup_shell

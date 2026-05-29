@@ -163,5 +163,59 @@ get_os() {
     echo "$DETECTED_OS"
 }
 
+#####################
+# Machine profile   #
+#####################
+#
+# The profile distinguishes machines (e.g. 'personal' vs 'work') so that
+# tooling, git identity, and secret handling can differ. The single source of
+# truth is a one-word file readable from both POSIX sh and zsh. The
+# DOTFILES_PROFILE env var (exported early by zsh/zshenv.symlink) wins if set.
+
+# Path to the profile file (honors XDG).
+profile_file() {
+    echo "${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/profile"
+}
+
+# Echo the active profile, or nothing if unset.
+get_profile() {
+    if [ -n "${DOTFILES_PROFILE:-}" ]; then
+        echo "$DOTFILES_PROFILE"
+    elif [ -r "$(profile_file)" ]; then
+        cat "$(profile_file)"
+    fi
+}
+
+is_personal() {
+    [ "$(get_profile)" = 'personal' ]
+}
+
+is_work() {
+    [ "$(get_profile)" = 'work' ]
+}
+
+# Prompt for and persist the profile if it is not already set.
+setup_profile() {
+    if [ -n "$(get_profile)" ]; then
+        info "Detected profile: $(get_profile). Skipping profile setup..."
+        return 0
+    fi
+
+    title 'Choose a machine profile'
+    info 'personal = full setup incl. 1Password; work = no 1Password, local secrets only'
+
+    profile=''
+    while [ "$profile" != 'personal' ] && [ "$profile" != 'work' ]; do
+        printf 'Profile [personal/work]: '
+        read -r profile
+    done
+
+    file="$(profile_file)"
+    mkdir -p "$(dirname "$file")"
+    echo "$profile" >"$file"
+    export DOTFILES_PROFILE="$profile"
+    success "Profile set to '$profile' ($file)"
+}
+
 get_os
 setup_color

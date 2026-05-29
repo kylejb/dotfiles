@@ -41,6 +41,18 @@ dot -h, --help        Show usage
 Run `dot -u` from time to time to keep your environment fresh. On Windows, use
 `init.ps1` instead — `dot` will refuse to run there.
 
+## Machine profiles
+
+Each machine has a profile — `personal` or `work` — that lets tooling, git
+identity, and secret handling differ per machine. Install prompts for it once
+and writes the single word to `~/.config/dotfiles/profile` (untracked). It is
+exported as `$DOTFILES_PROFILE` early in `zsh/zshenv.symlink`, so any script or
+shell can gate on it.
+
+Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
+rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
+local secrets only.
+
 ## Structure
 
 Everything is built around "topic" areas. If you're adding a new area to your

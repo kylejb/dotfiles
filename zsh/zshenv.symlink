@@ -19,6 +19,12 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
+# Machine profile (personal | work). Single source of truth, read early so
+# every shell and topic file can gate behavior on it. See utils.sh.
+if [[ -z "${DOTFILES_PROFILE:-}" && -r "$XDG_CONFIG_HOME/dotfiles/profile" ]]; then
+  export DOTFILES_PROFILE="$(<"$XDG_CONFIG_HOME/dotfiles/profile")"
+fi
+
 # editor
 export EDITOR="code"
 export GIT_EDITOR="code -w"

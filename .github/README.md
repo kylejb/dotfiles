@@ -73,7 +73,8 @@ There are a few special files in the hierarchy.
   expected to setup `$PATH` or similar.
 - **topic/completion.zsh**: Any file named `completion.zsh` is loaded
   last and is expected to setup autocomplete.
-- **topic/install.sh**: Any file named `install.sh` is executed when you run `script/install`. To avoid being loaded automatically, its extension is `.sh`, not `.zsh`.
+- **topic/install.sh**: Installs packages/tools (the heavy, occasional path). Run via `script/install` (and during a full `dot -i`). Use this for anything that fetches/builds software.
+- **topic/apply.sh**: (Re-)renders and links config — the fast, frequent path with **no package installs**. Run via `dot -a` / `script/apply` (and during a full install). Use this for templated/generated configs (see `gnupg/`) and symlinking config into place (see `ai/`, `ssh/`). Prefer rendering (template → generated, gitignored file) over a raw symlink whenever an app rewrites its own config or it must vary per machine.
 - **topic/update.sh**: Any file named `update.sh` is executed when you run `script/update`. To avoid being loaded automatically, its extension is `.sh`, not `.zsh`.
 - **topic/\*.symlink**: Any file ending in `*.symlink` gets symlinked into
   your `$HOME`. This is so you can keep all of those versioned in your dotfiles

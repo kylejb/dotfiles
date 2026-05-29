@@ -24,6 +24,7 @@ displayUsageAndExit() {
     echo 'Options:'
     echo '  -i, --install     Install dotfiles'
     echo '  -u, --update      Update dotfiles (git pull + run updaters)'
+    echo '  -a, --apply       Refresh symlinks + re-render configs (no package install)'
     echo '  -d, --defaults    Re-apply macOS defaults (macOS only)'
     echo '  -e, --edit        Open dotfiles directory for editing'
     echo '      --uninstall   Remove symlinks (does NOT remove installed packages)'
@@ -49,6 +50,9 @@ while test $# -gt 0; do
     '-u' | '--update')
         git -C "${DOTFILES}" pull
         exec "${DOTFILES}/script/update"
+        ;;
+    '-a' | '--apply')
+        exec "${DOTFILES}/script/apply"
         ;;
     '-d' | '--defaults')
         if [ "$(uname)" = 'Darwin' ]; then

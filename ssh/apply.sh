@@ -29,6 +29,7 @@ W-*)
 esac
 
 info "installing to ~/.ssh"
+mkdir -p "${target_dir}"
 ssh_config="${src_dir}/config"
 target="${target_dir}/config"
 if [ -e "$target" ]; then

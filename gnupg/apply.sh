@@ -1,22 +1,17 @@
 #!/bin/sh -e
 
-# shellcheck disable=SC1091,SC3046
-. ${DOTFILES}/utils.sh
+# shellcheck disable=SC3046 source=/dev/null
+. "${DOTFILES}/utils.sh"
 
 cp "${DOTFILES}/gnupg/base.gpg-agent.conf" "${DOTFILES}/gnupg/gpg-agent.conf"
 
-case "$DETECTED_OS" in
-darwin)
+if is_macos; then
   echo "pinentry-program /opt/homebrew/bin/pinentry" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
-  ;;
-linux-gnu)
+elif is_linux; then
   echo "pinentry-program /usr/local/bin/pinentry-curse" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
-  ;;
-*)
-  error "Unknown platform – $(uname | tr '[:upper:]' '[:lower:]') is not supported"
-  exit 1
-  ;;
-esac
+else
+  error "Unknown platform – $(uname -s) is not supported"
+fi
 
 #pinentry-program /usr/local/bin/pinentry-curses    # used in Debian
 #pinentry-program /usr/bin/pinentry-gnome3          # used in Fedora

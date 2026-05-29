@@ -1,15 +1,24 @@
 #!/bin/sh -e
 
+# Self-contained env (see "Script architecture" in the README): runs via dot
+# or standalone, so it sets DOTFILES + sources utils.sh itself.
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
 run_updates() {
-    find "${DOTFILES}" -name update.sh | while read -r updater; do sh -c "${updater}"; done
+    find "${DOTFILES}" -name update.sh | while read -r updater; do sh "${updater}"; done
 }
 
-# TODO: Script to dynamically update all packages/dependencies based on OS with one command
+# macOS-only system/package updates; skipped elsewhere so `dot --update`
+# works on Linux/WSL.
+if is_macos; then
+    # Update App Store apps
+    softwareupdate -i -a
 
-# Update App Store apps
-softwareupdate -i -a
-
-# Update Homebrew (Cask) & packages
-brew update && brew upgrade && brew cleanup
+    # Update Homebrew (Cask) & packages
+    brew update && brew upgrade && brew cleanup
+fi
 
 run_updates

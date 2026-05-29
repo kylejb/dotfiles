@@ -65,6 +65,7 @@ setup_color() {
         FMT_BLUE=""
         FMT_BOLD=""
         FMT_RESET=""
+        NO_COLOR=""
         return
     fi
 
@@ -117,50 +118,65 @@ success() {
 #####################
 
 heading() {
-    printf '\n%s\n' "${FMT_BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
+    printf '\n%s\n' "${FMT_BOLD}${FMT_BLUE}$*${FMT_RESET}"
 }
 
 info() {
-    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${NO_COLOR}"
+    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${FMT_RESET}"
 }
 
 warn() {
-    printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
+    printf '%s\n' "${FMT_YELLOW}! $*${FMT_RESET}"
 }
 
 error() {
-    # printf "%sError: %s%s\n" "${FMT_RED}" "${FMT_RESET}" "$1"
-    printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
+    printf '%s\n' "${FMT_RED}x $*${FMT_RESET}" >&2
     exit 1
 }
 
 completed() {
-    printf '\n%s\n' "${GREEN}$*${NO_COLOR}"
+    printf '\n%s\n' "${FMT_GREEN}$*${FMT_RESET}"
 }
 
 has() {
     command -v "$1" 1>/dev/null 2>&1
 }
 
-# shellcheck disable=SC1091,SC3028,SC3043,SC3046
-get_os() {
-    local os
-    os='unknown'
-    if echo "$OSTYPE" | grep -iq 'alpine'; then
-        os='alpine'
-    elif echo "$OSTYPE" | grep -iq 'darwin'; then
-        os='darwin'
-    elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
-        source /etc/os-release
-        # Set os to ID_LIKE if this field exists
-        # Else default to ID
-        # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
-        os="${ID_LIKE:-$ID}"
-    fi
-    export DETECTED_OS="$os"
+####################
+# OS detection     #
+####################
+#
+# Standardized, POSIX-safe (uname-based, no $OSTYPE) helpers used everywhere
+# OS-specific behavior is needed. Prefer the predicates at call sites:
+#   is_macos / is_linux / is_wsl
+# get_os returns the platform family; get_distro the Linux distro id.
 
-    # value to return
-    echo "$DETECTED_OS"
+is_macos() { [ "$(uname -s)" = 'Darwin' ]; }
+is_linux() { [ "$(uname -s)" = 'Linux' ]; }
+
+# True on Windows Subsystem for Linux (WSL1/WSL2).
+is_wsl() {
+    is_linux || return 1
+    [ -r /proc/version ] && grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null
+}
+
+# Platform family: macos | linux | unknown
+get_os() {
+    case "$(uname -s)" in
+    Darwin) echo 'macos' ;;
+    Linux) echo 'linux' ;;
+    *) echo 'unknown' ;;
+    esac
+}
+
+# Linux distribution id (debian, ubuntu, alpine, fedora, ...); empty elsewhere.
+get_distro() {
+    is_linux || return 0
+    if [ -r /etc/os-release ]; then
+        # shellcheck source=/dev/null
+        . /etc/os-release
+        echo "${ID:-}"
+    fi
 }
 
 #####################
@@ -217,5 +233,4 @@ setup_profile() {
     success "Profile set to '$profile' ($file)"
 }
 
-get_os
 setup_color

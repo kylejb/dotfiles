@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Remove dotfiles symlinks.
 #
 # This removes the symlinks created by `script/bootstrap` (both the `$HOME/.*`
@@ -7,6 +7,8 @@
 # nor does it delete the cloned repo.
 set -e
 
+# Self-contained env (see "Script architecture" in the README): runs via dot
+# or standalone, so it sets DOTFILES + sources utils.sh itself.
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 # shellcheck source=/dev/null

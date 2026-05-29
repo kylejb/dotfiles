@@ -1,8 +1,8 @@
 #!/bin/sh
 # source: https://mths.be/macos
 
-# shellcheck disable=SC1091,SC3046
-. "${DOTFILES}}/utils.sh"
+# shellcheck disable=SC3046 source=/dev/null
+. "${DOTFILES}/utils.sh"
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change

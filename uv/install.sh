@@ -1,7 +1,7 @@
-#!/bin/bash
-set -o pipefail
+#!/bin/sh
+set -e
 
-# shellcheck disable=SC1091,SC3046
+# shellcheck disable=SC3046 source=/dev/null
 . "${DOTFILES}/utils.sh"
 
 if ! command_exists uv; then

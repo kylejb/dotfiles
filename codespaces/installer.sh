@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Dotfile installation entry point for codespaces
 
 set -e
@@ -11,17 +11,17 @@ echo "Updating container dependencies..."
 sudo apt-get update
 
 echo "Setting up shell environment..."
-rm ~/.zshrc
+rm -f ~/.zshrc
 
 if ! [ -x "$(command -v zsh)" ]; then
-    echo -e "Installing zsh..."
+    echo "Installing zsh..."
     sudo apt-get -y install zsh
 else
-    echo -e "$(zsh --version) already installed"
+    echo "$(zsh --version) already installed"
 fi
 
 # Set zsh as default shell
-sudo chsh -s "$(which zsh)"
+sudo chsh -s "$(command -v zsh)"
 
 if ! [ -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended

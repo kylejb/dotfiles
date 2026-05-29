@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Apply configuration: refresh symlinks and (re-)render config files.
 #
 # This is the fast, config-only path — it does NOT install packages/tools.
@@ -11,6 +11,8 @@
 # (run here). Contrast topic/install.sh, which installs packages/tools.
 set -e
 
+# Self-contained env (see "Script architecture" in the README): runs via dot,
+# bootstrap, or standalone, so it sets DOTFILES + sources utils.sh itself.
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 # shellcheck source=/dev/null
@@ -19,7 +21,7 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 setup_symlinks() {
     title 'Creating symlinks'
 
-    while IFS= read -r file; do
+    find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
         target="$HOME/.$(basename "$file" '.symlink')"
         if [ -e "$target" ]; then
             # shellcheck disable=SC2295
@@ -28,7 +30,7 @@ setup_symlinks() {
             info "Creating symlink for $file"
             ln -sf "$file" "$target"
         fi
-    done < <(find -H "$DOTFILES" -maxdepth 3 -name '*.symlink')
+    done
 
     info 'Setting up ~/.config'
 
@@ -37,7 +39,7 @@ setup_symlinks() {
         mkdir -p "$HOME/.config"
     fi
 
-    while IFS= read -r config; do
+    find "$DOTFILES/config" -mindepth 1 -maxdepth 1 2>/dev/null | while IFS= read -r config; do
         target="$HOME/.config/$(basename "$config")"
         if [ -e "$target" ]; then
             # shellcheck disable=SC2295
@@ -46,7 +48,7 @@ setup_symlinks() {
             info "Creating symlink for $config"
             ln -s "$config" "$target"
         fi
-    done < <(find "$DOTFILES/config" -mindepth 1 -maxdepth 1 2>/dev/null)
+    done
 }
 
 run_appliers() {

@@ -1,14 +1,14 @@
-#!/bin/bash
-set -o pipefail
+#!/bin/sh
+set -e
 
-# shellcheck disable=SC1091,SC3046
+# shellcheck disable=SC3046 source=/dev/null
 . "${DOTFILES}/utils.sh"
 
 if [ -f "${HOME}/.local/bin/mise" ]; then
   echo 'mise has already been installed'
 else
   echo 'Installing mise'
-  curl https://mise.run | sh
+  curl -fsSL https://mise.run | sh
 
   if command -v "${HOME}/.local/bin/mise"; then
     echo 'Successfully installed mise'
@@ -19,9 +19,9 @@ else
 fi
 
 echo 'Installing shell completion'
-if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+if is_linux; then
   mise completion zsh  > /usr/local/share/zsh/site-functions/_mise
-elif [[ "$DETECTED_OS" == 'darwin' ]]; then
+elif is_macos; then
   mise completion zsh  > "$(brew --prefix)/share/zsh/site-functions/_mise"
 fi
 
@@ -29,9 +29,9 @@ echo 'Installing latest version of Go'
 mise use -g go@latest
 
 echo 'Installing system dependencies to build Node.js'
-if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+if is_linux; then
   sudo apt-get install gpg -y
-elif [[ "$DETECTED_OS" == 'darwin' ]]; then
+elif is_macos; then
   brew install gpg
 fi
 echo 'Installing lts version of Node.js'
@@ -41,9 +41,9 @@ echo 'Installing latest version of Python'
 mise use -g python@latest
 
 echo 'Installing system dependencies to build Ruby'
-if [[ "$DETECTED_OS" == 'linux-gnu' ]]; then
+if is_linux; then
   sudo apt-get install autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
-elif [[ "$DETECTED_OS" == 'darwin' ]]; then
+elif is_macos; then
   brew install openssl@3 readline libyaml gmp autoconf
 fi
 echo 'Installing latest version of Ruby'

@@ -1,18 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 set -e
 
 # TODO: rework entrypoints; this is a hack to avoid error when importing utils.sh
 set +u
 if [ "$CODESPACES" ]; then
     CODESPACE_DOTFILES=/workspaces/.codespaces/.persistedshare/dotfiles
-    echo -e 'Updating container dependencies...'
-    /bin/sh $CODESPACE_DOTFILES/codespaces/installer.sh
+    printf '%s\n' 'Updating container dependencies...'
+    /bin/sh "$CODESPACE_DOTFILES/codespaces/installer.sh"
     exit 0
 fi
 
 set -u
 
-# Default settings
+# Self-contained env: set DOTFILES + source utils.sh here, NOT via dot.
+# exec drops shell functions (only env survives), and installer.sh runs this
+# before dot is on $PATH. See "Script architecture" in the README.
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 export ZSH="${ZSH:-$DOTFILES/zsh}"
 
@@ -20,12 +22,17 @@ export ZSH="${ZSH:-$DOTFILES/zsh}"
 . "${DOTFILES}/utils.sh"
 
 init() {
-    echo "Making a Projects folder in $PATH_TO_CODE if it doesn't already exist"
-    mkdir -p "$PATH_TO_CODE"
-    echo "Making a Journal folder in $PATH_TO_JOURNAL if it doesn't already exist"
-    mkdir -p "$PATH_TO_JOURNAL"
-    echo "Making a Sandbox folder in $PATH_TO_SANDBOX if it doesn't already exist"
-    mkdir -p "$PATH_TO_SANDBOX"
+    title 'Creating base directories'
+    # Defaults mirror zsh/zshenv.symlink; bootstrap runs under sh and does not
+    # source it, so fall back here to avoid unset-var errors under `set -u`.
+    code_dir="${PATH_TO_CODE:-$HOME/Developer}"
+    journal_dir="${PATH_TO_JOURNAL:-$HOME/Journal}"
+    sandbox_dir="${PATH_TO_SANDBOX:-$HOME/Developer/Sandbox}"
+
+    for dir in "$code_dir" "$journal_dir" "$sandbox_dir"; do
+        info "Ensuring $dir exists"
+        mkdir -p "$dir"
+    done
 }
 
 run_installers() {
@@ -51,10 +58,10 @@ setup_git() {
     defaultGithub='kylejb'
     defaultSigningkey='0x0'
 
-    read -rp "Name [$defaultName] " name
-    read -rp "Email [$defaultEmail] " email
-    read -rp "Github username [$defaultGithub] " github
-    read -rp "Signing key [$defaultSigningkey] " signingkey
+    printf 'Name [%s] ' "$defaultName"; read -r name
+    printf 'Email [%s] ' "$defaultEmail"; read -r email
+    printf 'Github username [%s] ' "$defaultGithub"; read -r github
+    printf 'Signing key [%s] ' "$defaultSigningkey"; read -r signingkey
 
     git config -f "$git_local" user.name "${name:-$defaultName}"
     git config -f "$git_local" user.email "${email:-$defaultEmail}"
@@ -66,13 +73,17 @@ setup_git() {
 setup_shell() {
     title 'Configuring shell'
 
-    [[ -n "$(command -v brew)" ]] && zsh_path="$(brew --prefix)/bin/zsh" || zsh_path="$(which zsh)"
+    if [ -n "$(command -v brew)" ]; then
+        zsh_path="$(brew --prefix)/bin/zsh"
+    else
+        zsh_path="$(command -v zsh)"
+    fi
     if ! grep "$zsh_path" /etc/shells; then
         info "adding $zsh_path to /etc/shells"
         echo "$zsh_path" | sudo tee -a /etc/shells
     fi
 
-    if [[ "$SHELL" != "$zsh_path" ]]; then
+    if [ "$SHELL" != "$zsh_path" ]; then
         chsh -s "$zsh_path"
         info "default shell changed to $zsh_path"
     fi
@@ -80,46 +91,37 @@ setup_shell() {
 
 install_tools() {
     title 'Install dev tools'
-    local os
-    os="$(get_os)"
-    if [ "$os" = 'darwin' ]; then
+    if is_macos; then
         info 'Detected macOS'
         info 'Setting up Homebrew and installing common dependencies for development. This may take a while...'
         sh "${DOTFILES}/macos/setup.sh"
+    elif is_linux; then
+        case "$(get_distro)" in
+        debian | ubuntu | linuxmint | pop | raspbian)
+            info "Detected $(get_distro)"
+            info 'Installing common dependencies for development using apt. This may take a while...'
+            sh "${DOTFILES}/linux/debian.sh"
+            ;;
+        *)
+            warning "No installer for distro '$(get_distro)'. Skipping package install..."
+            ;;
+        esac
     else
-        warning 'Skipping installation using Homebrew because macOS was not detected...'
-    fi
-
-    if [ "$os" = 'debian' ] || [ "$os" = 'ubuntu' ]; then
-        info "Detected $os"
-        info 'Installing common dependencies for development using apt. This may take a while...'
-        sh "${DOTFILES}/linux/debian.sh"
-    else
-        warning 'Skipping installation using apt because Debian/Ubuntu was not detected...'
+        warning 'Unsupported platform. Skipping package install...'
     fi
 }
 
 set_macos_defaults() {
-    local os
-    os="$(get_os)"
-    if [ "$os" = 'darwin' ]; then
+    if is_macos; then
         title 'Applying macOS defaults'
         sh "${DOTFILES}/macos/set-defaults.sh"
     fi
 }
 
-# TODO: add config options for terminal
-setup_terminfo() {
-    title 'Configuring terminfo'
-
-    info 'adding xterm-256color-italic.terminfo'
-    tic -x "$DOTFILES/macos/xterm-256color-italic.terminfo"
-}
-
 main() {
     title 'Installing dotfiles...'
 
-    # init
+    init
     setup_profile
     install_tools
     run_installers

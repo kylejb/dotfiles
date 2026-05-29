@@ -53,6 +53,25 @@ Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
 rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
 local secrets only.
 
+## Script architecture
+
+The setup scripts (`installer.sh`, `bin/dot`, `script/*`, `*/install.sh`,
+`*/apply.sh`, `*/update.sh`, `utils.sh`) are POSIX `sh` and **self-contained**:
+each sets `DOTFILES` (with a fallback) and sources `utils.sh` itself. This is
+deliberate, not redundant — do not "centralize" it into `bin/dot`:
+
+- **`exec` does not preserve shell functions, only exported env.** `bin/dot`
+  exports `DOTFILES` (which survives `exec`) but cannot hand down `utils.sh`'s
+  functions (`is_macos`, `info`, …) — `exec` replaces the process image and
+  drops them. Each script must source `utils.sh` itself.
+- **First-time install bypasses `dot`.** `installer.sh` (run via `curl | sh`)
+  sources `script/bootstrap` directly, before `dot` is on `$PATH`. So scripts
+  can't assume `dot` set anything up.
+
+Net effect: every script runs correctly via `dot`, via `installer.sh`,
+when called internally by `bootstrap`, and standalone for debugging. `dot` is
+the user-facing CLI (flags, help, platform guard); it is not the only caller.
+
 ## Structure
 
 Everything is built around "topic" areas. If you're adding a new area to your

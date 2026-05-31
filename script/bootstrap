@@ -36,9 +36,9 @@ init() {
 }
 
 run_installers() {
-    # delegate to the shared installer runner (script/install)
-    # shellcheck source=/dev/null
-    . "${DOTFILES}/script/install"
+    # delegate to the shared installer runner, as a subprocess so its set/exit
+    # can't leak into or abort bootstrap
+    sh "${DOTFILES}/script/install"
 }
 
 setup_git() {
@@ -78,9 +78,9 @@ setup_shell() {
     else
         zsh_path="$(command -v zsh)"
     fi
-    if ! grep "$zsh_path" /etc/shells; then
+    if ! grep -Fqx "$zsh_path" /etc/shells; then
         info "adding $zsh_path to /etc/shells"
-        echo "$zsh_path" | sudo tee -a /etc/shells
+        echo "$zsh_path" | sudo tee -a /etc/shells >/dev/null
     fi
 
     if [ "$SHELL" != "$zsh_path" ]; then

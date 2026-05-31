@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
 # shellcheck disable=SC3046 source=/dev/null
 . "${DOTFILES}/utils.sh"
 

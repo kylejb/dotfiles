@@ -1,4 +1,9 @@
-#!/bin/sh -e
+#!/bin/sh
+# set -e here (not just in the shebang) so fail-fast holds when run as
+# `sh apply.sh`, which ignores shebang flags.
+set -e
+
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 # shellcheck disable=SC3046 source=/dev/null
 . "${DOTFILES}/utils.sh"

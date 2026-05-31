@@ -1,6 +1,8 @@
 #!/bin/sh
 # source: https://mths.be/macos
 
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
 # shellcheck disable=SC3046 source=/dev/null
 . "${DOTFILES}/utils.sh"
 

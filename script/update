@@ -8,7 +8,13 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 . "${DOTFILES}/utils.sh"
 
 run_updates() {
-    find "${DOTFILES}" -name update.sh | while read -r updater; do sh "${updater}"; done
+    # Updaters are best-effort: one failing must not abort the rest, but never
+    # fail silently — report it (mirrors run_appliers in script/apply).
+    find "${DOTFILES}" -name update.sh | while IFS= read -r updater; do
+        # shellcheck disable=SC2295
+        info "Running ${updater#$DOTFILES/}"
+        sh "${updater}" || warn "updater failed: ${updater#$DOTFILES/}"
+    done
 }
 
 # macOS-only system/package updates; skipped elsewhere so `dot --update`

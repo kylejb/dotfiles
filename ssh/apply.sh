@@ -2,6 +2,8 @@
 
 set -e
 
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
 # shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 

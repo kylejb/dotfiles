@@ -34,13 +34,13 @@ remove_link() {
 }
 
 # $HOME/.<name> links from *.symlink files
-find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while read -r file; do
+find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
     remove_link "$HOME/.$(basename "$file" '.symlink')"
 done
 
 # ~/.config/<name> links
 if [ -d "$DOTFILES/config" ]; then
-    find "$DOTFILES/config" -mindepth 1 -maxdepth 1 | while read -r config; do
+    find "$DOTFILES/config" -mindepth 1 -maxdepth 1 | while IFS= read -r config; do
         remove_link "$HOME/.config/$(basename "$config")"
     done
 fi

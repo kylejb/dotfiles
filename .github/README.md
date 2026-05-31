@@ -32,6 +32,7 @@ managing these dotfiles:
 ```
 dot -i, --install     Install dotfiles (runs script/bootstrap)
 dot -u, --update      git pull + run all topic update.sh scripts
+dot -a, --apply       Refresh symlinks + re-render configs (no package install)
 dot -d, --defaults    Re-apply macOS defaults (macOS only)
 dot -e, --edit        Open the dotfiles directory in $EDITOR
 dot     --uninstall   Remove symlinks (does NOT remove installed packages)
@@ -94,11 +95,25 @@ There are a few special files in the hierarchy.
   last and is expected to setup autocomplete.
 - **topic/install.sh**: Installs packages/tools (the heavy, occasional path). Run via `script/install` (and during a full `dot -i`). Use this for anything that fetches/builds software.
 - **topic/apply.sh**: (Re-)renders and links config — the fast, frequent path with **no package installs**. Run via `dot -a` / `script/apply` (and during a full install). Use this for templated/generated configs (see `gnupg/`) and symlinking config into place (see `ai/`, `ssh/`). Prefer rendering (template → generated, gitignored file) over a raw symlink whenever an app rewrites its own config or it must vary per machine.
-- **topic/update.sh**: Any file named `update.sh` is executed when you run `script/update`. To avoid being loaded automatically, its extension is `.sh`, not `.zsh`.
+- **topic/update.sh**: Refreshes already-installed tools (e.g. `mise self-update`, `gem update`). Run via `script/update` / `dot -u`. Extension is `.sh`, not `.zsh`, to avoid being auto-loaded.
 - **topic/\*.symlink**: Any file ending in `*.symlink` gets symlinked into
   your `$HOME`. This is so you can keep all of those versioned in your dotfiles
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
+
+#### error-handling convention
+
+These scripts are run as `sh "$script"`, which **ignores shebang flags** (a
+`#!/bin/sh -e` shebang does *not* enable `-e`). So:
+
+- **`install.sh` / `apply.sh` are fail-fast** — put an explicit `set -e` line in
+  them (not just the shebang). A half-installed package set or partially-applied
+  config should stop loudly, not silently continue.
+- **`update.sh` is best-effort** — no `set -e`; independent maintenance steps
+  (update tool A, then tool B) shouldn't abort each other.
+- The runners stay resilient and **report**: `run_appliers` and `run_updates`
+  run each topic with `… || warn "… failed"`, so one failure neither kills the
+  batch nor passes silently.
 
 ## Thanks
 

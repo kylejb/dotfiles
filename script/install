@@ -3,4 +3,6 @@
 
 set -e
 
-find "${DOTFILES}" -name install.sh | while read -r installer; do sh -c "${installer}"; done
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+find "${DOTFILES}" -name install.sh | while IFS= read -r installer; do sh "${installer}"; done

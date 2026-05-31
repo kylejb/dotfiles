@@ -23,12 +23,13 @@ setup_symlinks() {
 
     find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
         target="$HOME/.$(basename "$file" '.symlink')"
-        if [ -e "$target" ]; then
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
             # shellcheck disable=SC2295
-            info "~${target#$HOME} already exists... Skipping."
+            info "~${target#$HOME} exists and is not a symlink... Skipping."
         else
-            info "Creating symlink for $file"
-            ln -sf "$file" "$target"
+            # refresh existing symlinks; -n avoids descending into linked dirs
+            info "Linking $file"
+            ln -sfn "$file" "$target"
         fi
     done
 
@@ -41,12 +42,12 @@ setup_symlinks() {
 
     find "$DOTFILES/config" -mindepth 1 -maxdepth 1 2>/dev/null | while IFS= read -r config; do
         target="$HOME/.config/$(basename "$config")"
-        if [ -e "$target" ]; then
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
             # shellcheck disable=SC2295
-            info "~${target#$HOME} already exists... Skipping."
+            info "~${target#$HOME} exists and is not a symlink... Skipping."
         else
-            info "Creating symlink for $config"
-            ln -s "$config" "$target"
+            info "Linking $config"
+            ln -sfn "$config" "$target"
         fi
     done
 }
@@ -54,7 +55,7 @@ setup_symlinks() {
 run_appliers() {
     title 'Applying topic configs'
     # One applier failing must not abort the rest.
-    find "${DOTFILES}" -name apply.sh | while read -r applier; do
+    find "${DOTFILES}" -name apply.sh | while IFS= read -r applier; do
         # shellcheck disable=SC2295
         info "Running ${applier#$DOTFILES/}"
         sh "${applier}" || warn "applier failed: ${applier#$DOTFILES/}"

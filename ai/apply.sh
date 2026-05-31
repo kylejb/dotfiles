@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # Symlink shared AI agent configs into place.
 #
@@ -6,6 +6,9 @@
 # ai/codex/ in the repo into ~/.claude and ~/.codex respectively. Only
 # declarative, shareable config belongs in the repo — never runtime/secret
 # state (auth, sessions, history, caches, memories). See .gitignore.
+
+# set -e here (not just the shebang) so fail-fast holds when run as `sh apply.sh`.
+set -e
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
@@ -72,7 +75,7 @@ merge_codex_config() {
     mkdir -p "$(dirname "$target")"
     [ -f "$target" ] || : >"$target"
 
-    tmp="$(mktemp)"
+    tmp="$(mktemp "${TMPDIR:-/tmp}/dotfiles.codex.XXXXXX")"
     # Drop any previous managed block, then append a fresh one.
     awk -v b="$begin" -v e="$end" '
         $0==b {inblock=1; next}

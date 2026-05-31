@@ -13,23 +13,10 @@ set -e
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 # shellcheck source=/dev/null
-. "${DOTFILES}/utils.sh" >/dev/null 2>&1 || true
+. "${DOTFILES}/utils.sh"
 
-# Symlink $1 -> $2, but never clobber a real (non-symlink) file/dir at the
-# target — that's local data. Refreshes an existing symlink. Creates parents.
-safe_link() {
-    item="$1"
-    target="$2"
-
-    if [ -e "$target" ] && [ ! -L "$target" ]; then
-        printf '! %s already exists and is not a symlink... Skipping.\n' "$target"
-        return 0
-    fi
-
-    mkdir -p "$(dirname "$target")"
-    ln -sfn "$item" "$target"
-    printf '==> linked %s -> %s\n' "$target" "$item"
-}
+# safe_link (symlink unless a real file is present; refresh symlinks) lives in
+# utils.sh and is shared with setup_symlinks and the other appliers.
 
 # Link every top-level entry under $src into $dst. $3 is an optional
 # space-separated list of basenames to skip (e.g. docs / merge-only dirs).
@@ -88,10 +75,11 @@ merge_codex_config() {
         printf '%s\n' "$end"
     } >>"$tmp"
     mv "$tmp" "$target"
-    printf '==> merged %d Codex config fragment(s) into %s\n' "$#" "$target"
+    # shellcheck disable=SC2295
+    info "merged $# Codex config fragment(s) into ${target#"$HOME"}"
 }
 
-printf '\nSetting up AI agent configs\n'
+title 'Setting up AI agent configs'
 link_tree "${DOTFILES}/ai/claude" "$HOME/.claude"
 # README.md is docs; config.d is merged (below), not symlinked.
 link_tree "${DOTFILES}/ai/codex" "$HOME/.codex" "README.md config.d"

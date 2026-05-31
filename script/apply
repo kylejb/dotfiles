@@ -21,34 +21,14 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 setup_symlinks() {
     title 'Creating symlinks'
 
+    # *.symlink files -> $HOME/.<name>
     find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
-        target="$HOME/.$(basename "$file" '.symlink')"
-        if [ -e "$target" ] && [ ! -L "$target" ]; then
-            # shellcheck disable=SC2295
-            info "~${target#$HOME} exists and is not a symlink... Skipping."
-        else
-            # refresh existing symlinks; -n avoids descending into linked dirs
-            info "Linking $file"
-            ln -sfn "$file" "$target"
-        fi
+        safe_link "$file" "$HOME/.$(basename "$file" '.symlink')"
     done
 
-    info 'Setting up ~/.config'
-
-    if [ ! -d "$HOME/.config" ]; then
-        info 'Creating ~/.config'
-        mkdir -p "$HOME/.config"
-    fi
-
+    # config/<name> -> ~/.config/<name> (safe_link creates ~/.config as needed)
     find "$DOTFILES/config" -mindepth 1 -maxdepth 1 2>/dev/null | while IFS= read -r config; do
-        target="$HOME/.config/$(basename "$config")"
-        if [ -e "$target" ] && [ ! -L "$target" ]; then
-            # shellcheck disable=SC2295
-            info "~${target#$HOME} exists and is not a symlink... Skipping."
-        else
-            info "Linking $config"
-            ln -sfn "$config" "$target"
-        fi
+        safe_link "$config" "$HOME/.config/$(basename "$config")"
     done
 }
 

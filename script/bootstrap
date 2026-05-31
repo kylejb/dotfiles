@@ -41,35 +41,6 @@ run_installers() {
     sh "${DOTFILES}/script/install"
 }
 
-setup_git() {
-    # The include in config/git/config points at this path (XDG).
-    git_local="$HOME/.config/git/config.local"
-
-    if [ -f "$git_local" ]; then
-        info "Detected local git configuration. Skipping Git setup..."
-        return 0
-    fi
-    title 'Setting up Git'
-
-    mkdir -p "$(dirname "$git_local")"
-
-    defaultName='Kyle J. Burda'
-    defaultEmail='47502769+kylejb@users.noreply.github.com'
-    defaultGithub='kylejb'
-    defaultSigningkey='0x0'
-
-    printf 'Name [%s] ' "$defaultName"; read -r name
-    printf 'Email [%s] ' "$defaultEmail"; read -r email
-    printf 'Github username [%s] ' "$defaultGithub"; read -r github
-    printf 'Signing key [%s] ' "$defaultSigningkey"; read -r signingkey
-
-    git config -f "$git_local" user.name "${name:-$defaultName}"
-    git config -f "$git_local" user.email "${email:-$defaultEmail}"
-    git config -f "$git_local" user.signingkey "${signingkey:-$defaultSigningkey}"
-    git config -f "$git_local" github.user "${github:-$defaultGithub}"
-    git config -f "$git_local" commit.gpgsign true
-}
-
 setup_shell() {
     title 'Configuring shell'
 

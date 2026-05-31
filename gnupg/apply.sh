@@ -27,24 +27,5 @@ fi
 #pinentry-program /usr/bin/pinentry-x11
 
 info 'Setting up ~/.gnupg'
-if [ ! -d ~/.gnupg ]; then
-  mkdir "$HOME/.gnupg"
-fi
-
-gpg_agent_source="$DOTFILES/gnupg/gpg-agent.conf"
-gpg_agent_target="$HOME/.gnupg/gpg-agent.conf"
-if [ -e "$gpg_agent_target" ]; then
-  info "~${gpg_agent_target#$HOME} already exists... Skipping."
-else
-  info "Creating symlink for $gpg_agent_source"
-  ln -s "$gpg_agent_source" "$gpg_agent_target"
-fi
-
-gpg_conf_source="$DOTFILES/gnupg/gpg.conf"
-gpg_conf_target="$HOME/.gnupg/gpg.conf"
-if [ -e "$gpg_conf_target" ]; then
-  info "~${gpg_conf_target#$HOME} already exists... Skipping."
-else
-  info "Creating symlink for $gpg_conf_source"
-  ln -s "$gpg_conf_source" "$gpg_conf_target"
-fi
+safe_link "$DOTFILES/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"
+safe_link "$DOTFILES/gnupg/gpg.conf" "$HOME/.gnupg/gpg.conf"

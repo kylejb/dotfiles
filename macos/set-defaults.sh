@@ -10,6 +10,10 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
 
+user_can_sudo || {
+    error "This script requires sudo privileges to run. Please run as a user with sudo access."
+    exit 1
+}
 # Ask for the administrator password upfront
 sudo -v
 

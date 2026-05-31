@@ -142,22 +142,51 @@ has() {
     command -v "$1" 1>/dev/null 2>&1
 }
 
-# Symlink $1 -> $2, but never clobber a real (non-symlink) file/dir at the
-# target — that's local data. Refreshes an existing symlink; creates the parent.
+# True when $1 is a symlink owned by this dotfiles repo.
+is_dotfiles_link() {
+    _idl_target="$1"
+    [ -L "$_idl_target" ] || return 1
+
+    _idl_link="$(readlink "$_idl_target")" || return 1
+    case "$_idl_link" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    /*) return 1 ;;
+    esac
+
+    _idl_dir="$(dirname "$_idl_target")"
+    _idl_link_dir="$(dirname "$_idl_link")"
+    _idl_link_base="$(basename "$_idl_link")"
+    _idl_abs="$(
+        cd "$_idl_dir" 2>/dev/null &&
+            cd "$_idl_link_dir" 2>/dev/null &&
+            printf '%s/%s' "$(pwd -P)" "$_idl_link_base"
+    )" || return 1
+
+    case "$_idl_abs" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    *) return 1 ;;
+    esac
+}
+
+# Symlink $1 -> $2, but never clobber a real file/dir or external symlink at
+# the target — that's local data. Refreshes only dotfiles-owned symlinks.
 # Shared by setup_symlinks and the topic appliers (ai/gnupg/ssh).
 safe_link() {
     _sl_src="$1"
     _sl_target="$2"
 
-    if [ -e "$_sl_target" ] && [ ! -L "$_sl_target" ]; then
-        # shellcheck disable=SC2295
+    if [ -L "$_sl_target" ]; then
+        if ! is_dotfiles_link "$_sl_target"; then
+            warn "${_sl_target#"$HOME"} is a symlink outside \$DOTFILES... skipping"
+            return 0
+        fi
+    elif [ -e "$_sl_target" ]; then
         warn "${_sl_target#"$HOME"} exists and is not a symlink... skipping"
         return 0
     fi
 
     mkdir -p "$(dirname "$_sl_target")"
     ln -sfn "$_sl_src" "$_sl_target"
-    # shellcheck disable=SC2295
     info "linked ${_sl_target#"$HOME"} -> $_sl_src"
 }
 
@@ -191,11 +220,40 @@ get_os() {
 # Linux distribution id (debian, ubuntu, alpine, fedora, ...); empty elsewhere.
 get_distro() {
     is_linux || return 0
-    if [ -r /etc/os-release ]; then
+    _gd_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
+    if [ -r "$_gd_os_release" ]; then
         # shellcheck source=/dev/null
-        . /etc/os-release
+        . "$_gd_os_release"
         echo "${ID:-}"
     fi
+}
+
+# Linux distribution identifiers from ID and ID_LIKE, tokenized for family
+# matching across derivatives.
+get_distro_ids() {
+    is_linux || return 0
+    _gdi_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
+    if [ -r "$_gdi_os_release" ]; then
+        # shellcheck source=/dev/null
+        . "$_gdi_os_release"
+        printf '%s %s\n' "${ID:-}" "${ID_LIKE:-}"
+    fi
+}
+
+distro_matches() {
+    _dm_want="$1"
+    for _dm_id in $(get_distro_ids); do
+        [ "$_dm_id" = "$_dm_want" ] && return 0
+    done
+    return 1
+}
+
+is_debian_family() {
+    distro_matches debian ||
+        distro_matches ubuntu ||
+        distro_matches linuxmint ||
+        distro_matches pop ||
+        distro_matches raspbian
 }
 
 #####################

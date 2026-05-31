@@ -1,10 +1,9 @@
 #!/bin/sh
 # Remove dotfiles symlinks.
 #
-# This removes the symlinks created by `script/bootstrap` (both the `$HOME/.*`
-# links from `*.symlink` files and the `~/.config/*` links). It deliberately
-# does NOT remove packages/tools installed with Homebrew, apt, or Chocolatey,
-# nor does it delete the cloned repo.
+# This removes the symlinks created by `script/bootstrap`/`script/apply`. It
+# deliberately does NOT remove installed packages/tools nor does it delete
+# the cloned repo.
 set -e
 
 # Self-contained env (see "Script architecture" in the README): runs via dot
@@ -17,20 +16,31 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 heading 'Uninstalling kylejb/dotfiles'
 warn 'This does not remove packages/tools installed with Homebrew, apt, or Chocolatey.'
 
-# Remove a symlink only if it points back into $DOTFILES.
 remove_link() {
     target="$1"
-    if [ -L "$target" ]; then
-        case "$(readlink "$target")" in
-        "$DOTFILES"/*)
-            info "Removing $target"
-            rm "$target"
-            ;;
-        *)
-            warn "Skipping $target (not linked into \$DOTFILES)"
-            ;;
-        esac
+    if is_dotfiles_link "$target"; then
+        info "Removing $target"
+        rm "$target"
+    elif [ -L "$target" ]; then
+        warn "Skipping $target (not linked into \$DOTFILES)"
     fi
+}
+
+remove_link_tree() {
+    src="$1"
+    dst="$2"
+    skip="${3:-}"
+
+    [ -d "$src" ] || return 0
+
+    for item in "$src"/* "$src"/.[!.]*; do
+        [ -e "$item" ] || continue
+        base="$(basename "$item")"
+        case " $skip " in
+        *" $base "*) continue ;;
+        esac
+        remove_link "$dst/$base"
+    done
 }
 
 # $HOME/.<name> links from *.symlink files
@@ -44,5 +54,14 @@ if [ -d "$DOTFILES/config" ]; then
         remove_link "$HOME/.config/$(basename "$config")"
     done
 fi
+
+# Topic applier links
+remove_link "$HOME/.gnupg/gpg-agent.conf"
+remove_link "$HOME/.gnupg/gpg.conf"
+remove_link "$HOME/.ssh/config"
+
+remove_link_tree "$DOTFILES/ai/claude" "$HOME/.claude"
+remove_link_tree "$DOTFILES/ai/codex" "$HOME/.codex" "README.md config.d"
+remove_link "$HOME/.codex/AGENTS.md"
 
 completed 'Symlinks removed. Your packages and the dotfiles repo are untouched.'

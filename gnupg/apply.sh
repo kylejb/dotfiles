@@ -5,7 +5,7 @@ set -e
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
-# shellcheck disable=SC3046 source=/dev/null
+# shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
 cp "${DOTFILES}/gnupg/base.gpg-agent.conf" "${DOTFILES}/gnupg/gpg-agent.conf"

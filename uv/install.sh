@@ -3,7 +3,7 @@ set -e
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
-# shellcheck disable=SC3046 source=/dev/null
+# shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
 if ! command_exists uv; then

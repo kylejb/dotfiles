@@ -6,6 +6,7 @@
 # Note: .dmg/hdiutil is macOS-specific.
 #
 # credit: http://nparikh.org/notes/zshrc.txt
+
 function extract {
     if [ -f $1 ]; then
         case $1 in

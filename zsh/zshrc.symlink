@@ -12,3 +12,5 @@ prepend_path $DOTFILES/bin
 [[ -f $HOME/.localrc ]] && source $HOME/.localrc
 
 eval "$(starship init zsh)"
+
+. "$HOME/.local/share/../bin/env"

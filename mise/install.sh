@@ -6,6 +6,7 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 # shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
+# TODO: add guard to skip block for macOS
 if [ -f "${HOME}/.local/bin/mise" ]; then
   echo 'mise has already been installed'
 else
@@ -32,6 +33,7 @@ elif is_macos; then
   mise completion zsh > "$(brew --prefix)/share/zsh/site-functions/_mise"
 fi
 
+# TODO: replace with mise config file
 echo 'Installing latest version of Go'
 mise use -g go@latest
 

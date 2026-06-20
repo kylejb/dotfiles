@@ -26,21 +26,20 @@ remove_link() {
     fi
 }
 
-remove_link_tree() {
-    src="$1"
-    dst="$2"
-    skip="${3:-}"
+remove_codex_managed_block() {
+    target="$HOME/.codex/config.toml"
+    end='# <<< dotfiles:codex <<<'
 
-    [ -d "$src" ] || return 0
+    [ -f "$target" ] || return 0
 
-    for item in "$src"/* "$src"/.[!.]*; do
-        [ -e "$item" ] || continue
-        base="$(basename "$item")"
-        case " $skip " in
-        *" $base "*) continue ;;
-        esac
-        remove_link "$dst/$base"
-    done
+    tmp="$(mktemp "${TMPDIR:-/tmp}/dotfiles.codex.XXXXXX")"
+    awk -v e="$end" '
+        /^# >>> dotfiles:codex / {inblock=1; next}
+        $0==e {inblock=0; next}
+        !inblock {print}
+    ' "$target" >"$tmp"
+    mv "$tmp" "$target"
+    info "Removed dotfiles-managed Codex config block"
 }
 
 # $HOME/.<name> links from *.symlink files
@@ -60,8 +59,10 @@ remove_link "$HOME/.gnupg/gpg-agent.conf"
 remove_link "$HOME/.gnupg/gpg.conf"
 remove_link "$HOME/.ssh/config"
 
-remove_link_tree "$DOTFILES/ai/claude" "$HOME/.claude"
-remove_link_tree "$DOTFILES/ai/codex" "$HOME/.codex" "README.md config.d"
+remove_link "$HOME/.claude/CLAUDE.md"
+remove_link "$HOME/.claude/settings.json"
 remove_link "$HOME/.codex/AGENTS.md"
+remove_link "$HOME/.codex/prompts"
+remove_codex_managed_block
 
 completed 'Symlinks removed. Your packages and the dotfiles repo are untouched.'

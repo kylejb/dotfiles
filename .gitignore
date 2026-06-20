@@ -28,6 +28,5 @@ ai/**/shell-snapshots/
 ai/**/shell_snapshots/
 ai/**/memories/
 ai/**/.last-cleanup
-ai/codex/config.toml
-# secret-bearing Codex config fragments stay local
-ai/codex/config.d/*.local.toml
+# secret-bearing Codex config stays local
+ai/codex/config.local.toml

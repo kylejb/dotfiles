@@ -31,11 +31,9 @@ Set-PSDrive-HKCR;
 
 # Run scripts
 # Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "windows" | Join-Path -ChildPath "Chocolatey.ps1");
-Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "git" | Join-Path -ChildPath "Git.ps1");
 Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "vscode" | Join-Path -ChildPath "VSCode.ps1");
 Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "windows" | Join-Path -ChildPath "WindowsTerminal" | Join-Path -ChildPath "WindowsTerminal.ps1");
 Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "linux" | Join-Path -ChildPath "WSL.ps1");
-Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "docker" | Join-Path -ChildPath "Docker.ps1");
 Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "windows" | Join-Path -ChildPath "Workspace.ps1");
 Invoke-Expression (Join-Path -Path $DotfilesWorkFolder -ChildPath "windows" | Join-Path -ChildPath "SystemSettings.ps1");
 

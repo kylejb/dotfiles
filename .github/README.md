@@ -1,6 +1,6 @@
 # kylejb's dotfiles
 
-Supports macOS, Debian/Ubuntu, and Windows 11.
+Supports macOS, Debian/Ubuntu, and Windows 11 through WSL.
 
 > [!Warning]
 > Use at your own risk.
@@ -9,7 +9,7 @@ Supports macOS, Debian/Ubuntu, and Windows 11.
 
 Script will download this repository to `~/.dotfiles` and will symlink the appropriate files to your home directory.
 
-- Windows:
+- Windows (from an elevated PowerShell, then follow the Linux steps inside WSL):
 
   ```ps1
   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass;
@@ -39,8 +39,19 @@ dot     --uninstall   Remove symlinks (does NOT remove installed packages)
 dot -h, --help        Show usage
 ```
 
-Run `dot -u` from time to time to keep your environment fresh. On Windows, use
-`init.ps1` instead — `dot` will refuse to run there.
+Run `dot -u` from time to time to keep your environment fresh. On Windows, run
+`dot` inside WSL; it refuses to run in native Windows shells.
+
+## Windows
+
+Windows runs the Linux setup inside WSL, so there is one implementation to
+maintain. `installer.ps1` installs WSL with Ubuntu; from there, use the normal
+Linux install and `dot`.
+
+On the `personal` profile in WSL, git signs through the 1Password app on
+Windows, using `op-ssh-sign-wsl.exe` and `ssh.exe`.
+
+This path has not been tested on a real Windows machine yet.
 
 ## Machine profiles
 

@@ -1,6 +1,6 @@
 # Dotfiles
 
-A cross-platform (macOS, Linux/WSL2, Windows) personal environment managed as
+A cross-platform (macOS, Linux, Windows through WSL2) personal environment managed as
 bespoke POSIX `sh` — see [ADR 0001](docs/adr/0001-bespoke-posix-sh-over-dotfiles-manager.md).
 
 ## Language

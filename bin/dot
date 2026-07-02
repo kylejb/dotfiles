@@ -8,10 +8,10 @@
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
-# Windows is managed via PowerShell, not this script.
+# On Windows, dot runs inside WSL, where uname reports Linux.
 case "$(uname | tr '[:upper:]' '[:lower:]')" in
 *mingw* | *msys* | *cygwin*)
-    echo 'Windows detected. Run init.ps1 instead of dot.' >&2
+    echo 'Native Windows shells are not supported. Run dot inside WSL (see installer.ps1).' >&2
     exit 1
     ;;
 esac

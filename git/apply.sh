@@ -26,6 +26,14 @@ fi
 if is_personal; then
     if is_macos; then
         op_sign='/Applications/1Password.app/Contents/MacOS/op-ssh-sign'
+    elif is_wsl; then
+        # In WSL, 1Password on Windows does the signing and SSH (untested).
+        win_user="$(cmd.exe /c 'echo %USERNAME%' 2>/dev/null | tr -d '\r')"
+        [ -n "$win_user" ] || {
+            warn 'could not read the Windows username; config.local not written'
+            exit 1
+        }
+        op_sign="/mnt/c/Users/${win_user}/AppData/Local/Microsoft/WindowsApps/op-ssh-sign-wsl.exe"
     else
         op_sign='/opt/1Password/op-ssh-sign'
     fi
@@ -42,6 +50,9 @@ if is_personal; then
 [gpg "ssh"]
   program = "${op_sign}"
 EOF
+    if is_wsl; then
+        printf '[core]\n  sshCommand = ssh.exe\n' >>"$target"
+    fi
     info "rendered personal git identity + 1Password ssh signing into config/git/config.local"
     [ -x "$op_sign" ] || warn "1Password signer not found at ${op_sign}; commits will fail until it is installed"
 else

@@ -18,7 +18,7 @@
   "explorer.compactFolders": false,
   "explorer.confirmDelete": false,
   "explorer.sortOrder": "foldersNestsFiles",
-  "extensions.autoUpdate": false,
+  "extensions.autoUpdate": "off",
   "extensions.autoCheckUpdates": false,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 4000,
@@ -36,7 +36,7 @@
     "**/CVS": true,
     "**/Thumbs.db": true,
     "**/.coverage": true,
-    "**/node_modules": true
+    "**/node_modules": true,
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
@@ -63,12 +63,12 @@
   "markdown.preview.scrollEditorWithPreview": false,
   "material-icon-theme.folders.associations": {
     "internal": "Lib",
-    "Web": "React-components"
+    "Web": "React-components",
   },
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "npm.enableRunFromFolder": true,
   "python.analysis.typeCheckingMode": "standard",
-  "python.defaultInterpreterPath": "~/.local/share/mise/shims/python",
+  "python.defaultInterpreterPath": "",
   "python.testing.pytestEnabled": true,
   "python.testing.pytestPath": "~/.local/bin/pytest",
   "python.venvFolders": [".venv"],
@@ -76,10 +76,10 @@
   "remote.defaultExtensionsIfInstalledLocally": [
     "GitHub.copilot",
     "GitHub.copilot-chat",
-    "GitHub.vscode-pull-request-github"
+    "GitHub.vscode-pull-request-github",
   ],
   "search.exclude": {
-    "**/.venv": true
+    "**/.venv": true,
   },
   "search.showLineNumbers": true,
   "security.workspace.trust.untrustedFiles": "newWindow",
@@ -89,7 +89,7 @@
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.env.osx": {
     "PATH": ".",
-    "PYTHONPATH": "."
+    "PYTHONPATH": ".",
   },
   "terminal.integrated.fontFamily": "Fira Code",
   "typescript.suggest.paths": true,
@@ -108,7 +108,7 @@
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[dockercompose]": {
     "editor.autoIndent": "advanced",
@@ -118,27 +118,27 @@
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
-    }
+      "strings": true,
+    },
   },
   "[github-actions-workflow]": {
     "prettier.singleQuote": true,
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "[go]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -146,23 +146,23 @@
     "editor.quickSuggestions": {
       "other": true,
       "comments": true,
-      "strings": true
-    }
+      "strings": true,
+    },
   },
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  }
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+  },
 }

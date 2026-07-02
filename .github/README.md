@@ -24,9 +24,54 @@ Script will download this repository to `~/.dotfiles` and will symlink the appro
 
 Everything is configurable from this folder. The main file you'll want to change right off the bat is `zsh/zshrc.symlink`, which sets up a few paths that may differ on your particular machine.
 
-## Update
+## Managing your environment with `dot`
 
-`dot` is a simple script that installs some dependencies, sets sane macOS defaults, and so on. Tweak this script, and occasionally run dot from time to time to keep your environment fresh and up-to-date. You can find this script in `bin/`.
+`dot` (in `bin/`, on your `$PATH` after install) is the single front door for
+managing these dotfiles:
+
+```
+dot -i, --install     Install dotfiles (runs script/bootstrap)
+dot -u, --update      git pull + run all topic update.sh scripts
+dot -a, --apply       Refresh symlinks + re-render configs (no package install)
+dot -d, --defaults    Re-apply macOS defaults (macOS only)
+dot -e, --edit        Open the dotfiles directory in $EDITOR
+dot     --uninstall   Remove symlinks (does NOT remove installed packages)
+dot -h, --help        Show usage
+```
+
+Run `dot -u` from time to time to keep your environment fresh. On Windows, use
+`init.ps1` instead — `dot` will refuse to run there.
+
+## Machine profiles
+
+Each machine has a profile — `personal` or `work` — that lets tooling, git
+identity, and secret handling differ per machine. Install prompts for it once
+and writes the single word to `~/.config/dotfiles/profile` (untracked). It is
+exported as `$DOTFILES_PROFILE` early in `zsh/zshenv.symlink`, so any script or
+shell can gate on it.
+
+Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
+rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
+local secrets only.
+
+## Script architecture
+
+The setup scripts (`installer.sh`, `bin/dot`, `script/*`, `*/install.sh`,
+`*/apply.sh`, `*/update.sh`, `utils.sh`) are POSIX `sh` and **self-contained**:
+each sets `DOTFILES` (with a fallback) and sources `utils.sh` itself. This is
+deliberate, not redundant — do not "centralize" it into `bin/dot`:
+
+- **`exec` does not preserve shell functions, only exported env.** `bin/dot`
+  exports `DOTFILES` (which survives `exec`) but cannot hand down `utils.sh`'s
+  functions (`is_macos`, `info`, …) — `exec` replaces the process image and
+  drops them. Each script must source `utils.sh` itself.
+- **First-time install bypasses `dot`.** `installer.sh` (run via `curl | sh`)
+  sources `script/bootstrap` directly, before `dot` is on `$PATH`. So scripts
+  can't assume `dot` set anything up.
+
+Net effect: every script runs correctly via `dot`, via `installer.sh`,
+when called internally by `bootstrap`, and standalone for debugging. `dot` is
+the user-facing CLI (flags, help, platform guard); it is not the only caller.
 
 ## Structure
 
@@ -48,12 +93,27 @@ There are a few special files in the hierarchy.
   expected to setup `$PATH` or similar.
 - **topic/completion.zsh**: Any file named `completion.zsh` is loaded
   last and is expected to setup autocomplete.
-- **topic/install.sh**: Any file named `install.sh` is executed when you run `script/install`. To avoid being loaded automatically, its extension is `.sh`, not `.zsh`.
-- **topic/update.sh**: Any file named `update.sh` is executed when you run `script/update`. To avoid being loaded automatically, its extension is `.sh`, not `.zsh`.
+- **topic/install.sh**: Installs packages/tools (the heavy, occasional path). Run via `script/install` (and during a full `dot -i`). Use this for anything that fetches/builds software.
+- **topic/apply.sh**: (Re-)renders and links config — the fast, frequent path with **no package installs**. Run via `dot -a` / `script/apply` (and during a full install). Use this for templated/generated configs (see `gnupg/`) and symlinking config into place (see `ai/`, `ssh/`). Prefer rendering (template → generated, gitignored file) over a raw symlink whenever an app rewrites its own config or it must vary per machine.
+- **topic/update.sh**: Refreshes already-installed tools (e.g. `mise self-update`, `gem update`). Run via `script/update` / `dot -u`. Extension is `.sh`, not `.zsh`, to avoid being auto-loaded.
 - **topic/\*.symlink**: Any file ending in `*.symlink` gets symlinked into
   your `$HOME`. This is so you can keep all of those versioned in your dotfiles
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
+
+#### error-handling convention
+
+These scripts are run as `sh "$script"`, which **ignores shebang flags** (a
+`#!/bin/sh -e` shebang does *not* enable `-e`). So:
+
+- **`install.sh` / `apply.sh` are fail-fast** — put an explicit `set -e` line in
+  them (not just the shebang). A half-installed package set or partially-applied
+  config should stop loudly, not silently continue.
+- **`update.sh` is best-effort** — no `set -e`; independent maintenance steps
+  (update tool A, then tool B) shouldn't abort each other.
+- The runners stay resilient and **report**: `run_appliers` and `run_updates`
+  run each topic with `… || warn "… failed"`, so one failure neither kills the
+  batch nor passes silently.
 
 ## Thanks
 

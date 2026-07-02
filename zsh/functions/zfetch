@@ -5,6 +5,7 @@
 # https://github.com/jason0x43/dotfiles/blob/eff04270c4d8074db36d3e3bf85f64d3ccbeafe9/zsh/functions/zfetch
 
 # Terminal colors
+
 TC='\e['
 Rst="${TC}0m"
 Blk="${TC}30m";

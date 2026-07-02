@@ -1,0 +1,8 @@
+[tools]
+"go:github.com/air-verse/air" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:eas-cli" = "latest"
+go = "latest"
+node = "lts"
+python = "latest"
+ruby = "latest"

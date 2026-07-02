@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 mise self-update -y
 mise up

@@ -1,5 +1,10 @@
 #!/bin/sh -e
 
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
 install_extensions() {
     code --force --install-extension "aaron-bond.better-comments"
     code --force --install-extension "christian-kohler.path-intellisense"
@@ -13,18 +18,28 @@ install_extensions() {
     code --force --install-extension "ms-vscode-remote.remote-containers"
 }
 
-# Set up symlinks for settings, snippets, and keybindings
+# Set up symlinks for settings, keybindings, and snippets.
 echo "Setting up VSCode. This may take a minute..."
-# shellcheck disable=SC2010
-for file in $(ls -A "${DOTFILES}/vscode" | grep --include -r -E '\.json|snippets'); do
-    # shellcheck disable=3028
-    if echo "$OSTYPE" | grep -iq 'darwin'; then
-        ln -svf "${DOTFILES}/vscode/$file" "$HOME/Library/Application Support/Code/User/settings.json"
-    elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
-        ln -svf "${DOTFILES}/vscode/$file" "$HOME/.config/Code/User/$file"
-    else
-        echo 'Unsupported OS detected. Skipping VSCode setup...'
-    fi
-done
+
+# Resolve the VS Code "User" config dir per OS.
+if is_macos; then
+    code_user="$HOME/Library/Application Support/Code/User"
+elif is_linux; then
+    code_user="$HOME/.config/Code/User"
+else
+    code_user=''
+    echo 'Unsupported OS detected. Skipping VSCode setup...'
+fi
+
+if [ -n "$code_user" ]; then
+    mkdir -p "$code_user"
+    # Link each tracked config file to its OWN destination (not all to settings.json).
+    for name in settings.json keybindings.json; do
+        src="${DOTFILES}/vscode/$name"
+        [ -e "$src" ] && ln -sfnv "$src" "$code_user/$name"
+    done
+    # Snippets directory, if present.
+    [ -d "${DOTFILES}/vscode/snippets" ] && ln -sfnv "${DOTFILES}/vscode/snippets" "$code_user/snippets"
+fi
 
 install_extensions

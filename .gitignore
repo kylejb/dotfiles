@@ -1,3 +1,7 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
 # git
 # TODO: consider mirroring approach taken for gnupg to handle OS contexts
 
@@ -9,3 +13,20 @@ ssh/config
 
 # zsh
 zsh/plugins/**
+
+# ai — never capture runtime/secret state, only declarative config
+ai/**/auth.json
+ai/**/sessions/
+ai/**/projects/
+ai/**/history.jsonl
+ai/**/*.sqlite*
+ai/**/cache/
+ai/**/caches/
+ai/**/logs/
+ai/**/log/
+ai/**/shell-snapshots/
+ai/**/shell_snapshots/
+ai/**/memories/
+ai/**/.last-cleanup
+# secret-bearing Codex config stays local
+ai/codex/config.local.toml

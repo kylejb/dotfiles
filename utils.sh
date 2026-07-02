@@ -65,6 +65,7 @@ setup_color() {
         FMT_BLUE=""
         FMT_BOLD=""
         FMT_RESET=""
+        NO_COLOR=""
         return
     fi
 
@@ -117,51 +118,196 @@ success() {
 #####################
 
 heading() {
-    printf '\n%s\n' "${FMT_BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
+    printf '\n%s\n' "${FMT_BOLD}${FMT_BLUE}$*${FMT_RESET}"
 }
 
 info() {
-    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${NO_COLOR}"
+    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${FMT_RESET}"
 }
 
 warn() {
-    printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
+    printf '%s\n' "${FMT_YELLOW}! $*${FMT_RESET}"
 }
 
 error() {
-    # printf "%sError: %s%s\n" "${FMT_RED}" "${FMT_RESET}" "$1"
-    printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
+    printf '%s\n' "${FMT_RED}x $*${FMT_RESET}" >&2
     exit 1
 }
 
 completed() {
-    printf '\n%s\n' "${GREEN}$*${NO_COLOR}"
+    printf '\n%s\n' "${FMT_GREEN}$*${FMT_RESET}"
 }
 
 has() {
     command -v "$1" 1>/dev/null 2>&1
 }
 
-# shellcheck disable=SC1091,SC3028,SC3043,SC3046
-get_os() {
-    local os
-    os='unknown'
-    if echo "$OSTYPE" | grep -iq 'alpine'; then
-        os='alpine'
-    elif echo "$OSTYPE" | grep -iq 'darwin'; then
-        os='darwin'
-    elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
-        source /etc/os-release
-        # Set os to ID_LIKE if this field exists
-        # Else default to ID
-        # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
-        os="${ID_LIKE:-$ID}"
-    fi
-    export DETECTED_OS="$os"
+# True when $1 is a symlink owned by this dotfiles repo.
+is_dotfiles_link() {
+    _idl_target="$1"
+    [ -L "$_idl_target" ] || return 1
 
-    # value to return
-    echo "$DETECTED_OS"
+    _idl_link="$(readlink "$_idl_target")" || return 1
+    case "$_idl_link" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    /*) return 1 ;;
+    esac
+
+    _idl_dir="$(dirname "$_idl_target")"
+    _idl_link_dir="$(dirname "$_idl_link")"
+    _idl_link_base="$(basename "$_idl_link")"
+    _idl_abs="$(
+        cd "$_idl_dir" 2>/dev/null &&
+            cd "$_idl_link_dir" 2>/dev/null &&
+            printf '%s/%s' "$(pwd -P)" "$_idl_link_base"
+    )" || return 1
+
+    case "$_idl_abs" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    *) return 1 ;;
+    esac
 }
 
-get_os
+# Symlink $1 -> $2, but never clobber a real file/dir or external symlink at
+# the target — that's local data. Refreshes only dotfiles-owned symlinks.
+# Shared by setup_symlinks and the topic appliers (ai/gnupg/ssh).
+safe_link() {
+    _sl_src="$1"
+    _sl_target="$2"
+
+    if [ -L "$_sl_target" ]; then
+        if ! is_dotfiles_link "$_sl_target"; then
+            warn "${_sl_target#"$HOME"} is a symlink outside \$DOTFILES... skipping"
+            return 0
+        fi
+    elif [ -e "$_sl_target" ]; then
+        warn "${_sl_target#"$HOME"} exists and is not a symlink... skipping"
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$_sl_target")"
+    ln -sfn "$_sl_src" "$_sl_target"
+    info "linked ${_sl_target#"$HOME"} -> $_sl_src"
+}
+
+####################
+# OS detection     #
+####################
+#
+# Standardized, POSIX-safe (uname-based, no $OSTYPE) helpers used everywhere
+# OS-specific behavior is needed. Prefer the predicates at call sites:
+#   is_macos / is_linux / is_wsl
+# get_os returns the platform family; get_distro the Linux distro id.
+
+is_macos() { [ "$(uname -s)" = 'Darwin' ]; }
+is_linux() { [ "$(uname -s)" = 'Linux' ]; }
+
+# True on Windows Subsystem for Linux (WSL1/WSL2).
+is_wsl() {
+    is_linux || return 1
+    [ -r /proc/version ] && grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null
+}
+
+# Platform family: macos | linux | unknown
+get_os() {
+    case "$(uname -s)" in
+    Darwin) echo 'macos' ;;
+    Linux) echo 'linux' ;;
+    *) echo 'unknown' ;;
+    esac
+}
+
+# Linux distribution id (debian, ubuntu, alpine, fedora, ...); empty elsewhere.
+get_distro() {
+    is_linux || return 0
+    _gd_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
+    if [ -r "$_gd_os_release" ]; then
+        # shellcheck source=/dev/null
+        . "$_gd_os_release"
+        echo "${ID:-}"
+    fi
+}
+
+# Linux distribution identifiers from ID and ID_LIKE, tokenized for family
+# matching across derivatives.
+get_distro_ids() {
+    is_linux || return 0
+    _gdi_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
+    if [ -r "$_gdi_os_release" ]; then
+        # shellcheck source=/dev/null
+        . "$_gdi_os_release"
+        printf '%s %s\n' "${ID:-}" "${ID_LIKE:-}"
+    fi
+}
+
+distro_matches() {
+    _dm_want="$1"
+    for _dm_id in $(get_distro_ids); do
+        [ "$_dm_id" = "$_dm_want" ] && return 0
+    done
+    return 1
+}
+
+is_debian_family() {
+    distro_matches debian ||
+        distro_matches ubuntu ||
+        distro_matches linuxmint ||
+        distro_matches pop ||
+        distro_matches raspbian
+}
+
+#####################
+# Machine profile   #
+#####################
+#
+# The profile distinguishes machines (e.g. 'personal' vs 'work') so that
+# tooling, git identity, and secret handling can differ. The single source of
+# truth is a one-word file readable from both POSIX sh and zsh. The
+# DOTFILES_PROFILE env var (exported early by zsh/zshenv.symlink) wins if set.
+
+# Path to the profile file (honors XDG).
+profile_file() {
+    echo "${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/profile"
+}
+
+# Echo the active profile, or nothing if unset.
+get_profile() {
+    if [ -n "${DOTFILES_PROFILE:-}" ]; then
+        echo "$DOTFILES_PROFILE"
+    elif [ -r "$(profile_file)" ]; then
+        cat "$(profile_file)"
+    fi
+}
+
+is_personal() {
+    [ "$(get_profile)" = 'personal' ]
+}
+
+is_work() {
+    [ "$(get_profile)" = 'work' ]
+}
+
+# Prompt for and persist the profile if it is not already set.
+setup_profile() {
+    if [ -n "$(get_profile)" ]; then
+        info "Detected profile: $(get_profile). Skipping profile setup..."
+        return 0
+    fi
+
+    title 'Choose a machine profile'
+    info 'personal = full setup incl. 1Password; work = no 1Password, local secrets only'
+
+    profile=''
+    while [ "$profile" != 'personal' ] && [ "$profile" != 'work' ]; do
+        printf 'Profile [personal/work]: '
+        read -r profile
+    done
+
+    file="$(profile_file)"
+    mkdir -p "$(dirname "$file")"
+    echo "$profile" >"$file"
+    export DOTFILES_PROFILE="$profile"
+    success "Profile set to '$profile' ($file)"
+}
+
 setup_color

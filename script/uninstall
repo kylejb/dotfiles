@@ -1,0 +1,68 @@
+#!/bin/sh
+# Remove dotfiles symlinks.
+#
+# This removes the symlinks created by `script/bootstrap`/`script/apply`. It
+# deliberately does NOT remove installed packages/tools nor does it delete
+# the cloned repo.
+set -e
+
+# Self-contained env (see "Script architecture" in the README): runs via dot
+# or standalone, so it sets DOTFILES + sources utils.sh itself.
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
+heading 'Uninstalling kylejb/dotfiles'
+warn 'This does not remove packages/tools installed with Homebrew, apt, or Chocolatey.'
+
+remove_link() {
+    target="$1"
+    if is_dotfiles_link "$target"; then
+        info "Removing $target"
+        rm "$target"
+    elif [ -L "$target" ]; then
+        warn "Skipping $target (not linked into \$DOTFILES)"
+    fi
+}
+
+remove_codex_managed_block() {
+    target="$HOME/.codex/config.toml"
+    end='# <<< dotfiles:codex <<<'
+
+    [ -f "$target" ] || return 0
+
+    tmp="$(mktemp "${TMPDIR:-/tmp}/dotfiles.codex.XXXXXX")"
+    awk -v e="$end" '
+        /^# >>> dotfiles:codex / {inblock=1; next}
+        $0==e {inblock=0; next}
+        !inblock {print}
+    ' "$target" >"$tmp"
+    mv "$tmp" "$target"
+    info "Removed dotfiles-managed Codex config block"
+}
+
+# $HOME/.<name> links from *.symlink files
+find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
+    remove_link "$HOME/.$(basename "$file" '.symlink')"
+done
+
+# ~/.config/<name> links
+if [ -d "$DOTFILES/config" ]; then
+    find "$DOTFILES/config" -mindepth 1 -maxdepth 1 | while IFS= read -r config; do
+        remove_link "$HOME/.config/$(basename "$config")"
+    done
+fi
+
+# Topic applier links
+remove_link "$HOME/.gnupg/gpg-agent.conf"
+remove_link "$HOME/.gnupg/gpg.conf"
+remove_link "$HOME/.ssh/config"
+
+remove_link "$HOME/.claude/CLAUDE.md"
+remove_link "$HOME/.claude/settings.json"
+remove_link "$HOME/.codex/AGENTS.md"
+remove_link "$HOME/.codex/prompts"
+remove_codex_managed_block
+
+completed 'Symlinks removed. Your packages and the dotfiles repo are untouched.'

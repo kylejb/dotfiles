@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
-# shellcheck disable=SC1091,SC3046
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
 echo "Linux installer not implemented..."

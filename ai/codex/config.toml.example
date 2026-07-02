@@ -1,0 +1,22 @@
+# Example Codex managed config source.
+#
+# Copy to `config.toml` for committed, non-secret config, or to
+# `config.local.toml` for machine-local or secret-bearing config, then run
+# `dot --apply`.
+#
+# This file is rendered into the dotfiles-managed block in
+# ~/.codex/config.toml. Keep Codex runtime/project/TUI state outside that block
+# in the live file.
+
+# Non-secret server: safe to commit (no credentials).
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/Users/kylejb/Developer"]
+
+# Secret-bearing server: keep the token OUT of git. Put this table in
+# `config.local.toml` with the real value, or have the server read an env var
+# exported from your machine-local shell config (~/.localrc).
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+# env.GITHUB_TOKEN is read from the environment at runtime; do not inline it.

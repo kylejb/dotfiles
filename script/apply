@@ -1,0 +1,46 @@
+#!/bin/sh
+# Apply configuration: refresh symlinks and (re-)render config files.
+#
+# This is the fast, config-only path — it does NOT install packages/tools.
+# Run it whenever you change a tracked config or a *.tmpl/base template:
+#   dot --apply
+#
+# It is also invoked by script/bootstrap during a full install.
+#
+# Convention: any topic/apply.sh is an idempotent config renderer/linker
+# (run here). Contrast topic/install.sh, which installs packages/tools.
+set -e
+
+# Self-contained env (see "Script architecture" in the README): runs via dot,
+# bootstrap, or standalone, so it sets DOTFILES + sources utils.sh itself.
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
+setup_symlinks() {
+    title 'Creating symlinks'
+
+    # *.symlink files -> $HOME/.<name>
+    find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' | while IFS= read -r file; do
+        safe_link "$file" "$HOME/.$(basename "$file" '.symlink')"
+    done
+
+    # config/<name> -> ~/.config/<name> (safe_link creates ~/.config as needed)
+    find "$DOTFILES/config" -mindepth 1 -maxdepth 1 2>/dev/null | while IFS= read -r config; do
+        safe_link "$config" "$HOME/.config/$(basename "$config")"
+    done
+}
+
+run_appliers() {
+    title 'Applying topic configs'
+    # One applier failing must not abort the rest.
+    find "${DOTFILES}" -name apply.sh | while IFS= read -r applier; do
+        # shellcheck disable=SC2295
+        info "Running ${applier#$DOTFILES/}"
+        sh "${applier}" || warn "applier failed: ${applier#$DOTFILES/}"
+    done
+}
+
+setup_symlinks
+run_appliers

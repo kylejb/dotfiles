@@ -1,5 +1,5 @@
 [include]
-  # TODO: update path after redesigning approach
+  # per-machine identity/signing; rendered once by git/apply.sh, hand-editable
   path = ~/.config/git/config.local
 [core]
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol

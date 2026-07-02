@@ -54,6 +54,16 @@ Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
 rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
 local secrets only.
 
+### Git identity & signing
+
+`git/apply.sh` renders `config/git/config.local` (the include target of
+`config/git/config`) once per machine: `personal` gets the full identity plus
+1Password `op-ssh-sign` commit signing; `work` gets a stub with
+`gpgsign = false` and a TODO to fill in the work email. The file is
+user-owned and never overwritten — edit it freely, or delete it and run
+`dot -a` to regenerate. Even on `personal`, no script ever shells out to `op`;
+only the signer's path is written into the config.
+
 ## AI agent configs
 
 `ai/apply.sh` links the shared `ai/AGENTS.md` to `~/.claude/CLAUDE.md` and

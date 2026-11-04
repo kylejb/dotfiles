@@ -1,17 +1,5 @@
 #!/bin/sh -e
 
-runSetup() {
-    # Ask for the administrator password upfront
-    sudo -v
-
-    # Keep-alive: update existing `sudo` timestamp until the script has finished
-    while true; do
-        sudo -n true
-        sleep 60
-        kill -0 "$$" || exit
-    done 2>/dev/null &
-}
-
 command_exists() {
     command -v "$@" >/dev/null 2>&1
 }
@@ -58,37 +46,13 @@ fi
 setup_color() {
     # Only use colors if connected to a terminal
     if ! is_tty; then
-        FMT_RAINBOW=""
         FMT_RED=""
         FMT_GREEN=""
         FMT_YELLOW=""
         FMT_BLUE=""
         FMT_BOLD=""
         FMT_RESET=""
-        NO_COLOR=""
         return
-    fi
-
-    if command_exists supports_truecolor && supports_truecolor; then
-        FMT_RAINBOW="
-      $(printf '\033[38;2;255;0;0m')
-      $(printf '\033[38;2;255;97;0m')
-      $(printf '\033[38;2;247;255;0m')
-      $(printf '\033[38;2;0;255;30m')
-      $(printf '\033[38;2;77;0;255m')
-      $(printf '\033[38;2;168;0;255m')
-      $(printf '\033[38;2;245;0;172m')
-    "
-    else
-        FMT_RAINBOW="
-      $(printf '\033[38;5;196m')
-      $(printf '\033[38;5;202m')
-      $(printf '\033[38;5;226m')
-      $(printf '\033[38;5;082m')
-      $(printf '\033[38;5;021m')
-      $(printf '\033[38;5;093m')
-      $(printf '\033[38;5;163m')
-    "
     fi
 
     FMT_RED=$(printf '\033[31m')
@@ -97,28 +61,19 @@ setup_color() {
     FMT_BLUE=$(printf '\033[34m')
     FMT_BOLD=$(printf '\033[1m')
     FMT_RESET=$(printf '\033[0m')
-    NO_COLOR=$(printf '\033[0m')
 }
+
+#####################
+# Logging           #
+#####################
 
 title() {
     printf "\n%s%s%s\n" "${FMT_BLUE}" "$1" "${FMT_RESET}"
     printf "%s%s%s\n\n" "${FMT_BOLD}" "==============================" "${FMT_RESET}"
 }
 
-warning() {
-    echo "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
-}
-
 success() {
     echo "${FMT_GREEN}$1${FMT_RESET}"
-}
-
-#####################
-# Utility Functions #
-#####################
-
-heading() {
-    printf '\n%s\n' "${FMT_BOLD}${FMT_BLUE}$*${FMT_RESET}"
 }
 
 info() {
@@ -134,13 +89,9 @@ error() {
     exit 1
 }
 
-completed() {
-    printf '\n%s\n' "${FMT_GREEN}$*${FMT_RESET}"
-}
-
-has() {
-    command -v "$1" 1>/dev/null 2>&1
-}
+#####################
+# Links             #
+#####################
 
 # True when $1 is a symlink owned by this dotfiles repo.
 is_dotfiles_link() {
@@ -177,36 +128,27 @@ safe_link() {
 
     if [ -L "$_sl_target" ]; then
         if ! is_dotfiles_link "$_sl_target"; then
-            warn "${_sl_target#"$HOME"} is a symlink outside \$DOTFILES... skipping"
+            warn "~${_sl_target#"$HOME"} is a symlink outside \$DOTFILES... skipping"
             return 0
         fi
     elif [ -e "$_sl_target" ]; then
-        warn "${_sl_target#"$HOME"} exists and is not a symlink... skipping"
+        warn "~${_sl_target#"$HOME"} exists and is not a symlink... skipping"
         return 0
     fi
 
     mkdir -p "$(dirname "$_sl_target")"
     ln -sfn "$_sl_src" "$_sl_target"
-    info "linked ${_sl_target#"$HOME"} -> $_sl_src"
+    info "linked ~${_sl_target#"$HOME"} -> $_sl_src"
 }
 
 ####################
 # OS detection     #
 ####################
 #
-# Standardized, POSIX-safe (uname-based, no $OSTYPE) helpers used everywhere
-# OS-specific behavior is needed. Prefer the predicates at call sites:
-#   is_macos / is_linux / is_wsl
-# get_os returns the platform family; get_distro the Linux distro id.
+# POSIX-safe (uname-based, no $OSTYPE). Prefer the predicates at call sites.
 
 is_macos() { [ "$(uname -s)" = 'Darwin' ]; }
 is_linux() { [ "$(uname -s)" = 'Linux' ]; }
-
-# True on Windows Subsystem for Linux (WSL1/WSL2).
-is_wsl() {
-    is_linux || return 1
-    [ -r /proc/version ] && grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null
-}
 
 # Platform family: macos | linux | unknown
 get_os() {
@@ -217,43 +159,15 @@ get_os() {
     esac
 }
 
-# Linux distribution id (debian, ubuntu, alpine, fedora, ...); empty elsewhere.
-get_distro() {
-    is_linux || return 0
-    _gd_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
-    if [ -r "$_gd_os_release" ]; then
-        # shellcheck source=/dev/null
-        . "$_gd_os_release"
-        echo "${ID:-}"
-    fi
-}
-
-# Linux distribution identifiers from ID and ID_LIKE, tokenized for family
-# matching across derivatives.
-get_distro_ids() {
-    is_linux || return 0
-    _gdi_os_release="${OS_RELEASE_FILE:-/etc/os-release}"
-    if [ -r "$_gdi_os_release" ]; then
-        # shellcheck source=/dev/null
-        . "$_gdi_os_release"
-        printf '%s %s\n' "${ID:-}" "${ID_LIKE:-}"
-    fi
-}
-
-distro_matches() {
-    _dm_want="$1"
-    for _dm_id in $(get_distro_ids); do
-        [ "$_dm_id" = "$_dm_want" ] && return 0
-    done
-    return 1
-}
-
+# True on Debian, Ubuntu, and their derivatives (Mint, Pop!_OS, Raspbian, ...),
+# which name debian or ubuntu in ID or ID_LIKE.
 is_debian_family() {
-    distro_matches debian ||
-        distro_matches ubuntu ||
-        distro_matches linuxmint ||
-        distro_matches pop ||
-        distro_matches raspbian
+    is_linux && [ -r /etc/os-release ] || return 1
+    # shellcheck source=/dev/null
+    case " $(. /etc/os-release && echo "${ID:-} ${ID_LIKE:-}") " in
+    *' debian '* | *' ubuntu '*) return 0 ;;
+    esac
+    return 1
 }
 
 #####################

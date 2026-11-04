@@ -13,7 +13,7 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 # shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
-heading 'Uninstalling kylejb/dotfiles'
+title 'Uninstalling kylejb/dotfiles'
 warn 'This does not remove packages/tools installed with Homebrew, apt, or Chocolatey.'
 
 remove_link() {
@@ -65,4 +65,4 @@ remove_link "$HOME/.codex/AGENTS.md"
 remove_link "$HOME/.codex/prompts"
 remove_codex_managed_block
 
-completed 'Symlinks removed. Your packages and the dotfiles repo are untouched.'
+success 'Symlinks removed. Your packages and the dotfiles repo are untouched.'

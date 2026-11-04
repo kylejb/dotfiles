@@ -67,16 +67,15 @@ install_tools() {
         info 'Setting up Homebrew and installing common dependencies for development. This may take a while...'
         sh "${DOTFILES}/macos/setup.sh"
     elif is_linux; then
-        distro="$(get_distro)"
         if is_debian_family; then
-            info "Detected ${distro:-linux} (Debian family)"
+            info 'Detected Debian-family Linux'
             info 'Installing common dependencies for development using apt. This may take a while...'
             sh "${DOTFILES}/linux/debian.sh"
         else
-            warning "No installer for distro '${distro:-unknown}'. Skipping package install..."
+            warn 'No installer for this Linux distro. Skipping package install...'
         fi
     else
-        warning 'Unsupported platform. Skipping package install...'
+        warn 'Unsupported platform. Skipping package install...'
     fi
 }
 

@@ -16,22 +16,6 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 title 'Uninstalling kylejb/dotfiles'
 warn 'This does not remove packages/tools installed with Homebrew, apt, or Chocolatey.'
 
-remove_codex_managed_block() {
-    target="$HOME/.codex/config.toml"
-    end='# <<< dotfiles:codex <<<'
-
-    [ -f "$target" ] || return 0
-
-    tmp="$(mktemp "${TMPDIR:-/tmp}/dotfiles.codex.XXXXXX")"
-    awk -v e="$end" '
-        /^# >>> dotfiles:codex / {inblock=1; next}
-        $0==e {inblock=0; next}
-        !inblock {print}
-    ' "$target" >"$tmp"
-    mv "$tmp" "$target"
-    info "Removed dotfiles-managed Codex config block"
-}
-
 # Every link into $DOTFILES under a dot-entry of $HOME (~/.zshrc, ~/.config/*,
 # ~/.claude/skills/*, ...), so a new link never needs listing here. Only
 # dot-entries are scanned: that skips macOS's privacy-protected folders
@@ -42,7 +26,5 @@ find "$HOME"/.[!.]* -maxdepth 2 -path "$DOTFILES" -prune -o -type l -print 2>/de
         info "Removing ~${link#"$HOME"}"
         rm "$link"
     done
-
-remove_codex_managed_block
 
 success 'Symlinks removed. Your packages and the dotfiles repo are untouched.'

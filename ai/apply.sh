@@ -26,4 +26,3 @@ title 'Setting up AI agent configs'
 
 link_if_present "${DOTFILES}/ai/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 link_if_present "${DOTFILES}/ai/AGENTS.md" "$HOME/.codex/AGENTS.md"
-link_if_present "${DOTFILES}/ai/claude/settings.json" "$HOME/.claude/settings.json"

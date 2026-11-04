@@ -20,28 +20,6 @@ install_extensions() {
     code --force --install-extension "ms-vscode-remote.remote-containers"
 }
 
-# Set up symlinks for settings, keybindings, and snippets.
-echo "Setting up VSCode. This may take a minute..."
-
-# Resolve the VS Code "User" config dir per OS.
-if is_macos; then
-    code_user="$HOME/Library/Application Support/Code/User"
-elif is_linux; then
-    code_user="$HOME/.config/Code/User"
-else
-    code_user=''
-    echo 'Unsupported OS detected. Skipping VSCode setup...'
-fi
-
-if [ -n "$code_user" ]; then
-    mkdir -p "$code_user"
-    # Link each tracked config file to its OWN destination (not all to settings.json).
-    for name in settings.json keybindings.json; do
-        src="${DOTFILES}/vscode/$name"
-        [ -e "$src" ] && ln -sfnv "$src" "$code_user/$name"
-    done
-    # Snippets directory, if present.
-    [ -d "${DOTFILES}/vscode/snippets" ] && ln -sfnv "${DOTFILES}/vscode/snippets" "$code_user/snippets"
-fi
-
+# Settings are linked by vscode/apply.sh; this only installs extensions.
+echo "Installing VSCode extensions. This may take a minute..."
 install_extensions

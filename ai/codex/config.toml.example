@@ -11,7 +11,7 @@
 # Non-secret server: safe to commit (no credentials).
 [mcp_servers.filesystem]
 command = "npx"
-args = ["-y", "@modelcontextprotocol/server-filesystem", "/Users/kylejb/Developer"]
+args = ["-y", "@modelcontextprotocol/server-filesystem", "<your home>/Developer"]  # Codex does not expand ~ or $HOME
 
 # Secret-bearing server: keep the token OUT of git. Put this table in
 # `config.local.toml` with the real value, or have the server read an env var

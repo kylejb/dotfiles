@@ -10,21 +10,13 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 cp "${DOTFILES}/gnupg/base.gpg-agent.conf" "${DOTFILES}/gnupg/gpg-agent.conf"
 
-if is_macos; then
-  echo "pinentry-program /opt/homebrew/bin/pinentry" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
-elif is_linux; then
-  echo "pinentry-program /usr/local/bin/pinentry-curse" | tee -a "${DOTFILES}/gnupg/gpg-agent.conf" >/dev/null
+# Use whichever pinentry is on PATH (Homebrew or the distro package); with
+# none, gpg-agent falls back to its built-in default.
+if pinentry="$(command -v pinentry)"; then
+  echo "pinentry-program $pinentry" >>"${DOTFILES}/gnupg/gpg-agent.conf"
 else
-  error "Unknown platform – $(uname -s) is not supported"
+  warn 'no pinentry on PATH; gpg-agent will use its default'
 fi
-
-#pinentry-program /usr/local/bin/pinentry-curses    # used in Debian
-#pinentry-program /usr/bin/pinentry-gnome3          # used in Fedora
-#pinentry-program /usr/local/bin/pinentry-mac       # used in macOS (intel)
-#pinentry-program /opt/homebrew/bin/pinentry-mac    # used in macOS (silicon)
-#pinentry-program /usr/bin/pinentry-tty
-#pinentry-program /usr/bin/pinentry-gtk-2
-#pinentry-program /usr/bin/pinentry-x11
 
 info 'Setting up ~/.gnupg'
 safe_link "$DOTFILES/gnupg/gpg-agent.conf" "$HOME/.gnupg/gpg-agent.conf"

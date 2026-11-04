@@ -54,6 +54,31 @@ Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
 rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
 local secrets only.
 
+## AI agent configs
+
+`ai/apply.sh` links the shared `ai/AGENTS.md` to `~/.claude/CLAUDE.md` and
+`~/.codex/AGENTS.md`, and links each skill in `ai/skills/` into
+`~/.claude/skills/`.
+
+`~/.claude/settings.json` is not managed: Claude Code rewrites it and it holds
+machine-specific hooks. To turn on the commit check hook
+(`ai/claude/hooks/commit-check.sh`, needs `jq`), add this under `hooks` there:
+
+```json
+"PreToolUse": [
+  {
+    "matcher": "Bash",
+    "hooks": [
+      {
+        "type": "command",
+        "command": "\"$HOME/.dotfiles/ai/claude/hooks/commit-check.sh\"",
+        "timeout": 10
+      }
+    ]
+  }
+]
+```
+
 ## Script architecture
 
 The setup scripts (`installer.sh`, `bin/dot`, `script/*`, `*/install.sh`,

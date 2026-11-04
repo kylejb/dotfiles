@@ -40,7 +40,7 @@ echo '✅ Successfully installed zsh-autosuggestions, zsh-syntax-highlighting'
 
 # Set the default shell
 echo '⤵ Changing the default shell'
-chsh -s "$(which zsh)" "${USER}"
+chsh -s "$(command -v zsh)" "${USER}"
 echo '✅ Successfully modified the default shell'
 
 

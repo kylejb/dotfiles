@@ -1,6 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Run all dotfiles installers.
 
 set -e
 
-find "${DOTFILES}" -name install.sh | while read -r installer; do sh -c "${installer}"; done
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
+run_topic_scripts install.sh

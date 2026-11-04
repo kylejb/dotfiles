@@ -2,6 +2,5 @@
 # shellcheck disable=SC1071
 
 function zsource {
-    # shellcheck source=/dev/null
     source "$HOME"/.zshrc
 }

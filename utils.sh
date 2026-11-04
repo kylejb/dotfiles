@@ -1,17 +1,5 @@
 #!/bin/sh -e
 
-runSetup() {
-    # Ask for the administrator password upfront
-    sudo -v
-
-    # Keep-alive: update existing `sudo` timestamp until the script has finished
-    while true; do
-        sudo -n true
-        sleep 60
-        kill -0 "$$" || exit
-    done 2>/dev/null &
-}
-
 command_exists() {
     command -v "$@" >/dev/null 2>&1
 }
@@ -58,7 +46,6 @@ fi
 setup_color() {
     # Only use colors if connected to a terminal
     if ! is_tty; then
-        FMT_RAINBOW=""
         FMT_RED=""
         FMT_GREEN=""
         FMT_YELLOW=""
@@ -68,100 +55,196 @@ setup_color() {
         return
     fi
 
-    if command_exists supports_truecolor && supports_truecolor; then
-        FMT_RAINBOW="
-      $(printf '\033[38;2;255;0;0m')
-      $(printf '\033[38;2;255;97;0m')
-      $(printf '\033[38;2;247;255;0m')
-      $(printf '\033[38;2;0;255;30m')
-      $(printf '\033[38;2;77;0;255m')
-      $(printf '\033[38;2;168;0;255m')
-      $(printf '\033[38;2;245;0;172m')
-    "
-    else
-        FMT_RAINBOW="
-      $(printf '\033[38;5;196m')
-      $(printf '\033[38;5;202m')
-      $(printf '\033[38;5;226m')
-      $(printf '\033[38;5;082m')
-      $(printf '\033[38;5;021m')
-      $(printf '\033[38;5;093m')
-      $(printf '\033[38;5;163m')
-    "
-    fi
-
     FMT_RED=$(printf '\033[31m')
     FMT_GREEN=$(printf '\033[32m')
     FMT_YELLOW=$(printf '\033[33m')
     FMT_BLUE=$(printf '\033[34m')
     FMT_BOLD=$(printf '\033[1m')
     FMT_RESET=$(printf '\033[0m')
-    NO_COLOR=$(printf '\033[0m')
 }
+
+#####################
+# Logging           #
+#####################
 
 title() {
     printf "\n%s%s%s\n" "${FMT_BLUE}" "$1" "${FMT_RESET}"
     printf "%s%s%s\n\n" "${FMT_BOLD}" "==============================" "${FMT_RESET}"
 }
 
-warning() {
-    echo "${FMT_YELLOW}Warning: ${FMT_RESET}$1"
-}
-
 success() {
     echo "${FMT_GREEN}$1${FMT_RESET}"
 }
 
-#####################
-# Utility Functions #
-#####################
-
-heading() {
-    printf '\n%s\n' "${FMT_BOLD}${UNDERLINE}${BLUE}$*${NO_COLOR}"
-}
-
 info() {
-    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${NO_COLOR}"
+    printf '%s\n' "${FMT_BOLD}${FMT_BLUE}==> $*${FMT_RESET}"
 }
 
 warn() {
-    printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
+    printf '%s\n' "${FMT_YELLOW}! $*${FMT_RESET}"
 }
 
 error() {
-    # printf "%sError: %s%s\n" "${FMT_RED}" "${FMT_RESET}" "$1"
-    printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
+    printf '%s\n' "${FMT_RED}x $*${FMT_RESET}" >&2
     exit 1
 }
 
-completed() {
-    printf '\n%s\n' "${GREEN}$*${NO_COLOR}"
+#####################
+# Links             #
+#####################
+
+# True when $1 is a symlink owned by this dotfiles repo.
+is_dotfiles_link() {
+    _idl_target="$1"
+    [ -L "$_idl_target" ] || return 1
+
+    _idl_link="$(readlink "$_idl_target")" || return 1
+    case "$_idl_link" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    /*) return 1 ;;
+    esac
+
+    _idl_dir="$(dirname "$_idl_target")"
+    _idl_link_dir="$(dirname "$_idl_link")"
+    _idl_link_base="$(basename "$_idl_link")"
+    _idl_abs="$(
+        cd "$_idl_dir" 2>/dev/null &&
+            cd "$_idl_link_dir" 2>/dev/null &&
+            printf '%s/%s' "$(pwd -P)" "$_idl_link_base"
+    )" || return 1
+
+    case "$_idl_abs" in
+    "$DOTFILES" | "$DOTFILES"/*) return 0 ;;
+    *) return 1 ;;
+    esac
 }
 
-has() {
-    command -v "$1" 1>/dev/null 2>&1
-}
+# Symlink $1 -> $2, but never clobber a real file/dir or external symlink at
+# the target — that's local data. Refreshes only dotfiles-owned symlinks.
+# Shared by setup_symlinks and the topic appliers (ai/gnupg/ssh).
+safe_link() {
+    _sl_src="$1"
+    _sl_target="$2"
 
-# shellcheck disable=SC1091,SC3028,SC3043,SC3046
-get_os() {
-    local os
-    os='unknown'
-    if echo "$OSTYPE" | grep -iq 'alpine'; then
-        os='alpine'
-    elif echo "$OSTYPE" | grep -iq 'darwin'; then
-        os='darwin'
-    elif echo "$OSTYPE" | grep -iq 'linux-gnu'; then
-        source /etc/os-release
-        # Set os to ID_LIKE if this field exists
-        # Else default to ID
-        # ref. https://www.freedesktop.org/software/systemd/man/os-release.html#:~:text=The%20%2Fetc%2Fos%2Drelease,like%20shell%2Dcompatible%20variable%20assignments.
-        os="${ID_LIKE:-$ID}"
+    if [ -L "$_sl_target" ]; then
+        if ! is_dotfiles_link "$_sl_target"; then
+            warn "~${_sl_target#"$HOME"} is a symlink outside \$DOTFILES... skipping"
+            return 0
+        fi
+    elif [ -e "$_sl_target" ]; then
+        warn "~${_sl_target#"$HOME"} exists and is not a symlink... skipping"
+        return 0
     fi
-    export DETECTED_OS="$os"
 
-    # value to return
-    echo "$DETECTED_OS"
+    mkdir -p "$(dirname "$_sl_target")"
+    ln -sfn "$_sl_src" "$_sl_target"
+    info "linked ~${_sl_target#"$HOME"} -> $_sl_src"
 }
 
-get_os
+#####################
+# Topic scripts     #
+#####################
+
+# Run every topic's $1 (install.sh, apply.sh or update.sh) in a stable order.
+# A failing script is reported and the rest still run; returns non-zero if any
+# failed. The loop reads a heredoc, not a pipe, so it can carry the status out.
+run_topic_scripts() {
+    _rts_list="$(find "$DOTFILES" -name "$1" | sort)"
+    _rts_status=0
+    while IFS= read -r _rts_file; do
+        [ -n "$_rts_file" ] || continue
+        info "Running ${_rts_file#"$DOTFILES"/}"
+        sh "$_rts_file" </dev/null || {
+            warn "failed: ${_rts_file#"$DOTFILES"/}"
+            _rts_status=1
+        }
+    done <<EOF
+$_rts_list
+EOF
+    return "$_rts_status"
+}
+
+####################
+# OS detection     #
+####################
+#
+# POSIX-safe (uname-based, no $OSTYPE). Prefer the predicates at call sites.
+
+is_macos() { [ "$(uname -s)" = 'Darwin' ]; }
+is_linux() { [ "$(uname -s)" = 'Linux' ]; }
+
+# Platform family: macos | linux | unknown
+get_os() {
+    case "$(uname -s)" in
+    Darwin) echo 'macos' ;;
+    Linux) echo 'linux' ;;
+    *) echo 'unknown' ;;
+    esac
+}
+
+# True on Debian, Ubuntu, and their derivatives (Mint, Pop!_OS, Raspbian, ...),
+# which name debian or ubuntu in ID or ID_LIKE.
+is_debian_family() {
+    is_linux && [ -r /etc/os-release ] || return 1
+    # shellcheck source=/dev/null
+    case " $(. /etc/os-release && echo "${ID:-} ${ID_LIKE:-}") " in
+    *' debian '* | *' ubuntu '*) return 0 ;;
+    esac
+    return 1
+}
+
+#####################
+# Machine profile   #
+#####################
+#
+# The profile distinguishes machines (e.g. 'personal' vs 'work') so that
+# tooling, git identity, and secret handling can differ. The single source of
+# truth is a one-word file readable from both POSIX sh and zsh. The
+# DOTFILES_PROFILE env var (exported early by zsh/zshenv.symlink) wins if set.
+
+# Path to the profile file (honors XDG).
+profile_file() {
+    echo "${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/profile"
+}
+
+# Echo the active profile, or nothing if unset.
+get_profile() {
+    if [ -n "${DOTFILES_PROFILE:-}" ]; then
+        echo "$DOTFILES_PROFILE"
+    elif [ -r "$(profile_file)" ]; then
+        cat "$(profile_file)"
+    fi
+}
+
+is_personal() {
+    [ "$(get_profile)" = 'personal' ]
+}
+
+is_work() {
+    [ "$(get_profile)" = 'work' ]
+}
+
+# Prompt for and persist the profile if it is not already set.
+setup_profile() {
+    if [ -n "$(get_profile)" ]; then
+        info "Detected profile: $(get_profile). Skipping profile setup..."
+        return 0
+    fi
+
+    title 'Choose a machine profile'
+    info 'personal = full setup incl. 1Password; work = no 1Password, local secrets only'
+
+    profile=''
+    while [ "$profile" != 'personal' ] && [ "$profile" != 'work' ]; do
+        printf 'Profile [personal/work]: '
+        read -r profile
+    done
+
+    file="$(profile_file)"
+    mkdir -p "$(dirname "$file")"
+    echo "$profile" >"$file"
+    export DOTFILES_PROFILE="$profile"
+    success "Profile set to '$profile' ($file)"
+}
+
 setup_color

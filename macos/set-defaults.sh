@@ -24,11 +24,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # General UI/UX                                                               #
 ###############################################################################
 
-# Set computer name (as done via System Preferences → Sharing)
-#sudo scutil --set ComputerName "kyleBook"
-#sudo scutil --set HostName "kyleBook"
-#sudo scutil --set LocalHostName "kyleBook"
-#sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "kyleBook"
+# Undo the "-2" suffix macOS appends to the hostname after a name clash
+sudo sh "${DOTFILES}/macos/set-hostname.sh"
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "

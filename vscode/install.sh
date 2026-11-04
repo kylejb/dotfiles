@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/bin/sh
+
+set -e
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 

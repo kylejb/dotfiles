@@ -95,7 +95,7 @@ main() {
     run_installers
     setup_shell
     # symlinks + topic config renderers (also runnable standalone via dot --apply)
-    "${DOTFILES}/script/apply"
+    "${DOTFILES}/script/apply" || warn 'some appliers failed; see above'
     set_macos_defaults
 
     success 'Done.'

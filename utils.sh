@@ -141,6 +141,29 @@ safe_link() {
     info "linked ~${_sl_target#"$HOME"} -> $_sl_src"
 }
 
+#####################
+# Topic scripts     #
+#####################
+
+# Run every topic's $1 (install.sh, apply.sh or update.sh) in a stable order.
+# A failing script is reported and the rest still run; returns non-zero if any
+# failed. The loop reads a heredoc, not a pipe, so it can carry the status out.
+run_topic_scripts() {
+    _rts_list="$(find "$DOTFILES" -name "$1" | sort)"
+    _rts_status=0
+    while IFS= read -r _rts_file; do
+        [ -n "$_rts_file" ] || continue
+        info "Running ${_rts_file#"$DOTFILES"/}"
+        sh "$_rts_file" </dev/null || {
+            warn "failed: ${_rts_file#"$DOTFILES"/}"
+            _rts_status=1
+        }
+    done <<EOF
+$_rts_list
+EOF
+    return "$_rts_status"
+}
+
 ####################
 # OS detection     #
 ####################

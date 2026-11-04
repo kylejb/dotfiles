@@ -32,15 +32,6 @@ setup_symlinks() {
     done
 }
 
-run_appliers() {
-    title 'Applying topic configs'
-    # One applier failing must not abort the rest.
-    find "${DOTFILES}" -name apply.sh | while IFS= read -r applier; do
-        # shellcheck disable=SC2295
-        info "Running ${applier#$DOTFILES/}"
-        sh "${applier}" || warn "applier failed: ${applier#$DOTFILES/}"
-    done
-}
-
 setup_symlinks
-run_appliers
+title 'Applying topic configs'
+run_topic_scripts apply.sh

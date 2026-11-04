@@ -5,4 +5,7 @@ set -e
 
 export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
-find "${DOTFILES}" -name install.sh | while IFS= read -r installer; do sh "${installer}"; done
+# shellcheck source=/dev/null
+. "${DOTFILES}/utils.sh"
+
+run_topic_scripts install.sh

@@ -111,9 +111,11 @@ These scripts are run as `sh "$script"`, which **ignores shebang flags** (a
   config should stop loudly, not silently continue.
 - **`update.sh` is best-effort** — no `set -e`; independent maintenance steps
   (update tool A, then tool B) shouldn't abort each other.
-- The runners stay resilient and **report**: `run_appliers` and `run_updates`
-  run each topic with `… || warn "… failed"`, so one failure neither kills the
-  batch nor passes silently.
+- Every runner (`script/install`, `script/apply`, `script/update`) uses
+  `run_topic_scripts` from `utils.sh`: it runs each topic's script in sorted
+  order, warns on each failure, keeps going, and exits non-zero if any failed.
+  So one failure neither kills the batch nor passes silently. A failed install
+  batch stops `bootstrap` before shell and config setup.
 
 ## Thanks
 

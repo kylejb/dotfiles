@@ -26,3 +26,5 @@ title 'Setting up AI agent configs'
 
 link_if_present "${DOTFILES}/ai/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 link_if_present "${DOTFILES}/ai/AGENTS.md" "$HOME/.codex/AGENTS.md"
+link_if_present "${DOTFILES}/ai/skills/simplicity-review" "$HOME/.claude/skills/simplicity-review"
+link_if_present "${DOTFILES}/ai/skills/timed-exercise" "$HOME/.claude/skills/timed-exercise"

@@ -61,23 +61,7 @@ local secrets only.
 `~/.claude/skills/`.
 
 `~/.claude/settings.json` is not managed: Claude Code rewrites it and it holds
-machine-specific hooks. To turn on the commit check hook
-(`ai/claude/hooks/commit-check.sh`, needs `jq`), add this under `hooks` there:
-
-```json
-"PreToolUse": [
-  {
-    "matcher": "Bash",
-    "hooks": [
-      {
-        "type": "command",
-        "command": "\"$HOME/.dotfiles/ai/claude/hooks/commit-check.sh\"",
-        "timeout": 10
-      }
-    ]
-  }
-]
-```
+machine-specific hooks.
 
 ## Script architecture
 

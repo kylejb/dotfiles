@@ -45,6 +45,7 @@ if is_personal; then
   program = "${op_sign}"
 EOF
     info "rendered personal git identity + 1Password ssh signing into config/git/config.local"
+    [ -x "$op_sign" ] || warn "1Password signer not found at ${op_sign}; commits will fail until it is installed"
 else
     # Work machines cannot use 1Password: no op-ssh-sign, no op:// references.
     # Signing stays off until a local key is configured by hand.

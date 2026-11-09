@@ -55,10 +55,13 @@ else
   useConfigOnly = true
   # TODO: set your work email
   # email = work-email@example.com
-  # To sign with a local key instead of 1Password:
+  # To sign with a local key instead of 1Password, uncomment signingkey and
+  # the [gpg] section below, and set gpgsign to true:
   # signingkey = ~/.ssh/id_ed25519.pub
 [commit]
   gpgsign = false
+# [gpg]
+#   format = ssh
 EOF
     warn "rendered work git config stub into config/git/config.local — edit it to set your work email"
 fi

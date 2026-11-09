@@ -18,6 +18,8 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 # shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
+is_personal || is_work || warn "no valid machine profile; write personal or work to $(profile_file)"
+
 setup_symlinks() {
     title 'Creating symlinks'
 

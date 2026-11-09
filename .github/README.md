@@ -48,7 +48,8 @@ Each machine has a profile — `personal` or `work` — that lets tooling, git
 identity, and secret handling differ per machine. Install prompts for it once
 and writes the single word to `~/.config/dotfiles/profile` (untracked). It is
 exported as `$DOTFILES_PROFILE` early in `zsh/zshenv.symlink`, so any script or
-shell can gate on it.
+shell can gate on it. `dot -a` warns if it is missing or invalid; to set it on
+an existing machine, write `personal` or `work` to that file.
 
 Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
 rule: **the `work` profile must never invoke 1Password (`op`)** — work uses

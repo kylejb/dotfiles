@@ -74,6 +74,7 @@ When a request depends on recency (e.g., "latest", "current", "today", "as of no
 - Every change replaces what it makes redundant. A change stacked beside the mechanism it supersedes is unfinished.
 - Before adding a mechanism, check whether something already does that job.
 - When a late change needs a different shape, propose it with its measurements instead of building it.
+- When asked mid-task for something the brief or original request does not need, say what it adds (paths, flags, docs) and what the extras so far add up to, before building it.
 - When work has a written brief or approved design, save it and any guide to `.agent/guidance/` in the main checkout before relying on it, and say what you saved. It stays frozen: only the user's approval replaces it.
 - Before calling a design or significant change done, run the `simplicity-review` skill when it is available; for time-boxed work, follow `timed-exercise` when it is available. A change is significant when it changes the unit of work, adds or removes a stage, a path or a mechanism, or moves where state lives.
 

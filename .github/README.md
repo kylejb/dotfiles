@@ -58,7 +58,8 @@ local secrets only.
 
 `ai/apply.sh` links the shared `ai/AGENTS.md` to `~/.claude/CLAUDE.md` and
 `~/.codex/AGENTS.md`, and links each skill in `ai/skills/` into
-`~/.claude/skills/`.
+`~/.claude/skills/`. After adding or deleting a skill, run `dot -a`: it links
+new skills and removes the links of deleted ones.
 
 `~/.claude/settings.json` is not managed, because Claude Code rewrites it.
 

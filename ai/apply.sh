@@ -30,3 +30,11 @@ for skill in "${DOTFILES}"/ai/skills/*/; do
     [ -d "$skill" ] || continue
     safe_link "${skill%/}" "$HOME/.claude/skills/$(basename "$skill")"
 done
+
+# Drop links to skills that no longer exist; links from elsewhere stay.
+for link in "$HOME"/.claude/skills/*; do
+    if [ -L "$link" ] && [ ! -e "$link" ] && is_dotfiles_link "$link"; then
+        info "Removing stale skill link ~${link#"$HOME"}"
+        rm "$link"
+    fi
+done

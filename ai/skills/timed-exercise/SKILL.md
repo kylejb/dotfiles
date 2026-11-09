@@ -3,14 +3,14 @@ name: timed-exercise
 description: Run a time-boxed build — interview take-home, live coding round, hackathon — from brief to submission, keeping the design simple enough to survive a cold read. Use when the user mentions a take-home, an interview exercise or a deadline measured in hours, or asks whether a submission meets the bar.
 metadata:
   version: "1"
-  updated: "2026-11-03"
+  updated: "2026-11-09"
 ---
 
 A reviewer reads a time-boxed submission **cold** and judges whether its core flow is easy to follow and change. Simplicity is what they can see; a clever late optimisation that bends the shape costs more than it earns.
 
 ## Steps
 
-1. **Set the clock.** Write down the start, the end and the **freeze point**: one hour before the end, or at 75% of the box if that is earlier. Done when all three are in the plan.
+1. **Set the clock.** Write down the start, the end and the **freeze point**, at 75% of the box. Done when all three are in the plan.
 2. **Measure the input** before choosing the unit of work: counts, distinct keys, how they cluster, sizes. A few minutes of `awk`, `sort | uniq -c` or a notebook. Done when the plan names the unit of work and cites the numbers that chose it.
 3. **Build the simplest end-to-end flow first**: one path, one red-to-green slice per checkpoint at minimal depth (`tdd`, at agreed seams), so a tracer bullet runs through all of them before any deepening. Scope is what the brief asks for; extras go on a roadmap list, not into code. Done when every checkpoint runs end to end on the real input.
 4. **Deepen inside the shape** until every checkpoint meets the brief, then stop. Finishing early is fine; spare time goes to step 6, not to new features. For performance, measure first, then optimise within the current shape. A fix that needs a new shape, found before the freeze, must replace the old one entirely (`simplicity-review`, "replaced or stacked").

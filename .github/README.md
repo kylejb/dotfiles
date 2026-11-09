@@ -61,7 +61,8 @@ local secrets only.
 1Password `op-ssh-sign` commit signing; `work` gets a stub with
 `gpgsign = false` and a TODO to fill in the work email. The file is
 user-owned and never overwritten — edit it freely, or delete it and run
-`dot -a` to regenerate. Even on `personal`, no script ever shells out to `op`;
+`dot -a` to regenerate, for example after changing the template or rotating the
+key. Even on `personal`, no script ever shells out to `op`;
 only the signer's path is written into the config.
 
 ## AI agent configs

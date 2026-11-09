@@ -74,6 +74,7 @@ When a request depends on recency (e.g., "latest", "current", "today", "as of no
 - Every change replaces what it makes redundant. A change stacked beside the mechanism it supersedes is unfinished.
 - Before adding a mechanism, check whether something already does that job.
 - When a late change needs a different shape, propose it with its measurements instead of building it.
+- Save guidance the work must follow (a brief, a reviewer's guide, an approved design) to `.agent/guidance/` before relying on it, and say what you saved. It stays frozen: only the user's approval replaces it.
 - Before calling a design or significant change done, run the `simplicity-review` skill when it is available; for time-boxed work, follow `timed-exercise` when it is available.
 
 ## Engineering principles

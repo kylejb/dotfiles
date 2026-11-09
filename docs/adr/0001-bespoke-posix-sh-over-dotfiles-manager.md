@@ -23,6 +23,6 @@ this time.
 - Symlink, template, OS-detection, and profile logic is ours to maintain and test
   across macOS, Linux, and Windows.
 - Windows cannot share the `sh` implementation for free; it needs either a parallel
-  implementation or a POSIX shell (Git Bash/MSYS2) to run the same scripts. See the
-  follow-up decision on Windows execution.
+  implementation or a POSIX shell to run the same scripts. Resolved: Windows runs
+  these scripts inside WSL (see the README).
 - Revisit if cross-platform maintenance cost outgrows the value of zero-dependency.

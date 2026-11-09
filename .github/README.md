@@ -57,11 +57,10 @@ local secrets only.
 ## AI agent configs
 
 `ai/apply.sh` links the shared `ai/AGENTS.md` to `~/.claude/CLAUDE.md` and
-`~/.codex/AGENTS.md`, and links each skill in `ai/skills/` into
-`~/.claude/skills/`.
+`~/.codex/AGENTS.md`, and links the `simplicity-review` and `timed-exercise`
+skills into `~/.claude/skills/`.
 
-`~/.claude/settings.json` is not managed: Claude Code rewrites it and it holds
-machine-specific hooks.
+`~/.claude/settings.json` is not managed, because Claude Code rewrites it.
 
 ## Script architecture
 

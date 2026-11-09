@@ -54,6 +54,15 @@ Helpers live in `utils.sh`: `get_profile`, `is_personal`, `is_work`. The key
 rule: **the `work` profile must never invoke 1Password (`op`)** — work uses
 local secrets only.
 
+## AI agent configs
+
+`ai/apply.sh` links the shared `ai/AGENTS.md` to `~/.claude/CLAUDE.md` and
+`~/.codex/AGENTS.md`, and links each skill in `ai/skills/` into
+`~/.claude/skills/`. After adding or deleting a skill, run `dot -a`: it links
+new skills and removes the links of deleted ones.
+
+`~/.claude/settings.json` is not managed, because Claude Code rewrites it.
+
 ## Script architecture
 
 The setup scripts (`installer.sh`, `bin/dot`, `script/*`, `*/install.sh`,

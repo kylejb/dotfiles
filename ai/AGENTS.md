@@ -68,6 +68,23 @@ When a request depends on recency (e.g., "latest", "current", "today", "as of no
 - Avoid commands that might expose secrets (e.g., dumping env vars broadly, `cat ~/.ssh/*`).
 - Prefer existing authenticated CLIs; redact sensitive strings in any displayed output.
 
+## Simplicity (REQUIRED)
+
+- Build the simplest design that works: one path through the core flow; an "off" mode is a null component and concurrency is a parameter, not a branch.
+- Every change replaces what it makes redundant. A change stacked beside the mechanism it supersedes is unfinished.
+- Before adding a mechanism, check whether something already does that job.
+- When a late change needs a different shape, propose it with its measurements instead of building it.
+- Before calling a design or significant change done, run the `simplicity-review` skill when it is available; for time-boxed work, follow `timed-exercise` when it is available.
+
+## Engineering principles
+
+Each principle says why it exists; when a case isn't covered, follow the why.
+
+- **Test first at agreed seams** (the `tdd` skill, when it is available): one failing test, then the code that passes it. Tests written first pin behaviour, not implementation, so refactors stay cheap.
+- **Type everything, strictly.** Fix the types rather than loosening the checker (no `ignore`, `Any` escapes or exclusions). The type checker only protects what it is allowed to see.
+- **Small, green commits.** Every commit passes the project's checks and does one thing, so history reads as a story and any commit is safe to revert.
+- **Commits speak as the author.** Commit messages and committed text never name the user in the third person; the user is the author.
+
 ## Baseline workflow
 
 - Start every task by determining:

@@ -35,8 +35,6 @@ if is_personal; then
   name = Kyle J. Burda
   email = 47502769+kylejb@users.noreply.github.com
   signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRTdve9JQMSdN66HIQ76D0RrTswAfiC0JrR/cKJ4xqf
-[github]
-  user = kylejb
 [commit]
   gpgsign = true
 [gpg]

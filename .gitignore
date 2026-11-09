@@ -2,8 +2,8 @@
 .DS_Store
 **/.DS_Store
 
-# git
-# TODO: consider mirroring approach taken for gnupg to handle OS contexts
+# git — per-machine identity/signing, rendered by git/apply.sh
+config/git/config.local
 
 # gnupg
 gnupg/gpg-agent.conf

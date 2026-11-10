@@ -6,8 +6,7 @@ export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 # shellcheck source=/dev/null
 . "${DOTFILES}/utils.sh"
 
-# TODO: add guard to skip block for macOS
-if [ -f "${HOME}/.local/bin/mise" ]; then
+if command -v mise >/dev/null 2>&1 || [ -x "${HOME}/.local/bin/mise" ]; then
   echo 'mise has already been installed'
 else
   echo 'Installing mise'
@@ -33,10 +32,6 @@ elif is_macos; then
   mise completion zsh > "$(brew --prefix)/share/zsh/site-functions/_mise"
 fi
 
-# TODO: replace with mise config file
-echo 'Installing latest version of Go'
-mise use -g go@latest
-
 echo 'Installing system dependencies to build Node.js'
 if command -v apt-get >/dev/null 2>&1; then
   sudo apt-get install -y gpg
@@ -45,12 +40,6 @@ elif is_macos; then
 else
   echo 'No apt-get and not macOS; skipping system deps (install gpg manually).'
 fi
-echo 'Installing lts version of Node.js'
-mise use -g node@lts
-
-echo 'Installing latest version of Python'
-mise use -g python@latest
-
 echo 'Installing system dependencies to build Ruby'
 if command -v apt-get >/dev/null 2>&1; then
   sudo apt-get install -y autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
@@ -59,9 +48,7 @@ elif is_macos; then
 else
   echo 'No apt-get and not macOS; skipping Ruby build deps (install manually).'
 fi
-echo 'Installing latest version of Ruby'
-mise use -g ruby@latest
 
-# echo 'Install latest version of Rust' # TODO: consider using ``rustup`` instead
-# mise plugins install rust
-# mise use -g rust@latest
+# Versions live in config/mise/config.toml, linked as the global config.
+echo 'Installing tools from the mise config'
+mise install

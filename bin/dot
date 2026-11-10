@@ -29,7 +29,7 @@ displayUsageAndExit() {
     echo '  -e, --edit        Open dotfiles directory for editing'
     echo '      --uninstall   Remove symlinks (does NOT remove installed packages)'
     echo '  -h, --help        Show this help message and exit'
-    exit
+    exit "${1:-0}"
 }
 
 if [ $# -eq 0 ]; then
@@ -66,8 +66,8 @@ while test $# -gt 0; do
         exec "${DOTFILES}/script/uninstall"
         ;;
     *)
-        echo "Invalid option: $1"
-        displayUsageAndExit
+        echo "Invalid option: $1" >&2
+        displayUsageAndExit 1
         ;;
     esac
     shift

@@ -6,4 +6,7 @@ elif [[ -f /usr/local/bin/brew ]]; then
     eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-eval "$(mise activate zsh)"
+# User-level installs (mise, uv) land here.
+[[ -d $HOME/.local/bin ]] && path=("$HOME/.local/bin" $path)
+
+command -v mise >/dev/null && eval "$(mise activate zsh)"

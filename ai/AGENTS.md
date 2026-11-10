@@ -84,7 +84,7 @@ Each principle says why it exists; when a case isn't covered, follow the why.
 
 - **Test first at agreed seams** (the `tdd` skill, when it is available): one failing test, then the code that passes it. Tests written first pin behaviour, not implementation, so refactors stay cheap.
 - **Type everything, strictly.** Fix the types rather than loosening the checker (no `ignore`, `Any` escapes or exclusions). The type checker only protects what it is allowed to see.
-- **Bound every resource.** Stream input rather than loading it whole; pools, queues and caches have a size and an eviction or backpressure rule. An unbounded structure is a bug waiting for a bigger input.
+- **Bound what grows.** Anything that grows with input or uptime (a buffer, pool, queue or cache) has a limit and a rule for what happens at it; stream input whose size isn't known. An unbounded structure is a bug waiting for a bigger input.
 - **Small, green commits.** Every commit passes the project's checks and does one thing, so history reads as a story and any commit is safe to revert.
 - **Commits speak as the author.** Commit messages and committed text never name the user in the third person; the user is the author.
 

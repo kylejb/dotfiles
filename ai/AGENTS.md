@@ -71,6 +71,7 @@ When a request depends on recency (e.g., "latest", "current", "today", "as of no
 ## Simplicity (REQUIRED)
 
 - Build the simplest design that works: one path through the core flow; an "off" mode is a null component and concurrency is a parameter, not a branch.
+- Keep it extensible where it varies: separate a stage only when it could change without the others, and add an interface only where a second implementation is plausible, so the next filter or output is one new piece and one line of wiring.
 - Every change replaces what it makes redundant. A change stacked beside the mechanism it supersedes is unfinished.
 - Before adding a mechanism, check whether something already does that job.
 - When a late change needs a different shape, propose it with its measurements instead of building it.

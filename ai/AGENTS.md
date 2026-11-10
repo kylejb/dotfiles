@@ -84,6 +84,7 @@ Each principle says why it exists; when a case isn't covered, follow the why.
 
 - **Test first at agreed seams** (the `tdd` skill, when it is available): one failing test, then the code that passes it. Tests written first pin behaviour, not implementation, so refactors stay cheap.
 - **Type everything, strictly.** Fix the types rather than loosening the checker (no `ignore`, `Any` escapes or exclusions). The type checker only protects what it is allowed to see.
+- **Bound every resource.** Stream input rather than loading it whole; pools, queues and caches have a size and an eviction or backpressure rule. An unbounded structure is a bug waiting for a bigger input.
 - **Small, green commits.** Every commit passes the project's checks and does one thing, so history reads as a story and any commit is safe to revert.
 - **Commits speak as the author.** Commit messages and committed text never name the user in the third person; the user is the author.
 
@@ -94,7 +95,7 @@ Each principle says why it exists; when a case isn't covered, follow the why.
   2. Constraints (time, safety, scope).
   3. What must be inspected (files, commands, tests, docs).
   4. Whether the request depends on **recency** (if yes, apply the "Accuracy, recency, and sourcing" rules).
-  5. If requirements are ambiguous, ask targeted clarifying questions before making irreversible changes.
+  5. If requirements are ambiguous, ask targeted clarifying questions (input format, what counts as success, size and time limits) before choosing a design or making irreversible changes.
 
 ## CONTINUITY.md (REQUIRED)
 

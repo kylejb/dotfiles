@@ -2,8 +2,8 @@
 name: simplicity-review
 description: Review a design or change for over-engineering and drift from its brief — paths through the core flow, mechanisms doing the same job, a home for the next requirement, and whether a change replaced or stacked. Use before merging a design or significant change, after a redesign or performance fix, at a checkpoint or the end of a time box, or when someone asks whether code is over-engineered or too complex.
 metadata:
-  version: "2"
-  updated: "2026-11-09"
+  version: "3"
+  updated: "2026-11-10"
 ---
 
 Judge the code the way a reviewer meets it: a **cold read**, with no author to ask. The question is not "is each piece reasonable?" (each usually is) but "is the whole as simple as the problem allows, and easy to change?"
@@ -17,7 +17,7 @@ Bugs outside the guidance belong to `code-review`; style belongs to the linter. 
 3. **Pin the core flow.** Name the unit of work (a row, a request, a file) and the stages it passes through from input to output. Done when you can state both in one sentence; if you can't, that is the first finding: the flow is hard to follow.
 4. **Run the checks below** against the design or the diff, covering everything since the commit the approved design was agreed at, or the whole branch when there is none, rather than only the latest commit. Before the final review, run only Approved shape, Required work, Paths and Replaced or stacked, and mark the rest "not yet". For each, record a finding with evidence (file:line, a count), "clear", or "n/a: reason" when there is nothing to compare against or it could not be run. These entries are working notes; the report carries only findings. Done when every check due has an entry.
 5. **Name the simpler shape** for each finding: what replaces it and what it deletes. If the complexity earns its place, say what it buys, measured where possible. Done when every finding has one or the other.
-6. **Report** in two parts, under 400 words, each ranked by how hard a cold reader would trip. **Off course** holds departures from the approved shape and unmet required work; these stop the work and go to the user to decide. **Defects** holds the rest, as a fix list. A finding that fits both is Off course. Edit only when asked, or when a workflow such as `timed-exercise` calls this review.
+6. **Report** in two parts, under 400 words, each ranked by how hard a cold reader would trip. **Off course** holds departures from the approved shape and unmet required work; these stop the work and go to the user to decide. **Defects** holds the rest, as a fix list. A finding that fits both is Off course. Edit only when asked, or when a workflow such as `timed-exercise` calls this review. Once the user has judged the findings, append each to `~/.dotfiles/.agent/review-tally.md` with the project, its group and the verdict (real, noise or misrouted); this logging is a trial of the review's cost and ends once the skill has been judged.
 
 ## Checks
 
